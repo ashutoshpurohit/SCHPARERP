@@ -101,7 +101,7 @@ var TeacherSchema = new mongoose.Schema({
 	TeacherLastName: {type: String, required: true},
 	TeacherDOB : Date,
 	Age : Number,
-	TeacherGender: Date,
+	TeacherGender: String,
 	TeacherFullAddress: String,
 	MobileNumber: {type:Number ,required: true},
 	AlternateMobNumber: Number,
@@ -195,6 +195,35 @@ app.get('/students', function(request, response) {
 				dataservice.listStudent(Student, response);
 	});
 	
+
+app.get('/teachers/:TeacherId', function(request, response) {
+	console.log(request.url + ' : querying for ' +
+	request.params.TeacherId);
+	dataservice.findTeacherById(Teacher, request.params.TeacherId,
+	response);
+	});
+
+app.post('/teachers', function(request, response) {
+	dataservice.updateTeacher(Teacher, request.body, response)
+	});
+
+app.put('/teachers', function(request, response) {
+	
+	dataservice.createTeacher(Teacher, request.body, response)
+	});
+	
+app.del('/teachers/:TeacherId', function(request,response) {
+	console.log('request.params.TeacherId');
+	console.log(request.params.TeacherId);
+	dataservice.removeTeacher(Teacher, request.params.TeacherId, response);
+	});
+	
+app.get('/teachers', function(request, response) {
+		
+		console.log('Listing all teachers with ' + request.params.key +
+				'=' + request.params.value);
+				dataservice.listTeachers(Teacher, response);
+	});
 	
 
 http.createServer(app).listen(app.get('port'), function(){
