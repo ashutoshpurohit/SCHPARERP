@@ -271,7 +271,7 @@ exports.updateStudent = function (model, requestBody, response) {
 exports.createTeacher = function (model, requestBody, response)
 {
 	var Teacher = toTeacher(requestBody, model);
-	console.log(Teacher);
+	
 	Teacher.save(function(err){
 		if (err)
 			{

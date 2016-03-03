@@ -9,7 +9,8 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , mongoose = require('mongoose')
-  , dataservice = require('./modules/dataservices');
+  , dataservice = require('./modules/dataservices')
+  , messagedataservice = require('./modules/messagedataservice');
 
 var app = express();
 
@@ -134,6 +135,7 @@ var MobileDeviceMappingSchema = new mongoose.Schema({
 });
 
 var MessageSchema = new mongoose.Schema({
+	MessageId: String,
 	From: String,
 	To:
 		[
@@ -224,7 +226,42 @@ app.get('/teachers', function(request, response) {
 				'=' + request.params.value);
 				dataservice.listTeachers(Teacher, response);
 	});
+
+app.get('/messages/:MessageId', function(request, response) {
+	console.log(request.url + ' : querying for ' +
+	request.params.MessageId);
+	messagedataservice.findMessagebyId(Message, request.params.MessageId,
+	response);
+	});
+
+app.post('/messages', function(request, response) {
+	messagedataservice.updateMessage(Message, request.body, response)
+	});
+
+app.put('/messages', function(request, response) {
 	
+	messagedataservice.createMessage(Message, request.body, response)
+	});
+	
+app.del('/messages/:MessageId', function(request,response) {
+	console.log('request.params.MessageId');
+	console.log(request.params.MessageId);
+	messagedataservice.deleteMessage(Message, request.params.MessageId, response);
+	});
+	
+app.get('/messages', function(request, response) {
+		
+		console.log('Listing all messages with ' + request.params.key +
+				'=' + request.params.value);
+		messagedataservice.listMessages(Message, response);
+	});
+	
+app.get('/messages/from/:From', function(request, response) {
+	console.log(request.url + ' : querying for ' +
+	request.params.From);
+	messagedataservice.findMessagesFrom(Message, request.params.From,
+	response);
+	});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
