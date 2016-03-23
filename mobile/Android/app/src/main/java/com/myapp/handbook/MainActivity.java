@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,6 +28,7 @@ import android.widget.ShareActionProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.myapp.handbook.data.HandBookDbHelper;
 
 public class MainActivity extends Activity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -50,6 +52,8 @@ public class MainActivity extends Activity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SQLiteOpenHelper notificationHelper = new HandBookDbHelper(this);
+        Notifications.setDb(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         titles = getResources().getStringArray(R.array.titles);

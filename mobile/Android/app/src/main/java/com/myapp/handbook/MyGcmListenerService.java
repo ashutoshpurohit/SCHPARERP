@@ -79,7 +79,7 @@ public class MyGcmListenerService extends GcmListenerService {
         String title = data.getString("title");
         String message = data.getString("body");
         if ((msgType.equalsIgnoreCase(getResources().getString(R.string.app_notice))))
-            Notifications.addNote(message);
+            Notifications.notify(data);
         else if( (msgType.equalsIgnoreCase(getResources().getString(R.string.app_assignment)))){
 
             Assignment asgmt = new Assignment();
