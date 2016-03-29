@@ -14,8 +14,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,14 +26,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -56,12 +58,24 @@ public class MainActivity extends Activity {
         Notifications.setDb(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         titles = getResources().getStringArray(R.array.titles);
+
         drawerList = (ListView)findViewById(R.id.drawer);
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //Populate the ListView
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                                                       android.R.layout.simple_list_item_activated_1, titles));
+        /*drawerList.setAdapter(new ArrayAdapter<String>(this,
+                                                       android.R.layout.simple_list_item_activated_1, titles));*/
+        drawerList.setAdapter(new CustomNavAdapter(
+                this,
+                titles,
+                new Integer[]{
+                        R.drawable.ic_action_name,
+                        R.drawable.ic_action_name,
+                        R.drawable.ic_action_name,
+                        R.drawable.ic_action_name
+                }));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         //Display the correct fragment.
         if (savedInstanceState != null) {
@@ -87,8 +101,8 @@ public class MainActivity extends Activity {
                 }
             };
         drawerLayout.setDrawerListener(drawerToggle);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         getFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
@@ -97,7 +111,7 @@ public class MainActivity extends Activity {
                         if (fragment instanceof TopFragment) {
                             currentPosition = 0;
                         }
-                        if (fragment instanceof PizzaFragment) {
+                        if (fragment instanceof NotesFragment) {
                             currentPosition = 1;
                         }
                         if (fragment instanceof PastaFragment) {
@@ -156,6 +170,7 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+        getSupportActionBar().setElevation(0f);
     }
 
     private void selectItem(int position) {
@@ -164,7 +179,7 @@ public class MainActivity extends Activity {
         Fragment fragment;
         switch(position) {
         case 1:
-            fragment = new PizzaFragment();
+            fragment = new NotesFragment();
             break;
         case 2:
             fragment = new PastaFragment();
@@ -249,16 +264,16 @@ public class MainActivity extends Activity {
         } else {
             title = titles[position];
         }
-        getActionBar().setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        shareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
-        setIntent("This is example text");
+       /* MenuItem menuItem = menu.findItem(R.id.action_share);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setIntent("This is example text");*/
         return super.onCreateOptionsMenu(menu);
     }
 
