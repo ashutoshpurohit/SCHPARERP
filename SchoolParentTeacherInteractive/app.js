@@ -10,7 +10,9 @@ var express = require('express')
   , path = require('path')
   , mongoose = require('mongoose')
   , dataservice = require('./modules/dataservices')
-  , messagedataservice = require('./modules/messagedataservice');
+  , messagedataservice = require('./modules/messagedataservice')
+  , devicedataservice = require('./modules/devicedataservice')
+  , gcm =  require('node-gcm');
 
 var app = express();
 
@@ -261,6 +263,160 @@ app.get('/messages/from/:From', function(request, response) {
 	request.params.From);
 	messagedataservice.findMessagesFrom(Message, request.params.From,
 	response);
+	});
+
+app.get('/devices/:MobileNumber', function(request, response) {
+	console.log(request.url + ' : querying for ' +
+	request.params.MobileNumber);
+	devicedataservice.findDeviceByMobileNumber(MobileDevice, request.params.MobileNumber,
+	response);
+	});
+
+app.post('/devices', function(request, response) {
+	devicedataservice.updateDevice(MobileDevice, request.body, response);
+	});
+
+app.put('/devices', function(request, response) {
+	devicedataservice.createMobileDevice(MobileDevice, request.body, response);
+	});
+	
+app.del('/devices/:MobileNumber', function(request,response) {
+	console.log('request.params.MobileNumber');
+	console.log(request.params.MobileNumber);
+	devicedataservice.deleteDevice(MobileDevice, request.params.MobileNumber, response);
+	});
+	
+app.get('/devices', function(request, response) {
+		
+		console.log('Listing all device with ' + request.params.key +
+				'=' + request.params.value);
+		devicedataservice.listDevices(MobileDevice, response);
+	});
+
+app.get('/devices/:DeviceId', function(request, response) {
+	console.log(request.url + ' : querying for ' +
+	request.params.DeviceId);
+	devicedataservice.findDeviceByDeviceID(MobileDevice, request.params.DeviceId,
+	response);
+	});
+
+app.put('/SendMessage', function(request, response) {
+
+	var message = new gcm.Message({
+	    
+	    data: {
+	    	"type" : "Notice",
+	        "body": request.body.MessageBody,
+	        "title": request.body.MessageTitle
+	    },
+	    notification: {
+	        title: "From Ashutosh purohit node app ",
+	        icon: "ic_launcher",
+	        body: "This is a notification that will be displayed ASAP."
+	    }
+	});
+	
+	// Set up the sender with you API key
+	var sender = new gcm.Sender('AIzaSyDvbQO3k8lkZzsN6xpRmYmg9RkDDpbPKgA');
+	var registrationTokens = [];
+	
+	MobileDevice.find({}, function(error, result) {
+		if (error) 
+		{
+		console.error(error);
+		return null;
+		}
+		else
+		{
+			var resultcount =0;
+			if(result !=undefined)
+			{
+				console.log("inside result");
+				console.log(result.length);
+				for(resultcount =0; resultcount<result.length; resultcount++)
+				{
+					console.log("for");
+					console.log(result[resultcount].DeviceId);
+					registrationTokens.push(result[resultcount].DeviceId);
+
+				}
+			}
+
+			// Now the sender can be used to send messages
+			// ... or retrying a specific number of times (10)
+			sender.send(message, { registrationTokens: registrationTokens }, 10, function (err, response) {
+			  if(err) 
+				  {
+				  console.error(err);
+				  }
+			  else   
+				  {
+				   console.log(response);
+				  }
+			});
+	
+	  }
+		
+	});
+
+	
+	
+	// Send to a topic, with no retry this time
+	sender.sendNoRetry(message, { topic: '/topics/global' }, function (err, response) {
+	    if(err) {console.error(" Error " + err);}
+	    else    {console.log("Success " + response);}
+	});
+	
+	
+	response.end('Ended final');
+	});
+
+app.put('/SendMessageToSingleUser', function(request, response) {
+
+	var message = new gcm.Message({
+	    
+	    data: {
+	    	"type" : "Notice",
+	        "body": request.body.MessageBody,
+	        "title": request.body.MessageTitle
+	    },
+	    notification: {
+	        title: "From Ashutosh purohit node app ",
+	        icon: "ic_launcher",
+	        body: "This is a notification that will be displayed ASAP."
+	    }
+	});
+
+
+	var registrationTokens = [];
+	MobileDevice.findOne({MobileNumber: request.body.MobileNumber},
+	 function(error, data) {
+		if (error)
+		{
+		console.error(error);
+		return null;
+		}
+		else 
+		{			
+			if(data !=undefined)
+			{
+				console.log(data.DeviceId);
+				registrationTokens.push(data.DeviceId);	
+				// Set up the sender with you API key
+				var sender = new gcm.Sender('AIzaSyDvbQO3k8lkZzsN6xpRmYmg9RkDDpbPKgA');
+
+				// Now the sender can be used to send messages
+				// ... or retrying a specific number of times (10)
+				sender.send(message, { registrationTokens: registrationTokens }, 10, function (err, response) {
+				  if(err) {console.error(err);}
+				  else    {console.log(response);}
+				});
+			}
+		}
+	});
+	
+	
+	response.end('Ended final')
 	});
 
 http.createServer(app).listen(app.get('port'), function(){
