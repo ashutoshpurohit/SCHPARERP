@@ -32,8 +32,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
-mongoose.connect('mongodb://localhost/SchoolsDB');
+var dbURI = 'mongodb://localhost/SchoolsDB';
+if (process.env.NODE_ENV === 'production') {
+	dbURI = process.env.MONGOLAB_URI;
+}
+mongoose.connect(dbURI);
 
 var SchoolSchema = new mongoose.Schema({
 	SchoolId: {type: String, required: true, unique: true },
