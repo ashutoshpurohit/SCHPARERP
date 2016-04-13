@@ -36,6 +36,9 @@ var dbURI = 'mongodb://localhost/SchoolsDB';
 if (process.env.NODE_ENV === 'production') {
 	dbURI = process.env.MONGOLAB_URI;
 }
+
+console.log('Connecting to DB ' + dbURI);
+
 mongoose.connect(dbURI);
 
 var SchoolSchema = new mongoose.Schema({
