@@ -1,9 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="com.myapp.handbook.NotesDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/detail_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="Summer Holidays from tomorrow "/>
+        <TextView
+            android:id="@+id/detail_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="19/Apr/2016"/>
+        <TextView
+            android:id="@+id/detail_priority"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Priority: High"/>
+        <TextView
+            android:id="@+id/detail_from"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="From: Principal"
+            />
+        <TextView
+            android:id="@+id/detail_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="The school will clase from tomorrow and reopen on June 1st.
+            All the parents are requested to complete the admisison formalities before opening of school. Happy Vacation!"/>
 
-</FrameLayout>
+    </LinearLayout>
+
+
+</ScrollView>

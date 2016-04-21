@@ -29,6 +29,14 @@
               android:name="android.support.PARENT_ACTIVITY"
               android:value="com.myapp.handbook.MainActivity" />
         </activity>
+        <activity
+            android:name="com.myapp.handbook.NotesDetailActivity"
+            android:label="@string/details"
+            android:parentActivityName="com.myapp.handbook.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.myapp.handbook.MainActivity" />
+        </activity>
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

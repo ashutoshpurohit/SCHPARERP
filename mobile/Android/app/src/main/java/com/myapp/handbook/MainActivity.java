@@ -1,6 +1,5 @@
 package com.myapp.handbook;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -14,17 +13,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
@@ -117,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
                         if (fragment instanceof PastaFragment) {
                             currentPosition = 2;
                         }
-                        if (fragment instanceof StoresFragment) {
+                        if (fragment instanceof FeedbackFragment) {
                             currentPosition = 3;
                         }
                         setActionBarTitle(currentPosition);
@@ -185,7 +181,7 @@ public class MainActivity extends ActionBarActivity {
             fragment = new PastaFragment();
             break;
         case 3:
-            fragment = new StoresFragment();
+            fragment = new FeedbackFragment();
             break;
         default:
             fragment = new TopFragment();
