@@ -74,12 +74,13 @@ public class NotesDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_notes_detail,container,false);
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
 
         cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
                 null,
-                "_id=1", null, null, null, null, null);
+                "_id= ?", new String[] {Long.toString(message_id)}, null, null, null, null);
         if(cursor.moveToFirst()){
             int id = cursor.getInt(0);
             int notificationId = cursor.getInt(1);
@@ -88,7 +89,7 @@ public class NotesDetailFragment extends Fragment {
             String detail = cursor.getString(4);
             String title = cursor.getString(5);
             String from = cursor.getString(6);
-            View view = inflater.inflate(R.layout.fragment_notes_detail,container,false);
+
             TextView titleTextView = (TextView)view.findViewById(R.id.detail_header);
             TextView detailTextView = (TextView)view.findViewById(R.id.detail_message);
             TextView priorityTextView = (TextView)view.findViewById(R.id.detail_priority);
@@ -96,14 +97,16 @@ public class NotesDetailFragment extends Fragment {
             TextView fromTextView = (TextView)view.findViewById(R.id.detail_from);
             titleTextView.setText(title);
             detailTextView.setText(detail);
-            priorityTextView.setText(priority);
-            dateTextView.setText(date);
+            priorityTextView.setText(Integer.toString(priority));
+            dateTextView.setText(Integer.toString(date));
             fromTextView.setText(from);
 
 
         }
 
-        return inflater.inflate(R.layout.fragment_notes_detail, container, false);
+//        View v=  inflater.inflate(R.layout.fragment_notes_detail, container, false);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

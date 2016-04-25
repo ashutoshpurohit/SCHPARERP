@@ -13,7 +13,7 @@
         android:title="@string/action_share"
         android:orderInCategory="2"
         android:showAsAction="ifRoom"
-        android:actionProviderClass="android.widget.ShareActionProvider" />
+        android:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
   
   <item android:id="@+id/action_settings"
         android:title="@string/action_settings"

@@ -13,7 +13,7 @@ public class NotesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes_detail);
         NotesDetailFragment fragment = new NotesDetailFragment();
        // fragment.setArguments(arguments);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.notes_detail_container, fragment)
                 .commit();
