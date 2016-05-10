@@ -1,8 +1,9 @@
 package com.myapp.handbook;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +32,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -57,6 +61,8 @@ public class MainActivity extends ActionBarActivity {
 
         titles = getResources().getStringArray(R.array.titles);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         drawerList = (ListView)findViewById(R.id.drawer);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -76,7 +82,8 @@ public class MainActivity extends ActionBarActivity {
         //Display the correct fragment.
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position");
-            setActionBarTitle(currentPosition);
+            //setActionBarTitle(currentPosition);
+            myToolbar.setTitle("Handbook");
         } else {
             selectItem(0);
         }
@@ -102,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
         getFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
-                        FragmentManager fragMan = getFragmentManager();
+                        android.support.v4.app.FragmentManager fragMan = getSupportFragmentManager();
                         Fragment fragment = fragMan.findFragmentByTag("visible_fragment");
                         if (fragment instanceof TopFragment) {
                             currentPosition = 0;
@@ -186,10 +193,11 @@ public class MainActivity extends ActionBarActivity {
         default:
             fragment = new TopFragment();
         }
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, fragment, "visible_fragment");
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //ft.replace(R.id.content_frame, fragment, "visible_fragment");
+        ft.replace(R.id.main_fragment, fragment, "visible_fragment");
         ft.addToBackStack(null);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         //Set the action bar title
         setActionBarTitle(position);
@@ -270,6 +278,15 @@ public class MainActivity extends ActionBarActivity {
        /* MenuItem menuItem = menu.findItem(R.id.action_share);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         setIntent("This is example text");*/
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -286,12 +303,8 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         switch (item.getItemId()) {
-        case R.id.action_create_order:
-            //Code to run when the Create Order item is clicked
-            Intent intent = new Intent(this, OrderActivity.class);
-            startActivity(intent);
-            return true;
-        case R.id.action_settings:
+
+            case R.id.action_settings:
             //Code to run when the settings item is clicked
             return true;
         default:

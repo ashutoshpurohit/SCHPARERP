@@ -1,7 +1,9 @@
 package com.myapp.handbook;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,7 +15,16 @@ public class NotesDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes_detail);
         NotesDetailFragment fragment = new NotesDetailFragment();
        // fragment.setArguments(arguments);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // my_child_toolbar is defined in the layout file
+        Toolbar myChildToolbar =
+                (Toolbar) findViewById(R.id.my_child_toolbar);
+        setSupportActionBar(myChildToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.notes_detail_container, fragment)
                 .commit();
