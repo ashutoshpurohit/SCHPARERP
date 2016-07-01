@@ -22,10 +22,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -55,8 +59,9 @@ public class RegistrationIntentService extends IntentService {
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
 
-            // TODO: Implement this method to send any registration to your app's servers.
-            sendRegistrationToServer(token);
+            // Check if token has already been sent to server
+            if(sharedPreferences.getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER,false)==true)
+                sendRegistrationToServer(token);
 
             // Subscribe to topic channels
             subscribeTopics(token);
@@ -71,6 +76,8 @@ public class RegistrationIntentService extends IntentService {
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
             sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
+            Toast.makeText(getApplicationContext(), "Failed to update the GCM token)",
+                    Toast.LENGTH_LONG).show();
         }
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(QuickstartPreferences.REGISTRATION_COMPLETE);
@@ -85,8 +92,14 @@ public class RegistrationIntentService extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(String token) throws JSONException, IOException {
         // Add custom implementation, as needed.
+        HttpConnectionUtil connectionUtil = new HttpConnectionUtil();
+        JSONObject deviceObject = new JSONObject();
+        //TO_DO mobile number should be set globally and ysed here
+        deviceObject.put("MobileNumber","9343603060");
+        deviceObject.put("DeviceId",token);
+        connectionUtil.downloadUrl(HttpConnectionUtil.URL_ENPOINT + "/devices", HttpConnectionUtil.RESTMethod.POST,deviceObject);
     }
 
     /**

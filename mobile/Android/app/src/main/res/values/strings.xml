@@ -10,7 +10,7 @@
   <string name="action_share">Share</string>
   <string name="app_notice">Notice</string>
   <string name="app_assignment">Assignment</string>
-  <string name="search_hint">Search</string>
+  <string name="search_hint">Enter search text</string>
 
 
   <!-- TODO: Remove or change this placeholder text -->
@@ -33,7 +33,14 @@
     <item>Notifications</item>
     <item>Assignments</item>
     <item>Feedback</item>
+    <item>Teacher Note</item>
   </string-array>
   <string name="open_drawer">Open drawer</string>
   <string name="close_drawer">Close drawer</string>
+  <string name="connection_error">Unable to connect to network</string>
+  <string name="send">Send</string>
+  <string name="std">Std</string>
+  <string name="select">Select Students</string>
+
+    <string name="title_activity_search">Search Results</string>
 </resources>

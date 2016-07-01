@@ -8,13 +8,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.support.v7.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 
 import com.myapp.handbook.data.HandBookDbHelper;
@@ -29,7 +34,9 @@ public class NotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
+        setHasOptionsMenu(true);
+        SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
+
         db = handbookDbHelper.getReadableDatabase();
 
         cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
@@ -71,5 +78,46 @@ public class NotesFragment extends Fragment {
                                                                 Notifications.notes);
         setListAdapter(adapter);*/
         //return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
+
+        super.onCreateOptionsMenu(menu,menuInflater);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView)searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            /**
+             * Called when the user submits the query. This could be due to a key press on the
+             * keyboard or due to pressing a submit button.
+             * The listener can override the standard behavior by returning true
+             * to indicate that it has handled the submit request. Otherwise return false to
+             * let the SearchView handle the submission by launching any associated intent.
+             *
+             * @param query the query text that is to be submitted
+             * @return true if the query has been handled by the listener, false to let the
+             * SearchView perform the default action.
+             */
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("NotesFragment", "Submitted query" + query);
+                searchView.clearFocus();
+                return true;
+            }
+
+            /**
+             * Called when the query text is changed by the user.
+             *
+             * @param newText the new content of the query text field.
+             * @return false if the SearchView should perform the default action of showing any
+             * suggestions if available, true if the action was handled by the listener.
+             */
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 }

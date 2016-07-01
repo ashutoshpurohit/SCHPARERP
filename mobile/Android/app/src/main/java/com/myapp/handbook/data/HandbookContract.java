@@ -42,4 +42,32 @@ public class HandbookContract {
 
         }
 
+    public static final class ProfileEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "profile";
+
+        // Column with the foreign key into the location table.
+        public static final String COLUMN_ID = "id";
+        // Date, stored as long in milliseconds since the epoch
+        public static final String COLUMN_FIRST_NAME = "first_name";
+
+        public static final String COLUMN_MIDDLE_NAME = "middle_name";
+        public static final String COLUMN_LAST_NAME = "last_name";
+
+        // Weather id as returned by API, to identify the icon to be used
+        public static final String COLUMN_ROLE = "role";
+
+        // Short description and long description of the weather, as provided by API.
+        // e.g "clear" vs "sky is clear".
+        public static final String COLUMN_GENDER = "gender";
+
+        public static final String COLUMN_DOB = "birth_date";
+
+        // Min and max temperatures for the day (stored as floats)
+        public static final String COLUMN_STD = "class";
+        public static final String COLUMN_ADDRESS = "address";
+
+    }
+
+
 }

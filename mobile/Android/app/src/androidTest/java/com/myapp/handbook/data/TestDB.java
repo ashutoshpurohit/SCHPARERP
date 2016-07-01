@@ -71,8 +71,8 @@ public class TestDB extends AndroidTestCase {
         SQLiteDatabase db = new HandBookDbHelper(
                 this.mContext).getWritableDatabase();
 
-        String title="Holiday Notification";
-        HandBookDbHelper.insertNotification(db,title,"Holiday on 23 March 2016 on occasion of Holi",new Date().toString(),1,"Admin",10001);
+        String title="Holiday tomorrow";
+        HandBookDbHelper.insertNotification(db, title, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001);
         Cursor cursor = db.query("notifications", null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             Assert.assertEquals(title,cursor.getString(5));
@@ -83,4 +83,22 @@ public class TestDB extends AndroidTestCase {
 
 
     }
+
+    public void testInsertToProfileTable() throws Throwable{
+        SQLiteDatabase db = new HandBookDbHelper(
+                this.mContext).getWritableDatabase();
+
+        String firstname="Ashutosh";
+        HandBookDbHelper.insertProfile(db,"001","Ashutosh", "Solanki", "Avinash", "Student", "M","12","69 Chandralok Indore",new Date(1978,9,20).toString());
+        Cursor cursor = db.query("profile", null, null, null, null, null, null);
+        if(cursor.moveToFirst()){
+            Assert.assertEquals(firstname,cursor.getString(1));
+
+        }
+        cursor.close();
+        db.close();
+
+
+    }
+
 }

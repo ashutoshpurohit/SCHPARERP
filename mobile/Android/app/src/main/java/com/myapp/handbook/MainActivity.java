@@ -2,7 +2,6 @@ package com.myapp.handbook;
 
 import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,11 +14,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,16 +75,31 @@ public class MainActivity extends AppCompatActivity {
                         R.drawable.ic_action_name,
                         R.drawable.ic_action_name,
                         R.drawable.ic_action_name,
+                        R.drawable.ic_action_name,
                         R.drawable.ic_action_name
+
                 }));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         //Display the correct fragment.
         if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt("position");
+            currentPosition = savedInstanceState.getInt("position",0);
             //setActionBarTitle(currentPosition);
             myToolbar.setTitle("Handbook");
+            selectItem(currentPosition);
         } else {
-            selectItem(0);
+            Intent intent =getIntent();
+            if(intent!=null)
+            {
+                int type = intent.getIntExtra("requestType",0);
+                if(type==HttpConnectionUtil.GCM_NOTIFICATION)
+                    currentPosition=1;
+                else
+                    currentPosition=0;
+                selectItem(currentPosition);
+            }
+            else {
+                selectItem(0);
+            }
         }
         //Create the ActionBarDrawerToggle
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -120,9 +134,13 @@ public class MainActivity extends AppCompatActivity {
                         if (fragment instanceof PastaFragment) {
                             currentPosition = 2;
                         }
-                        if (fragment instanceof FeedbackFragment) {
+                        if (fragment instanceof StudentFeedbackFragment) {
                             currentPosition = 3;
                         }
+                        if (fragment instanceof TeacherNoteFragment) {
+                            currentPosition = 4;
+                        }
+
                         setActionBarTitle(currentPosition);
                         drawerList.setItemChecked(currentPosition, true);
                     }
@@ -143,31 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        mDownstreamBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String from = intent.getStringExtra(RegistrationConstants.SENDER_ID);
-                Bundle data = intent.getBundleExtra(RegistrationConstants.EXTRA_KEY_BUNDLE);
-                String message = data.getString(RegistrationConstants.EXTRA_KEY_MESSAGE);
-
-                Log.d(TAG, "Received from ---------------------->" + from + "< with >" + data.toString() + "<-----------------------------");
-                Log.d(TAG, "Message: " + message);
-
-                String action = data.getString(RegistrationConstants.ACTION);
-                String status = data.getString(RegistrationConstants.STATUS);
-
-
-
-               // downstreamBundleView.setText(data.toString());
-
-            }
-        };
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mDownstreamBroadcastReceiver,
-                new IntentFilter(RegistrationConstants.NEW_DOWNSTREAM_MESSAGE));
-
-        registerReceiver();
+     registerReceiver();
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
@@ -188,7 +182,10 @@ public class MainActivity extends AppCompatActivity {
             fragment = new PastaFragment();
             break;
         case 3:
-            fragment = new FeedbackFragment();
+            fragment = new StudentFeedbackFragment();
+            break;
+        case 4:
+            fragment = new TeacherNoteFragment();
             break;
         default:
             fragment = new TopFragment();
@@ -287,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 searchManager.getSearchableInfo(getComponentName()));
 
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     private void setIntent(String text) {
