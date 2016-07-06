@@ -59,7 +59,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         Button sendButton = (Button)fragmentView.findViewById(R.id.sendButton);
         sendButton.setOnClickListener(this);
-        studentIds= GetStudentIds();
+        studentIds= Profile.GetIdsForRole(db, Profile.ProfileRole.STUDENT);
         if(studentIds.size()==1)
         {
             selectedStudentId = studentIds.get(0);
@@ -72,19 +72,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         SetupView();
         new FetchProfileAsyncTask().execute();
         return fragmentView;
-    }
-
-    private List<String> GetStudentIds() {
-
-        List<String> studentIds= new ArrayList<>();
-
-        List<Profile> allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
-        for(Profile profile:allProfiles){
-            if(profile.getRole().equalsIgnoreCase(Profile.ProfileRole.STUDENT.toString())){
-                studentIds.add(profile.getId());
-            }
-        }
-        return  studentIds;
     }
 
     public void onClick(View v){

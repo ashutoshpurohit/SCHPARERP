@@ -62,8 +62,11 @@ public class GcmIntentService extends IntentService {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("requestType",HttpConnectionUtil.GCM_NOTIFICATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                intent , 0);
+
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 

@@ -87,19 +87,9 @@ public class MainActivity extends AppCompatActivity {
             myToolbar.setTitle("Handbook");
             selectItem(currentPosition);
         } else {
-            Intent intent =getIntent();
-            if(intent!=null)
-            {
-                int type = intent.getIntExtra("requestType",0);
-                if(type==HttpConnectionUtil.GCM_NOTIFICATION)
-                    currentPosition=1;
-                else
-                    currentPosition=0;
-                selectItem(currentPosition);
-            }
-            else {
+
                 selectItem(0);
-            }
+
         }
         //Create the ActionBarDrawerToggle
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -168,6 +158,18 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
         getSupportActionBar().setElevation(0f);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent){
+        Bundle b = intent.getExtras();
+        int type = b.getInt("requestType");
+        if(type==HttpConnectionUtil.GCM_NOTIFICATION)
+            currentPosition=1;
+        else
+            currentPosition=0;
+        selectItem(currentPosition);
+
     }
 
     private void selectItem(int position) {
@@ -308,4 +310,10 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent result){
+        super.onActivityResult(requestCode,resultCode,result);
+    }
+
 }

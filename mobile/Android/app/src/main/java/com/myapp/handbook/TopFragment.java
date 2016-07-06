@@ -49,7 +49,7 @@ public class TopFragment extends Fragment {
 
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).commit();
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).commit();
 
         if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
             //Download the profile
@@ -114,15 +114,15 @@ public class TopFragment extends Fragment {
                 JSONObject teacher = null;
                 if (jsonBody.has("Students"))
                     students = jsonBody.getJSONArray("Students");
-                /*if(jsonBody.has("Teacher"))
-                    teacher=jsonBody.getJSONObject("Teacher");*/
+                if(jsonBody.has("Teacher"))
+                    teacher=jsonBody.getJSONObject("Teacher");
                 for (int i = 0; i < students.length(); i++) {
                     Profile profile = Profile.parseStudentJSonObject(students.getJSONObject(i));
                     if (profile != null)
                         profiles.add(profile);
                 }
                 if (teacher != null) {
-                    Profile teacherProfile = Profile.parseStudentJSonObject(teacher);
+                    Profile teacherProfile = Profile.parseTeacherJSonObject(teacher);
                     if (teacherProfile != null)
                         profiles.add(teacherProfile);
                 }
@@ -138,12 +138,14 @@ public class TopFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Profile> profiles) {
-            allProfiles = profiles;
-            sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).apply();
-           // Toast.makeText(getActivity().getApplicationContext(), "Successfully downloaded the profiles from server)",
-             //       Toast.LENGTH_LONG).show();
-            SetUpView();
-            SavetoDB();
+            if(profiles.size()>0) {
+                allProfiles = profiles;
+                sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).apply();
+                // Toast.makeText(getActivity().getApplicationContext(), "Successfully downloaded the profiles from server)",
+                //       Toast.LENGTH_LONG).show();
+                SetUpView();
+                SavetoDB();
+            }
         }
     }
 

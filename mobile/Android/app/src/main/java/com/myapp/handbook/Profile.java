@@ -1,7 +1,13 @@
 package com.myapp.handbook;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,7 +18,65 @@ import java.util.List;
  * Created by SAshutosh on 6/12/2016.
  */
 
-public class Profile {
+public class Profile implements Parcelable {
+
+    protected Profile(Parcel in) {
+        id = in.readString();
+        firstName = in.readString();
+        middleName = in.readString();
+        lastName = in.readString();
+        role = in.readString();
+        gender = in.readString();
+        birth_date = in.readString();
+        std = in.readString();
+        address = in.readString();
+        mobileNumber = in.readString();
+    }
+
+    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(firstName);
+        dest.writeString(middleName);
+        dest.writeString(lastName);
+        dest.writeString(role);
+        dest.writeString(gender);
+        dest.writeString(birth_date);
+        dest.writeString(std);
+        dest.writeString(address);
+        dest.writeString(mobileNumber);
+    }
 
     public enum ProfileRole{
         STUDENT,
@@ -23,6 +87,8 @@ public class Profile {
 
 
     public static final String STUDENT_FIRST_NAME ="StudentFirstName";
+    public static final String FATHER_MOBILE = "FatherMobile";
+    public static final String STUDENT_FULL_NAME ="StudentFullName";
     public static final String STUDENT_ID ="StudentId";
     public static final String STUDENT_MIDDLE_NAME ="StudentMiddleName";
     public static final String STUDENT_LAST_NAME ="StudentLastName";
@@ -30,8 +96,11 @@ public class Profile {
     public static final String STUDENT_GENDER ="StudentGender";
     public static final String STUDENT_STD ="StudentClassStandard";
     public static final String STUDENT_ADDRESS ="StudentFullAddress";
+    public static final String STUDENT_MOBILE ="StudentParentMobiles";
+
 
     public static final String TEACHER_FIRST_NAME ="TeacherFirstName";
+    public static final String TEACHER_ID ="TeacherId";
     public static final String TEACHER_MIDDLE_NAME ="TeacherMiddleName";
     public static final String TEACHER_LAST_NAME ="TeacherLastName";
     public static final String TEACHER_DOB ="TeacherDOB";
@@ -111,6 +180,14 @@ public class Profile {
         this.id = id;
     }
 
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
     private String id;
     private  String firstName;
 
@@ -130,6 +207,9 @@ public class Profile {
     private String std;
     private String address;
 
+
+
+    private String mobileNumber;
     public Profile(String id,String firstName, String middleName, String lastName, String role, String gender, String birth_date, String std, String address){
         this.id = id;
         this.address=address;
@@ -160,6 +240,25 @@ public class Profile {
             studentProfile.setGender(studentObj.getString(STUDENT_GENDER));
             studentProfile.setStd(studentObj.getString(STUDENT_STD));
             studentProfile.setBirth_date(studentObj.getString(STUDENT_DOB));
+            JSONArray mobiles = studentObj.getJSONArray(STUDENT_MOBILE);
+            //TO-DO currently we are fetching only first mobile number need to discuss how to implement this
+            studentProfile.setMobileNumber(mobiles.get(0).toString());
+        }
+        return studentProfile;
+
+    }
+
+    public static Profile parsePartialStudentJSonObject(JSONObject studentObj) throws JSONException {
+
+        Profile studentProfile = null;
+        if(studentObj!=null) {
+
+            studentProfile = new Profile();
+            studentProfile.setId(studentObj.getString(STUDENT_ID));
+            studentProfile.setRole(ProfileRole.STUDENT.toString());
+            studentProfile.setFirstName(studentObj.getString(STUDENT_FULL_NAME));
+            studentProfile.setMobileNumber(studentObj.getString(FATHER_MOBILE));
+
         }
         return studentProfile;
 
@@ -167,16 +266,31 @@ public class Profile {
 
     public static Profile parseTeacherJSonObject(JSONObject teacherObj) throws JSONException {
 
-        Profile studentProfile = new Profile();
-        studentProfile.setRole(ProfileRole.TEACHER.toString());
-        studentProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
-        studentProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
-        studentProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
-        studentProfile.setGender(teacherObj.getString(TEACHER_GENDER));
-        studentProfile.setStd("");
-        studentProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
+        Profile teacherProfile = new Profile();
+        teacherProfile.setRole(ProfileRole.TEACHER.toString());
+        teacherProfile.setId(teacherObj.getString(TEACHER_ID));
+        teacherProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
+        teacherProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
+        teacherProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
+        teacherProfile.setGender(teacherObj.getString(TEACHER_GENDER));
+        teacherProfile.setStd("");
+        teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
 
-        return studentProfile;
+        return teacherProfile;
+
+    }
+
+    public static List<String> GetIdsForRole(SQLiteDatabase db, Profile.ProfileRole role)
+    {
+        List<String> profileIds= new ArrayList<>();
+
+        List<Profile> allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
+        for(Profile profile:allProfiles){
+            if(profile.getRole().equalsIgnoreCase(role.toString())){
+                profileIds.add(profile.getId());
+            }
+        }
+        return  profileIds;
 
     }
 
