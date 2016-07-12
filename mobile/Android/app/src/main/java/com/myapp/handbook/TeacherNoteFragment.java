@@ -157,7 +157,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         Intent intent = new Intent(getActivity(),StudentSearch.class);
         intent.putExtra("Teacher_ID",selectedTeacherId);
-        startActivityForResult(intent,0);
     }
 
 
