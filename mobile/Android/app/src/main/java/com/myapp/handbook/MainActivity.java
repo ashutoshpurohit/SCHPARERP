@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -44,12 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private String[] titles;
     private static final String TAG = "MyActivity";
     private ListView drawerList;
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private int currentPosition = 0;
     private boolean isReceiverRegistered;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private BroadcastReceiver mDownstreamBroadcastReceiver;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        drawerList = (ListView)findViewById(R.id.drawer);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //Populate the ListView
-        /*drawerList.setAdapter(new ArrayAdapter<String>(this,
-                                                       android.R.layout.simple_list_item_activated_1, titles));*/
-        drawerList.setAdapter(new CustomNavAdapter(
-                this,
-                titles,
-                new Integer[]{
-                        R.drawable.ic_action_name,
-                        R.drawable.ic_action_name,
-                        R.drawable.ic_action_name,
-                        R.drawable.ic_action_name,
-                        R.drawable.ic_action_name
-
-                }));
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
-        //Display the correct fragment.
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position",0);
             //setActionBarTitle(currentPosition);
@@ -88,28 +73,109 @@ public class MainActivity extends AppCompatActivity {
             selectItem(currentPosition);
         } else {
 
-                selectItem(0);
+            selectItem(0);
 
         }
-        //Create the ActionBarDrawerToggle
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                                                 R.string.open_drawer, R.string.close_drawer) {
-                //Called when a drawer has settled in a completely closed state
-                @Override
-                public void onDrawerClosed(View view) {
-                    super.onDrawerClosed(view);
-                    invalidateOptionsMenu();
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+
+                Fragment fragment=null;
+                android.support.v4.app.FragmentTransaction fragmentTransaction=null;
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if(menuItem.isChecked()) menuItem.setChecked(false);
+                else menuItem.setChecked(true);
+
+                //Closing drawer on item click
+                drawerLayout.closeDrawers();
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()){
+
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.home:
+                        fragment = new TopFragment();
+                        currentPosition=0;
+                        break;
+                    case R.id.notifications:
+                        Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+                        fragment = new NotesFragment();
+                        currentPosition=1;
+                        break;
+                    case R.id.assignments:
+                        Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.feedback:
+                        Toast.makeText(getApplicationContext(),"Drafts Selected",Toast.LENGTH_SHORT).show();
+                        fragment = new StudentFeedbackFragment();
+                        currentPosition=3;
+                        break;
+                    case R.id.teacherNote:
+                        Toast.makeText(getApplicationContext(),"All Mail Selected",Toast.LENGTH_SHORT).show();
+                        fragment = new TeacherNoteFragment();
+                        currentPosition=4;
+                        break;
+
+                    case R.id.trash:
+                        Toast.makeText(getApplicationContext(),"Trash Selected",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.spam:
+                        Toast.makeText(getApplicationContext(),"Spam Selected",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        break;
                 }
-                //Called when a drawer has settled in a completely open state.
-                @Override
-                public void onDrawerOpened(View drawerView) {
-                    super.onDrawerOpened(drawerView);
-                    invalidateOptionsMenu();
+                if(fragment!=null) {
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
                 }
-            };
-        drawerLayout.setDrawerListener(drawerToggle);
+
+                return true;
+
+            }
+        });
+
+        // Initializing Drawer Layout and ActionBarToggle
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,myToolbar,R.string.open_drawer, R.string.close_drawer){
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+
+
+
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
         getFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
@@ -132,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         setActionBarTitle(currentPosition);
-                        drawerList.setItemChecked(currentPosition, true);
+                        //drawerList.setItemChecked(currentPosition, true);
                     }
                 }
         );
@@ -179,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         switch(position) {
         case 1:
             fragment = new NotesFragment();
+
             break;
         case 2:
             fragment = new PastaFragment();
@@ -194,14 +261,14 @@ public class MainActivity extends AppCompatActivity {
         }
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         //ft.replace(R.id.content_frame, fragment, "visible_fragment");
-        ft.replace(R.id.main_fragment, fragment, "visible_fragment");
+        ft.replace(R.id.frame, fragment, "visible_fragment");
         ft.addToBackStack(null);
         //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
         //Set the action bar title
         setActionBarTitle(position);
         //Close drawer
-        drawerLayout.closeDrawer(drawerList);
+        //drawerLayout.closeDrawer(drawerList);
     }
 
     private void registerReceiver() {
@@ -236,8 +303,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the drawer is open, hide action items related to the content view
-        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
-        menu.findItem(R.id.action_share).setVisible(!drawerOpen);
+       // boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+        //menu.findItem(R.id.action_share).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -245,13 +312,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
+       actionBarDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override

@@ -46,4 +46,11 @@
     <string name="title_activity_search">Search Results</string>
   <string name="done">Done</string>
   <string name="selectStudent">Select student</string>
+  <string name="home">Home</string>
+  <string name="Notifications">Notifications</string>
+  <string name="Assignments">Assignments</string>
+  <string name="Feedback">Feedback</string>
+  <string name="Teacher_Note">Teacher Note</string>
+  <string name="trash_string">Trash</string>
+  <string name="spam_string">Spam</string>
 </resources>
