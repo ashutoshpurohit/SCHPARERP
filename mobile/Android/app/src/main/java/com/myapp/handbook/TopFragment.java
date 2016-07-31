@@ -138,7 +138,7 @@ public class TopFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Profile> profiles) {
-            if(profiles.size()>0) {
+            if(profiles!=null && profiles.size()>0) {
                 allProfiles = profiles;
                 sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).apply();
                 // Toast.makeText(getActivity().getApplicationContext(), "Successfully downloaded the profiles from server)",

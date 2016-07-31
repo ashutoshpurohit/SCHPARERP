@@ -10,9 +10,9 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$NotesFragment">
 
-    <ListView
-        android:id="@+id/listview_notes"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
 </FrameLayout>
