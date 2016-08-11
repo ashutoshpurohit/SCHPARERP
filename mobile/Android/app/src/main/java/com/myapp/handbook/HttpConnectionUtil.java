@@ -68,13 +68,13 @@ public class HttpConnectionUtil {
         }
         return response;
     }
-
+    static String mobileNumber ="9611696804";
     public static String getMobileNumber(){
-        String mobileNumber ="9611696804";//"9845912894";
+        //"9845912894";
         return mobileNumber;
     }
 
     public static void setMobilenumber(String number){
-
+        mobileNumber=number;
     }
 }

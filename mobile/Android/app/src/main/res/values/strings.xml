@@ -1,56 +1,57 @@
 <resources>
-  <string name="app_name">Handbook</string>
+    <string name="app_name">Handbook</string>
 
-  <string name="hello_world">Hello world!</string>
-  <string name="action_settings">Settings</string>
-  <string name="action_search">Search</string>
-  <string name="action_create_order">Create Order</string>
-  <string name="title_activity_order">Order Activity</string>
-  <string name="details">Details</string>
-  <string name="action_share">Share</string>
-  <string name="app_notice">Notice</string>
-  <string name="app_assignment">Assignment</string>
-  <string name="search_hint">Enter search text</string>
-  <string name="subject">Subject</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_create_order">Create Order</string>
+    <string name="title_activity_order">Order Activity</string>
+    <string name="details">Details</string>
+    <string name="action_share">Share</string>
+    <string name="app_notice">Notice</string>
+    <string name="app_assignment">Assignment</string>
+    <string name="search_hint">Enter search text</string>
+    <string name="subject">Subject</string>
 
 
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
-  <string name="title_top">Top fragment</string>
-  <string-array name="pizzas">
-    <item>Diavolo</item>
-    <item>Funghi</item>
-  </string-array>
-  <string-array name="pasta">
-    <item>Spaghetti Bolognese</item>
-    <item>Lasagne</item>
-  </string-array>
-  <string-array name="stores">
-    <item>Cambridge</item>
-    <item>Sebastopol</item>
-  </string-array>
-  <string-array name="titles">
-    <item>Home</item>
-    <item>Notifications</item>
-    <item>Assignments</item>
-    <item>Feedback</item>
-    <item>Teacher Note</item>
-  </string-array>
-  <string name="open_drawer">Open drawer</string>
-  <string name="close_drawer">Close drawer</string>
-  <string name="connection_error">Unable to connect to network</string>
-  <string name="send">Send</string>
-  <string name="std">Std</string>
-  <string name="select">Select Students</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_top">Top fragment</string>
+    <string-array name="pizzas">
+        <item>Diavolo</item>
+        <item>Funghi</item>
+    </string-array>
+    <string-array name="pasta">
+        <item>Spaghetti Bolognese</item>
+        <item>Lasagne</item>
+    </string-array>
+    <string-array name="stores">
+        <item>Cambridge</item>
+        <item>Sebastopol</item>
+    </string-array>
+    <string-array name="titles">
+        <item>Home</item>
+        <item>Notifications</item>
+        <item>Assignments</item>
+        <item>Feedback</item>
+        <item>Teacher Note</item>
+    </string-array>
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+    <string name="connection_error">Unable to connect to network</string>
+    <string name="send">Send</string>
+    <string name="std">Std</string>
+    <string name="select">Select Students</string>
 
     <string name="title_activity_search">Search Results</string>
-  <string name="done">Done</string>
-  <string name="selectStudent">Select student</string>
-  <string name="home">Home</string>
-  <string name="Notifications">Notifications</string>
-  <string name="Assignments">Assignments</string>
-  <string name="Feedback">Feedback</string>
-  <string name="Teacher_Note">Teacher Note</string>
-  <string name="trash_string">Trash</string>
-  <string name="spam_string">Spam</string>
+    <string name="done">Done</string>
+    <string name="selectStudent">Select student</string>
+    <string name="home">Home</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Assignments">Assignments</string>
+    <string name="Feedback">Feedback</string>
+    <string name="Teacher_Note">Teacher Note</string>
+    <string name="trash_string">Trash</string>
+    <string name="spam_string">Spam</string>
+    <string name="title_activity_login">Login</string>
 </resources>
