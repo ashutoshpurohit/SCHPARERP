@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.myapp.handbook.data.HandBookDbHelper;
  */
 public class GcmIntentService extends IntentService {
 
+    public static int id=0;
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -57,6 +60,9 @@ public class GcmIntentService extends IntentService {
     }
 
     private void sendNotification(String title,String msg) {
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_launcher);
+
         NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -72,7 +78,8 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_action_search)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setLargeIcon(largeIcon)
                         .setContentTitle(title)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
@@ -81,6 +88,7 @@ public class GcmIntentService extends IntentService {
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(id, mBuilder.build());
+        id++;
     }
 }

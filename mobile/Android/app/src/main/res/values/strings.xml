@@ -35,6 +35,9 @@
         <item>Assignments</item>
         <item>Feedback</item>
         <item>Teacher Note</item>
+        <item>Trash</item>
+        <item>Spam</item>
+
     </string-array>
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>

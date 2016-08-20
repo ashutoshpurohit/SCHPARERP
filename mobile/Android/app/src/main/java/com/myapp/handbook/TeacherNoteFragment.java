@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 
@@ -51,6 +54,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         fragmentView= inflater.inflate(R.layout.fragment_teacher_note, container, false);
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
@@ -59,6 +63,16 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
+
+        Button clickButton = (Button) fragmentView.findViewById(R.id.sendButton);
+        clickButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new PostTeacherMessageAsyncTask().execute();
+            }
+        });
 
         new FetchTeacherAssignmentAsyncTask().execute();
         SetupView();
@@ -157,7 +171,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         Intent intent = new Intent(getActivity(),StudentSearch.class);
         intent.putExtra("Teacher_ID",selectedTeacherId);
-        this.startActivity(intent);
+        startActivityForResult(intent,111);
     }
 
 
@@ -187,8 +201,65 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
 
+
     }
 
+    private class PostTeacherMessageAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+
+            HttpConnectionUtil util = new HttpConnectionUtil();
+
+            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
+            JSONObject messageJson = prepareMessage();
+            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
+            return result;
+
+        }
+        @Override
+        protected void onPostExecute(String result){
+            if(result!=null && result.length()> 0 ){
+                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private JSONObject prepareMessage() {
+        JSONArray numbers = new JSONArray();
+        JSONObject msgToSend = new JSONObject();
+        int i=0;
+        for (Profile student:selectedStudents
+             ) {
+            try {
+                numbers.put(i,student.getMobileNumber());
+                i++;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        String message ="";
+        View view = fragmentView;
+        TextView fromText = (TextView) view.findViewById(R.id.teacher_note);
+        message = fromText.getText().toString();
+        try {
+            msgToSend.put("MessageTitle",message);
+            msgToSend.put("MessageTitle","Teacher Note");
+            msgToSend.put("MobileNumbers",numbers);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return msgToSend;
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Hide all menu icon
+        for (int i = 0; i < menu.size()-1; i++)
+            menu.getItem(i).setVisible(false);
+    }
 
 
 }

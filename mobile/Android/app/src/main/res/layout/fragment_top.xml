@@ -29,26 +29,31 @@
         android:id="@+id/role"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+      android:text="Role:Student"
       style ="?android:listSeparatorTextViewStyle"/>
   <TextView
         android:id="@+id/gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+      android:text="Gender:M"
       style ="?android:listSeparatorTextViewStyle"/>
   <TextView
         android:id="@+id/dob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+      android:text="DOB:"
       style ="?android:listSeparatorTextViewStyle"/>
   <TextView
         android:id="@+id/std"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+      android:text="Std:"
       style ="?android:listSeparatorTextViewStyle"/>
     <TextView
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Address"
         style ="?android:listSeparatorTextViewStyle"/>
 
 </LinearLayout>

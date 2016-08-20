@@ -3,6 +3,7 @@ package com.myapp.handbook;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class Profile implements Parcelable {
 
+    private static final String TAG = "ProfileParse Fetch";
     protected Profile(Parcel in) {
         id = in.readString();
         firstName = in.readString();
@@ -264,20 +266,27 @@ public class Profile implements Parcelable {
 
     }
 
-    public static Profile parseTeacherJSonObject(JSONObject teacherObj) throws JSONException {
+    public static Profile parseTeacherJSonObject(JSONObject teacherObj){
 
-        Profile teacherProfile = new Profile();
-        teacherProfile.setRole(ProfileRole.TEACHER.toString());
-        teacherProfile.setId(teacherObj.getString(TEACHER_ID));
-        teacherProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
-        teacherProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
-        teacherProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
-        teacherProfile.setGender(teacherObj.getString(TEACHER_GENDER));
-        teacherProfile.setStd("");
-        teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
+        Profile teacherProfile=null;
+        try {
+            teacherProfile = new Profile();
+            teacherProfile.setRole(ProfileRole.TEACHER.toString());
+            teacherProfile.setId(teacherObj.getString(TEACHER_ID));
+            teacherProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
+            teacherProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
+            teacherProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
+            teacherProfile.setGender(teacherObj.getString(TEACHER_GENDER));
+            teacherProfile.setStd("");
+            teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
 
+
+        }
+        catch(JSONException w)
+        {
+            Log.d(TAG,"JSON for teacher missing or incorrect");
+        }
         return teacherProfile;
-
     }
 
     public static List<String> GetIdsForRole(SQLiteDatabase db, Profile.ProfileRole role)

@@ -83,4 +83,9 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent result){
+        super.onActivityResult(requestCode,resultCode,result);
+    }
+
 }

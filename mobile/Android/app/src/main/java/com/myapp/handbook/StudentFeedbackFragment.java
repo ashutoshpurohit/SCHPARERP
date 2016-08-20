@@ -9,6 +9,8 @@ import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
@@ -50,6 +53,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
+
         fragmentView= inflater.inflate(R.layout.fragment_feedback, container, false);
         //Set up the listener for the spinner
         Spinner spinner = (Spinner) fragmentView.findViewById(R.id.teachers_spinner);
@@ -68,6 +73,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             //TO-DO Insert logic to ask user to select one student
             selectedStudentId = studentIds.get(0);
         }
+        //Button selectStudent = (Button)fragmentView.findViewById(R.id.sendButton);
+        //selectStudent.setOnClickListener(this);
 
         SetupView();
         new FetchProfileAsyncTask().execute();
@@ -78,29 +85,62 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         //Post message for notification
         EditText et=((EditText)fragmentView.findViewById(R.id.feeback_message));
         String messageBody= et.getText().toString();
-        String mobileNo= allTeacherProfiles.get(selectedTeacherIndex).mobileNumber;
+        String[] mobileNo= {allTeacherProfiles.get(selectedTeacherIndex).mobileNumber};
+
         //To-Do hardcoded header to be changed
-        //To-Do  Create a separate method for preparing JSon message
-        String messageHeader ="Hello";
-        JSONObject messageObject = new JSONObject();
-        JSONArray mobileNumbers = new JSONArray();
+        //To-Do  Figure out from which profile message is sent
+        String messageHeader ="Note from Parent";
+        JSONObject messageObject = prepareMessage(mobileNo,"Parent",messageBody);
 
-        try {
-            messageObject.put(MESSAGE_HEADER,messageHeader);
-            messageObject.put(MESSAGE_BODY,messageBody);
-            mobileNumbers.put(mobileNo);
-            messageObject.put(MOBILE_TO_SEND, mobileNumbers);
-
-        } catch(JSONException e) {
-            e.printStackTrace();
-        }
-
-        HttpConnectionUtil connUtil = new HttpConnectionUtil();
-        String result= connUtil.downloadUrl(HttpConnectionUtil.URL_ENPOINT +"/SendMessageToMultipleUser", HttpConnectionUtil.RESTMethod.PUT,messageObject);
-        Log.d(TAG,"Received result from put message "+ result);
+        new PostTeacherMessageAsyncTask().execute(messageObject);
 
 
     }
+
+    private class PostTeacherMessageAsyncTask extends AsyncTask<JSONObject, Void, String> {
+
+        @Override
+        protected String doInBackground(JSONObject... params) {
+
+            HttpConnectionUtil util = new HttpConnectionUtil();
+
+            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
+            JSONObject message = params[0];
+            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, message);
+            return result;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            if(result!=null && result.length()> 0 ){
+                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private JSONObject prepareMessage(String[] toMobileNumbers, String from, String message) {
+        JSONArray numbers = new JSONArray();
+        JSONObject msgToSend = new JSONObject();
+        int i=0;
+        for (String number:toMobileNumbers
+                ) {
+            try {
+                numbers.put(i,number);
+                i++;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            msgToSend.put("MessageTitle",message);
+            msgToSend.put("MessageTitle","Teacher Note from"+from);
+            msgToSend.put("MobileNumbers",numbers);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return msgToSend;
+    }
+
 
     private void SetupView() {
         View view = fragmentView;
@@ -196,6 +236,14 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             allTeacherProfiles = profiles;
             SetupView();
         }
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Hide all menu icon
+        for (int i = 0; i < menu.size()-1; i++)
+            menu.getItem(i).setVisible(false);
     }
 
 

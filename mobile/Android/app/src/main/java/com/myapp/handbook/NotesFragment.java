@@ -39,10 +39,12 @@ public class NotesFragment extends Fragment {
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
         db = handbookDbHelper.getReadableDatabase();
+        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
 
-        cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
+        cursor = db.rawQuery(query_to_fetch_earliest, null);
+        /*cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
                 null,
-                null, null, null, null, null, null);
+                null, null, null, null, HandbookContract.NotificationEntry.COLUMN_TIMESTAMP, null);*/
 
         /* CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
                 android.R.layout.simple_list_item_1,

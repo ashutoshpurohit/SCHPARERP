@@ -76,7 +76,32 @@ public class TestDB extends AndroidTestCase {
         Cursor cursor = db.query("notifications", null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             Assert.assertEquals(title,cursor.getString(5));
+            Assert.assertNotNull(cursor.getString(7));
+        }
+        cursor.close();
+        db.close();
 
+
+    }
+
+    public void testOrderByQueryNotificationsTable() throws Throwable{
+        SQLiteDatabase db = new HandBookDbHelper(
+                this.mContext).getWritableDatabase();
+
+        String title1="Holiday tomorrow";
+        String title2="Test";
+        HandBookDbHelper.insertNotification(db, title1, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001);
+        HandBookDbHelper.insertNotification(db,title2 , "This is wonderful day", new Date().toString(), 2, "Admin", 10002);
+        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") ASC ";
+
+        Cursor cursor = db.rawQuery(query_to_fetch_earliest, null);
+        //Cursor cursor = db.query("notifications", null, null, null, null, null, "DATETIME("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+")"+" DESC");
+        if(cursor.moveToFirst()){
+            //Assert.assertEquals(title2,cursor.getString(5));
+            //Assert.assertNotNull(cursor.getString(7));
+            System.out.println(cursor.getString(5)+ ":"+cursor.getString(7));
+            cursor.moveToNext();
+            System.out.println(cursor.getString(5)+ ":"+cursor.getString(7));
         }
         cursor.close();
         db.close();

@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,11 +39,12 @@ public class TopFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_top, container, false);
         fragmentView = view;
 
+        setHasOptionsMenu(true);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
@@ -49,8 +52,8 @@ public class TopFragment extends Fragment {
 
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).commit();
 
+        //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).apply();
         if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
             //Download the profile
             new FetchProfileAsyncTask().execute();
@@ -114,7 +117,7 @@ public class TopFragment extends Fragment {
                 JSONObject teacher = null;
                 if (jsonBody.has("Students"))
                     students = jsonBody.getJSONArray("Students");
-                if(jsonBody.has("Teacher"))
+                if(jsonBody.has("Teacher") && !jsonBody.isNull("Teacher"))
                     teacher=jsonBody.getJSONObject("Teacher");
                 for (int i = 0; i < students.length(); i++) {
                     Profile profile = Profile.parseStudentJSonObject(students.getJSONObject(i));
@@ -158,5 +161,13 @@ public class TopFragment extends Fragment {
 
         sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Hide search menu icon
+        menu.getItem(0).setVisible(false);
     }
 }

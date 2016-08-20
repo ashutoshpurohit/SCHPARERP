@@ -34,7 +34,7 @@
         android:layout_height="0dp"
         android:id="@+id/feeback_message"
         android:layout_weight="1"
-        android:layout_gravity="top"
+        android:gravity="top|left"
         android:hint="Message">
         <requestFocus/>
 

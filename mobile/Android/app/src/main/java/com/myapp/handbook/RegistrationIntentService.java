@@ -97,7 +97,7 @@ public class RegistrationIntentService extends IntentService {
         HttpConnectionUtil connectionUtil = new HttpConnectionUtil();
         JSONObject deviceObject = new JSONObject();
         //TO_DO mobile number should be set globally and ysed here
-        deviceObject.put("MobileNumber","9343603060");
+        deviceObject.put("MobileNumber",HttpConnectionUtil.getMobileNumber());
         deviceObject.put("DeviceId",token);
         connectionUtil.downloadUrl(HttpConnectionUtil.URL_ENPOINT + "/devices", HttpConnectionUtil.RESTMethod.POST,deviceObject);
     }

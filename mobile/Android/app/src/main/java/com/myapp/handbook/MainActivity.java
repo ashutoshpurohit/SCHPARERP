@@ -145,10 +145,11 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame, fragment);
                     fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    fragmentTransaction.commitAllowingStateLoss();
+
 
                 }
-
+                setActionBarTitle(currentPosition);
                 return true;
 
             }
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.frame, fragment, "visible_fragment");
         ft.addToBackStack(null);
         //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
+        ft.commitAllowingStateLoss();
         //Set the action bar title
         setActionBarTitle(position);
         //Close drawer
@@ -354,12 +355,12 @@ public class MainActivity extends AppCompatActivity {
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         setIntent("This is example text");*/
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
+        /*SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+                searchManager.getSearchableInfo(getComponentName()));*/
 
 
         return true;
@@ -394,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
 
-    @Override
+/*    @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
@@ -415,6 +416,6 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
-    }
+    }*/
 
 }

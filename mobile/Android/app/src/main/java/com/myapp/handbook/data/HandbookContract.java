@@ -40,6 +40,8 @@ public class HandbookContract {
         public static final String COLUMN_FROM = "msg_source";
         public static final String COLUMN_PRIORITY = "priority";
 
+        public static final String COLUMN_TIMESTAMP ="timestamp";
+
         }
 
     public static final class ProfileEntry implements BaseColumns {

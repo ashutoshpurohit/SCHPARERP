@@ -44,7 +44,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 NotificationEntry.COLUMN_DETAIL + " TEXT NOT NULL, " +
                 NotificationEntry.COLUMN_TITLE + " TEXT NOT NULL," +
 
-                NotificationEntry.COLUMN_FROM + " TEXT NOT NULL" + " );";
+                NotificationEntry.COLUMN_FROM + " TEXT NOT NULL," +
+                NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" +" );";
 
         final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
                 ProfileEntry.COLUMN_ID +" TEXT NOT NULL,"+
