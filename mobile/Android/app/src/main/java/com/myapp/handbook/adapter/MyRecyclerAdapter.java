@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,14 @@ import com.myapp.handbook.R;
 /**
  * Created by SAshutosh on 7/19/2016.
  */
-public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> implements View.OnClickListener {
+public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener
+ {
 
     // Because RecyclerView.Adapter in its current form doesn't natively
     // support cursors, we wrap a CursorAdapter that will do all the job
     // for us.
     CursorAdapter mCursorAdapter;
-
+     private SparseBooleanArray selectedItems;
     Context mContext;
 
     public MyRecyclerAdapter(Context context, Cursor c) {
@@ -52,6 +54,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 viewHolder.dbId=cursor.getLong(0);
             }
         };
+
+        selectedItems= new SparseBooleanArray();
     }
 
     /**
@@ -62,6 +66,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     @Override
     public void onClick(View v) {
 
+        long rowId =0;
         //Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
         if(v!=null){
             //long rowId = cursor.getLong(0);
@@ -69,15 +74,39 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             //TextView notificationIdView = (TextView) v.findViewById(R.id.list_item_noteid_textview);
             //long rowId = Integer.parseInt(notificationIdView.getText().toString());
             ViewHolder viewHolder = (ViewHolder) v.getTag();
-            long rowId = viewHolder.dbId;
-            Intent intent = new Intent(mContext ,NotesDetailActivity.class);
-            intent.putExtra("ID",rowId);
-            mContext.startActivity(intent);
+            rowId = viewHolder.dbId;
+            //Intent intent = new Intent(mContext ,NotesDetailActivity.class);
+            //intent.putExtra("ID",rowId);
+           // mContext.startActivity(intent);
             //TO-DO Add the current fragment to back stack so that back button works
         }
+        if (selectedItems.get((int)rowId, false)) {
+            selectedItems.delete((int)rowId);
+            v.setSelected(false);
+        }
+        else {
+            selectedItems.put((int)rowId, true);
+            v.setSelected(true);
+        }
+
+
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+     /**
+      * Called when a view has been clicked and held.
+      *
+      * @param v The view that was clicked and held.
+      * @return true if the callback consumed the long click, false otherwise.
+      */
+     @Override
+     public boolean onLongClick(View v) {
+         v.setSelected(true);
+
+         return true;
+     }
+
+
+     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v1;
         public final TextView titleView;
         public final TextView detailMsgView;

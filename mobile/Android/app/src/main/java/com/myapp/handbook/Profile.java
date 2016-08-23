@@ -99,7 +99,7 @@ public class Profile implements Parcelable {
     public static final String STUDENT_STD ="StudentClassStandard";
     public static final String STUDENT_ADDRESS ="StudentFullAddress";
     public static final String STUDENT_MOBILE ="StudentParentMobiles";
-
+    public static final String IMAGE_URL="ImageUrl";
 
     public static final String TEACHER_FIRST_NAME ="TeacherFirstName";
     public static final String TEACHER_ID ="TeacherId";
@@ -190,6 +190,14 @@ public class Profile implements Parcelable {
         this.mobileNumber = mobileNumber;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     private String id;
     private  String firstName;
 
@@ -208,6 +216,9 @@ public class Profile implements Parcelable {
     // Min and max temperatures for the day (stored as floats)
     private String std;
     private String address;
+
+
+    private String imageUrl;
 
 
 
@@ -245,6 +256,7 @@ public class Profile implements Parcelable {
             JSONArray mobiles = studentObj.getJSONArray(STUDENT_MOBILE);
             //TO-DO currently we are fetching only first mobile number need to discuss how to implement this
             studentProfile.setMobileNumber(mobiles.get(0).toString());
+            studentProfile.setImageUrl(studentObj.getString(IMAGE_URL));
         }
         return studentProfile;
 

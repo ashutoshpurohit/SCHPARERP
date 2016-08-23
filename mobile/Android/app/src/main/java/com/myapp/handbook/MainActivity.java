@@ -375,17 +375,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        switch (item.getItemId()) {
-
-            case R.id.action_settings:
-            //Code to run when the settings item is clicked
-            return true;
-        default:
             return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

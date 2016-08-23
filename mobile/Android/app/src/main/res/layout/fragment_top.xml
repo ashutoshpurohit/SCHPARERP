@@ -5,55 +5,68 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 tools:context=".MainActivity">
-  <TextView
-      android:id="@+id/firstName"
-      android:text= "First Name :Ashutosh "
+  <ImageView
+      android:id="@+id/profileImage"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style ="?android:listSeparatorTextViewStyle"
+      android:layout_height="0dp"
+      android:layout_weight="0.4"
+      android:src="@drawable/contact_picture_placeholder"
+      />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:orientation="vertical">
+      <TextView
+          android:id="@+id/firstName"
+          android:text= "First Name :Ashutosh "
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          style ="?android:listSeparatorTextViewStyle"
       />
 
-    <TextView
-        android:id="@+id/middleName"
-        android:text="Middle Name :Avinash"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style ="?android:listSeparatorTextViewStyle"/>
-   <TextView
-       android:id="@+id/lastName"
-       android:text="Last Name :Solanki"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       style ="?android:listSeparatorTextViewStyle"/>
-  <TextView
-        android:id="@+id/role"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      android:text="Role:Student"
-      style ="?android:listSeparatorTextViewStyle"/>
-  <TextView
-        android:id="@+id/gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      android:text="Gender:M"
-      style ="?android:listSeparatorTextViewStyle"/>
-  <TextView
-        android:id="@+id/dob"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      android:text="DOB:"
-      style ="?android:listSeparatorTextViewStyle"/>
-  <TextView
-        android:id="@+id/std"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      android:text="Std:"
-      style ="?android:listSeparatorTextViewStyle"/>
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Address"
-        style ="?android:listSeparatorTextViewStyle"/>
-
+        <TextView
+            android:id="@+id/middleName"
+            android:text="Middle Name :Avinash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style ="?android:listSeparatorTextViewStyle"/>
+       <TextView
+           android:id="@+id/lastName"
+           android:text="Last Name :Solanki"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           style ="?android:listSeparatorTextViewStyle"/>
+      <TextView
+            android:id="@+id/role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+          android:text="Role:Student"
+          style ="?android:listSeparatorTextViewStyle"/>
+      <TextView
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+          android:text="Gender:M"
+          style ="?android:listSeparatorTextViewStyle"/>
+      <TextView
+            android:id="@+id/dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+          android:text="DOB:"
+          style ="?android:listSeparatorTextViewStyle"/>
+      <TextView
+            android:id="@+id/std"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+          android:text="Std:"
+          style ="?android:listSeparatorTextViewStyle"/>
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            style ="?android:listSeparatorTextViewStyle"/>
+    </LinearLayout>
 </LinearLayout>
+

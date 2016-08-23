@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +31,7 @@ public class NotesFragment extends Fragment {
     private SQLiteDatabase db;
     private Cursor cursor;
     RecyclerView mRecyclerView;
+    ShareActionProvider shareActionProvider;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     @Override
@@ -98,11 +101,33 @@ public class NotesFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    void updateIntent(){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text");
+
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
 
         super.onCreateOptionsMenu(menu,menuInflater);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
         final SearchView searchView = (SearchView)searchItem.getActionView();
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                return false;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 
@@ -120,6 +145,11 @@ public class NotesFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("NotesFragment", "Submitted query" + query);
+                String searchQuery = "SELECT *  FROM "+ HandbookContract.NotificationEntry.TABLE_NAME + " where " + HandbookContract.NotificationEntry.COLUMN_DETAIL +" like \'%"+ query + "%\'";// order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+                cursor = db.rawQuery(searchQuery, null);
+                mAdapter = new MyRecyclerAdapter(getContext(),cursor);
+                mRecyclerView.setAdapter(mAdapter);
+
                 searchView.clearFocus();
                 return true;
             }

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,11 +15,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +42,7 @@ public class TopFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_top, container, false);
         fragmentView = view;
@@ -53,7 +56,7 @@ public class TopFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).apply();
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).apply();
         if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
             //Download the profile
             new FetchProfileAsyncTask().execute();
@@ -76,9 +79,15 @@ public class TopFragment extends Fragment {
 
         View view = fragmentView;
         TextView firstName = (TextView) view.findViewById(R.id.firstName);
+        ImageView profileImage = (ImageView)view.findViewById(R.id.profileImage);
+        //profileImage.setImageDrawable();
         if (!allProfiles.isEmpty()) {
             Profile profile = allProfiles.get(0);
-
+            Picasso.with(getContext())
+                    .load(profile.getImageUrl())
+                    .placeholder(R.drawable.contact_picture_placeholder)
+                    .error(R.drawable.contact_picture_error)
+                    .into(profileImage);
             TextView middleName = (TextView) view.findViewById(R.id.middleName);
             TextView lastName = (TextView) view.findViewById(R.id.lastName);
             TextView role = (TextView) view.findViewById(R.id.role);

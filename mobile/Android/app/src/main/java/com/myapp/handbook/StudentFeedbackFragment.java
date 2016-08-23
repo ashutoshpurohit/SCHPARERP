@@ -132,7 +132,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             }
         }
         try {
-            msgToSend.put("MessageTitle",message);
+            msgToSend.put("MessageBody",message);
             msgToSend.put("MessageTitle","Teacher Note from"+from);
             msgToSend.put("MobileNumbers",numbers);
         } catch (JSONException e) {
