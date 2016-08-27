@@ -1,7 +1,9 @@
 package com.myapp.handbook.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.digits.sdk.android.DigitsAuthButton;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
 import com.myapp.handbook.HttpConnectionUtil;
+import com.myapp.handbook.QuickstartPreferences;
 import com.myapp.handbook.R;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -26,7 +29,7 @@ public class Login extends AppCompatActivity {
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "FYb2ipP3TtsjypFzFcqmUIgzR";
     private static final String TWITTER_SECRET = "t0vQHLYZp6PSAyBYnZB4a260SFFT20RChlE1xx8ixzkCaWGuA6";
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +62,16 @@ public class Login extends AppCompatActivity {
                     //Remove country code
                     String finalNumber = filterCountryCode(phoneNumber);
                     HttpConnectionUtil.setMobilenumber(finalNumber);
+                    //Set the Logged in flag to true
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, true).apply();
+                    sharedPreferences.edit().putString(QuickstartPreferences.LOGGED_MOBILE,finalNumber).apply();
                     Intent intent = new Intent(getBaseContext(),com.myapp.handbook.MainActivity.class);
                     startActivity(intent);
                 }
                 else{
-                    //TO-DO put some validation logic
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
                 }
 
             }

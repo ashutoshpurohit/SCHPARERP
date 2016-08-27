@@ -21,5 +21,7 @@ public class QuickstartPreferences {
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String PROFILE_DOWNLOADED ="profileDownloaded";
+    public static final String LOGGED_IN ="loginCompleted";
+    public static final String LOGGED_MOBILE ="mobileNumber";
 
 }

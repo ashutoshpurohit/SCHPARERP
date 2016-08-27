@@ -1,9 +1,13 @@
 package com.myapp.handbook;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -17,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -41,6 +48,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     public static final String MESSAGE_HEADER ="MessageTitle";
     public static final String MESSAGE_BODY ="MessageBody";
     public static final String MOBILE_TO_SEND ="MobileNumbers";
+    private static final int REQUEST_PHOTO = 2;
+
 
     View fragmentView=null;
     List<String> teacherNames;
@@ -49,15 +58,43 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private SQLiteDatabase db;
     List<String> studentIds;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
+    private ImageButton photoButton;
+    private ImageView photoView;
+    private File photoFile;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
+
         fragmentView= inflater.inflate(R.layout.fragment_feedback, container, false);
         //Set up the listener for the spinner
         Spinner spinner = (Spinner) fragmentView.findViewById(R.id.teachers_spinner);
+        photoButton =(ImageButton)fragmentView.findViewById(R.id.camera_button);
+        photoView =(ImageView)fragmentView.findViewById(R.id.message_image);
+        photoFile = HttpConnectionUtil.getPhotoFile(getContext(),HttpConnectionUtil.getPhotoFileName());
+
+        final Intent captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //Check if permission is available to create file and access camera
+        boolean canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
+        photoButton.setEnabled(canTakePhoto);
+
+        if (canTakePhoto) {
+            Uri uri = Uri.fromFile( photoFile); captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
+        }
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(captureImage,REQUEST_PHOTO);
+            }
+        });
+
+
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
@@ -78,7 +115,20 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
         SetupView();
         new FetchProfileAsyncTask().execute();
+        updatePhotoView();
         return fragmentView;
+    }
+
+    public void updatePhotoView(){
+        if(photoFile==null|| photoFile.exists()==false ){
+            photoView.setImageDrawable(null);
+            photoView.setVisibility(View.GONE);
+        }
+        else{
+            Bitmap bitmap = PictureUtil.getScaledBitmap(photoFile.getPath(),getActivity());
+            photoView.setImageBitmap(bitmap);
+            photoView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onClick(View v){
@@ -93,7 +143,12 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         JSONObject messageObject = prepareMessage(mobileNo,"Parent",messageBody);
 
         new PostTeacherMessageAsyncTask().execute(messageObject);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent result){
+        if(requestCode==REQUEST_PHOTO)
+            updatePhotoView();
 
     }
 
@@ -245,6 +300,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         for (int i = 0; i < menu.size()-1; i++)
             menu.getItem(i).setVisible(false);
     }
+
 
 
 

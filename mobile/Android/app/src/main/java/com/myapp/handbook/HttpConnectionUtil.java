@@ -1,36 +1,46 @@
 package com.myapp.handbook;
 
+import android.content.Context;
+import android.os.Environment;
+
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by SAshutosh on 6/7/2016.
  */
 public class HttpConnectionUtil {
 
-    public enum RESTMethod{
+    public enum RESTMethod {
         GET,
         POST,
         PUT,
         DELETE
-    };
+    }
 
-    public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
-    public static int GCM_NOTIFICATION =1000;
+    ;
+
+    public static String URL_ENPOINT = "https://floating-bastion-86283.herokuapp.com";
+    public static int GCM_NOTIFICATION = 1000;
+
     /**
      * Given a string representation of a URL, sets up a connection and gets
      * an input stream.
+     *
      * @param urlString A string representation of a URL.
      * @return An String containing the received response.
-     *
      */
-    public String downloadUrl(String urlString, RESTMethod method, JSONObject inputJson ) {
+    public String downloadUrl(String urlString, RESTMethod method, JSONObject inputJson) {
         // BEGIN_INCLUDE(get_inputstream)
         String response = "";
         try {
@@ -68,14 +78,32 @@ public class HttpConnectionUtil {
         }
         return response;
     }
-    static String mobileNumber ="9611696804";
-    public static String getMobileNumber(){
+
+    static String mobileNumber = "9611696804";
+
+    public static String getMobileNumber() {
         //String number ="9611696804";
         //return number;
         return mobileNumber;
     }
 
-    public static void setMobilenumber(String number){
-        mobileNumber=number;
+    public static void setMobilenumber(String number) {
+        mobileNumber = number;
+    }
+
+    public static String getPhotoFileName() {
+        Calendar c = Calendar.getInstance();
+        int currentTime = c.get(Calendar.DATE);
+        return "IMG_" + DateFormat.getDateTimeInstance().format(new Date()) + ".jpg";
+    }
+
+    public static File getPhotoFile(Context ctx, String name) {
+        File externalFilesDir = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFilesDir == null) {
+            return null;
+        }
+        return new File(externalFilesDir, name);
+
+
     }
 }

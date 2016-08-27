@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SQLiteOpenHelper notificationHelper = new HandBookDbHelper(this);
@@ -84,6 +84,27 @@ public class MainActivity extends AppCompatActivity {
             selectItem(0);
 
         }
+        //Check if logged in
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false) == false){
+            //Launch the digits app
+            Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
+            startActivity(intent);
+        }
+        else{
+            String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
+            //If valid mobile
+            if(mobileNumber.length()>0)
+            {
+                HttpConnectionUtil.setMobilenumber(mobileNumber);
+            }
+            else{
+                //Redirect user back to login Screen
+                Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
+                startActivity(intent);
+            }
+        }
+
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
@@ -157,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,myToolbar,R.string.open_drawer, R.string.close_drawer){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,myToolbar,R.string.open_drawer, R.string.close_drawer){
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -227,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-     registerReceiver();
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
-        getSupportActionBar().setElevation(0f);
+    registerReceiver();
+    if (checkPlayServices()) {
+        // Start IntentService to register this application with GCM.
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
+    }
+    getSupportActionBar().setElevation(0f);
     }
 
     @Override
