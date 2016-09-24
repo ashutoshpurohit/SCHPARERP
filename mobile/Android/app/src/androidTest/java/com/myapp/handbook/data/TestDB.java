@@ -3,6 +3,7 @@ package com.myapp.handbook.data;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
@@ -42,6 +43,7 @@ public class TestDB extends AndroidTestCase {
         Note that this only tests that the Location table has the correct columns, since we
         give you the code for the weather table.  This test does not look at the
      */
+    @SmallTest
     public void testCreateDb() throws Throwable {
         // build a HashSet of all of the table names we wish to look for
         // Note that there will be another table in the DB that stores the
@@ -67,12 +69,13 @@ public class TestDB extends AndroidTestCase {
         } while (c.moveToNext());
     }
 
+    @SmallTest
     public void testInsertToNotificationsTable() throws Throwable{
         SQLiteDatabase db = new HandBookDbHelper(
                 this.mContext).getWritableDatabase();
 
         String title="Holiday tomorrow";
-        HandBookDbHelper.insertNotification(db, title, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001);
+        HandBookDbHelper.insertNotification(db, title, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"http://floating-bastion-86283.herokuapp.com/uploadTeacherOrStudentImage/IMG_11 Sep 2016 6:50:47 am.jpg");
         Cursor cursor = db.query("notifications", null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             Assert.assertEquals(title,cursor.getString(5));
@@ -84,14 +87,15 @@ public class TestDB extends AndroidTestCase {
 
     }
 
+    @SmallTest
     public void testOrderByQueryNotificationsTable() throws Throwable{
         SQLiteDatabase db = new HandBookDbHelper(
                 this.mContext).getWritableDatabase();
 
         String title1="Holiday tomorrow";
         String title2="Test";
-        HandBookDbHelper.insertNotification(db, title1, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001);
-        HandBookDbHelper.insertNotification(db,title2 , "This is wonderful day", new Date().toString(), 2, "Admin", 10002);
+        HandBookDbHelper.insertNotification(db, title1, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,null);
+        HandBookDbHelper.insertNotification(db,title2 , "This is wonderful day", new Date().toString(), 2, "Admin", 10002,null);
         String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") ASC ";
 
         Cursor cursor = db.rawQuery(query_to_fetch_earliest, null);
@@ -143,7 +147,7 @@ public class TestDB extends AndroidTestCase {
                 this.mContext).getWritableDatabase();
 
         String firstname="Ashutosh";
-        HandBookDbHelper.insertProfile(db,"001","Ashutosh", "Solanki", "Avinash", "Student", "M","12","69 Chandralok Indore",new Date(1978,9,20).toString());
+        HandBookDbHelper.insertProfile(db,"001","Ashutosh", "Solanki", "Avinash", "Student", "M","12","69 Chandralok Indore",new Date(1978,9,20).toString(),"");
         Cursor cursor = db.query("profile", null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             Assert.assertEquals(firstname,cursor.getString(1));

@@ -4,11 +4,12 @@
     android:layout_height="190dp"
     android:background="@drawable/background_material"
     android:orientation="vertical"
+    android:id="@+id/navigation_header"
     >
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
+        android:id="@+id/school_logo"
         android:layout_width="76dp"
         android:layout_height="76dp"
         android:src="@drawable/profile"
@@ -28,7 +29,7 @@
         android:textStyle="bold"
         android:gravity="left"
         android:paddingBottom="4dp"
-        android:id="@+id/username"
+        android:id="@+id/schoolName"
         android:layout_above="@+id/email"
         android:layout_alignLeft="@+id/profile_image"
         android:layout_alignStart="@+id/profile_image" />

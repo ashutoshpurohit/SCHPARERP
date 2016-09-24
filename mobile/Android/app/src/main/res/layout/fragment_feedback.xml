@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:layout_marginTop="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/feedback_from"
+        android:textSize="20sp"
         android:text="From:"
      />
     <LinearLayout
@@ -16,14 +18,17 @@
         android:layout_height= "wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.25"
             android:id="@+id/Teacher_To"
+            android:textSize="20sp"
             android:text="Teacher"
             />
         <Spinner
             android:id="@+id/teachers_spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
             android:layout_gravity="right"
             android:layout_height="wrap_content" />
 
@@ -31,14 +36,15 @@
     <ImageView
         android:id="@+id/message_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="centerInside"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/feeback_message"
-        android:layout_weight="1"
+        android:layout_weight="0.2"
         android:gravity="top|left"
         android:hint="Message">
         <requestFocus/>

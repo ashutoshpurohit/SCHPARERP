@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SQLiteOpenHelper notificationHelper = new HandBookDbHelper(this);
         Notifications.setDb(notificationHelper.getWritableDatabase());
+        //notificationHelper.onCreate(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position",0);
             //setActionBarTitle(currentPosition);
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.home:
                         fragment = new TopFragment();
+                        ((TopFragment)fragment).setNavigationView(navigationView);
                         currentPosition=0;
                         break;
                     case R.id.notifications:
@@ -155,8 +160,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.trash:
                         Toast.makeText(getApplicationContext(),"Trash Selected",Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.spam:
-                        Toast.makeText(getApplicationContext(),"Spam Selected",Toast.LENGTH_SHORT).show();
+                    case R.id.logout:
+                        Toast.makeText(getApplicationContext(),"Logging out",Toast.LENGTH_SHORT).show();
+                        Logout();
+
                         break;
                     default:
                         Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
@@ -257,6 +264,15 @@ public class MainActivity extends AppCompatActivity {
     getSupportActionBar().setElevation(0f);
     }
 
+    private void Logout() {
+
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     @Override
     protected void onNewIntent(Intent intent){
         Bundle b = intent.getExtras();
@@ -289,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
             break;
         default:
             fragment = new TopFragment();
+            ((TopFragment)fragment).setNavigationView(navigationView);
         }
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         //ft.replace(R.id.content_frame, fragment, "visible_fragment");

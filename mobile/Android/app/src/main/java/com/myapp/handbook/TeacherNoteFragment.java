@@ -1,6 +1,5 @@
 package com.myapp.handbook;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.profile.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +45,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
     List<String> subjects =new ArrayList<>();
-    ArrayList<Profile> selectedStudents= new ArrayList<>();
+    ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         fragmentView= inflater.inflate(R.layout.fragment_teacher_note, container, false);
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
-        selectedTeacherId= Profile.GetIdsForRole(db, Profile.ProfileRole.TEACHER).get(0);
+        selectedTeacherId= RoleProfile.GetIdsForRole(db, RoleProfile.ProfileRole.TEACHER).get(0);
 
         Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
@@ -229,7 +229,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         JSONArray numbers = new JSONArray();
         JSONObject msgToSend = new JSONObject();
         int i=0;
-        for (Profile student:selectedStudents
+        for (RoleProfile student:selectedStudents
              ) {
             try {
                 numbers.put(i,student.getMobileNumber());
