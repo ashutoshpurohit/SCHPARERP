@@ -39,10 +39,10 @@
             android:icon="@drawable/ic_delete_black"
             android:title="@string/trash_string" />
         <item
-            android:id="@+id/spam"
+            android:id="@+id/logout"
             android:checked="false"
-            android:icon="@drawable/ic_error_black"
-            android:title="@string/spam_string" />
+            android:icon="@drawable/common_full_open_on_phone"
+            android:title="@string/logout_string" />
 
     </group>
 </menu>

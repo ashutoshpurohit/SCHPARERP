@@ -8,6 +8,7 @@
     <string name="title_activity_order">Order Activity</string>
     <string name="details">Details</string>
     <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
     <string name="app_notice">Notice</string>
     <string name="app_assignment">Assignment</string>
     <string name="search_hint">Enter search text</string>
@@ -57,4 +58,5 @@
     <string name="trash_string">Trash</string>
     <string name="spam_string">Spam</string>
     <string name="title_activity_login">Login</string>
+    <string name="logout_string">Log Out</string>
 </resources>

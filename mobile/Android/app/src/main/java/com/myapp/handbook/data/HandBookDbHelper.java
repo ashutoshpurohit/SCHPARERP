@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.myapp.handbook.Profile;
+import com.myapp.handbook.profile.RoleProfile;
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 
@@ -45,6 +45,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 NotificationEntry.COLUMN_TITLE + " TEXT NOT NULL," +
 
                 NotificationEntry.COLUMN_FROM + " TEXT NOT NULL," +
+                NotificationEntry.COLUMN_IMAGE+ " TEXT," +
                 NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" +" );";
 
         final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
@@ -56,16 +57,17 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 ProfileEntry.COLUMN_GENDER + " TEXT NOT NULL, " +
                 ProfileEntry.COLUMN_STD + " TEXT , " +
                 HandbookContract.ProfileEntry.COLUMN_DOB + " INTEGER NOT NULL, " +
+                NotificationEntry.COLUMN_IMAGE+ " TEXT," +
                 ProfileEntry.COLUMN_ADDRESS + " TEXT" + " );";
 
 
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
-        HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001);
+        HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"");
 
     }
 
-    public static void insertNotification(SQLiteDatabase sqliteDatabase, String title, String detail, String date, int priority, String from, int note_id){
+    public static void insertNotification(SQLiteDatabase sqliteDatabase, String title, String detail, String date, int priority, String from, int note_id, String image){
 
         ContentValues note = new ContentValues();
         note.put(NotificationEntry.COLUMN_PRIORITY,priority);
@@ -74,11 +76,12 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         note.put(NotificationEntry.COLUMN_TITLE,title);
         note.put(NotificationEntry.COLUMN_FROM, from);
         note.put(NotificationEntry.COLUMN_NOTIFICATION_ID, note_id);
+        note.put(NotificationEntry.COLUMN_IMAGE,image);
         sqliteDatabase.insert(NotificationEntry.TABLE_NAME, null, note);
     }
 
     public static void insertProfile(SQLiteDatabase sqliteDatabase, String id,String firstname, String lastname, String middlename, String role, String gender,
-                                     String std, String address, String dob) {
+                                     String std, String address, String dob, String image) {
 
         ContentValues note = new ContentValues();
         note.put(ProfileEntry.COLUMN_ID,id);
@@ -91,12 +94,13 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         note.put(HandbookContract.ProfileEntry.COLUMN_ROLE,role);
         note.put(ProfileEntry.COLUMN_MIDDLE_NAME,middlename);
         note.put(ProfileEntry.COLUMN_DOB, dob);
+        note.put(ProfileEntry.COLUMN_IMAGE,image);
 
         long retVal= sqliteDatabase.insert(ProfileEntry.TABLE_NAME, null, note);
     }
 
-    public static List<Profile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
-        ArrayList<Profile> profiles = new ArrayList<>();
+    public static List<RoleProfile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
+        ArrayList<RoleProfile> profiles = new ArrayList<>();
 
         Cursor cursor= sqliteDatabase.query(HandbookContract.ProfileEntry.TABLE_NAME,
                 null,
@@ -113,7 +117,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 String gender = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_GENDER));
                 String role = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_ROLE));
                 String std = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_STD));
-                Profile profile= new Profile(id,firstName,middleName,lastName,role,gender,dob,std,address);
+                RoleProfile profile= new RoleProfile(id,firstName,middleName,lastName,role,gender,dob,std,address);
                 profiles.add(profile);
 
             }

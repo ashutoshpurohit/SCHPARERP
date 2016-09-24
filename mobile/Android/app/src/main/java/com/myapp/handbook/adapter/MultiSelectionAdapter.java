@@ -17,7 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
-import com.myapp.handbook.Profile;
+import com.myapp.handbook.profile.RoleProfile;
 import com.myapp.handbook.R;
 
 
@@ -142,7 +142,7 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_student_search, null);
         }
         TextView studentName = (TextView) convertView.findViewById(R.id.search_studentName);
-        Profile studentProfile = (Profile) mList.get(position);
+        RoleProfile studentProfile = (RoleProfile) mList.get(position);
         String studentFullName = studentProfile.getFirstName()+ " " + studentProfile.getLastName();
         studentName.setText(studentFullName);
         String studentId = studentProfile.getId();

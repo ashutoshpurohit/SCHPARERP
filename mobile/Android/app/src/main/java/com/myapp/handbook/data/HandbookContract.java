@@ -39,7 +39,7 @@ public class HandbookContract {
         // Min and max temperatures for the day (stored as floats)
         public static final String COLUMN_FROM = "msg_source";
         public static final String COLUMN_PRIORITY = "priority";
-
+        public static final String COLUMN_IMAGE = "image";
         public static final String COLUMN_TIMESTAMP ="timestamp";
 
         }
@@ -68,6 +68,8 @@ public class HandbookContract {
         // Min and max temperatures for the day (stored as floats)
         public static final String COLUMN_STD = "class";
         public static final String COLUMN_ADDRESS = "address";
+
+        public  static final String COLUMN_IMAGE ="image";
 
     }
 

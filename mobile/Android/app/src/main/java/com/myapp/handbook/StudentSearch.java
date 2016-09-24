@@ -10,21 +10,21 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.myapp.handbook.adapter.MultiSelectionAdapter;
+import com.myapp.handbook.profile.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class StudentSearch extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "StudentSearch";
     String teacherId;
-    ArrayList<Profile> allStudentsProfile= new ArrayList<>();
-    ArrayList<Profile> selectedStudents = new ArrayList<>();
-    MultiSelectionAdapter<Profile> multiSelectAdapter;
+    ArrayList<RoleProfile> allStudentsProfile= new ArrayList<>();
+    ArrayList<RoleProfile> selectedStudents = new ArrayList<>();
+    MultiSelectionAdapter<RoleProfile> multiSelectAdapter;
     ListView studentList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
 
     private void SetupView() {
 
-        multiSelectAdapter = new MultiSelectionAdapter<Profile>(this,allStudentsProfile);
+        multiSelectAdapter = new MultiSelectionAdapter<RoleProfile>(this,allStudentsProfile);
         studentList.setAdapter(multiSelectAdapter);
 
     }
@@ -65,11 +65,11 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private class FetchStudentProfileAsyncTask extends AsyncTask<Void, Void, ArrayList<Profile>> {
+    private class FetchStudentProfileAsyncTask extends AsyncTask<Void, Void, ArrayList<RoleProfile>> {
         @Override
-        protected ArrayList<Profile> doInBackground(Void... params) {
+        protected ArrayList<RoleProfile> doInBackground(Void... params) {
             HttpConnectionUtil util = new HttpConnectionUtil();
-            ArrayList<Profile> profiles=null;
+            ArrayList<RoleProfile> profiles=null;
 
             String url =HttpConnectionUtil.URL_ENPOINT + "/GetAllStudentDetailsForTeacher/"+ teacherId;
             String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.GET, null);
@@ -82,7 +82,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
                     students = jsonBody.getJSONArray("StudentList");
 
                 for (int i = 0; i < students.length(); i++) {
-                    Profile profile = Profile.parsePartialStudentJSonObject(students.getJSONObject(i));
+                    RoleProfile profile = RoleProfile.parsePartialStudentJSonObject(students.getJSONObject(i));
                     if (profile != null)
                         profiles.add(profile);
                 }
@@ -96,7 +96,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Profile> profiles) {
+        protected void onPostExecute(ArrayList<RoleProfile> profiles) {
             allStudentsProfile = profiles;
             SetupView();
         }

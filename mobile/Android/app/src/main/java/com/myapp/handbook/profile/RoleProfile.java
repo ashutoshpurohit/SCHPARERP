@@ -1,4 +1,4 @@
-package com.myapp.handbook;
+package com.myapp.handbook.profile;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.data.HandbookContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,10 +18,10 @@ import java.util.List;
  * Created by SAshutosh on 6/12/2016.
  */
 
-public class Profile implements Parcelable {
+public class RoleProfile implements Parcelable {
 
     private static final String TAG = "ProfileParse Fetch";
-    protected Profile(Parcel in) {
+    protected RoleProfile(Parcel in) {
         id = in.readString();
         firstName = in.readString();
         middleName = in.readString();
@@ -35,15 +34,15 @@ public class Profile implements Parcelable {
         mobileNumber = in.readString();
     }
 
-    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+    public static final Creator<RoleProfile> CREATOR = new Creator<RoleProfile>() {
         @Override
-        public Profile createFromParcel(Parcel in) {
-            return new Profile(in);
+        public RoleProfile createFromParcel(Parcel in) {
+            return new RoleProfile(in);
         }
 
         @Override
-        public Profile[] newArray(int size) {
-            return new Profile[size];
+        public RoleProfile[] newArray(int size) {
+            return new RoleProfile[size];
         }
     };
 
@@ -223,7 +222,7 @@ public class Profile implements Parcelable {
 
 
     private String mobileNumber;
-    public Profile(String id,String firstName, String middleName, String lastName, String role, String gender, String birth_date, String std, String address){
+    public RoleProfile(String id, String firstName, String middleName, String lastName, String role, String gender, String birth_date, String std, String address){
         this.id = id;
         this.address=address;
         this.birth_date=birth_date;
@@ -235,16 +234,16 @@ public class Profile implements Parcelable {
         this.middleName=middleName;
     }
 
-    public Profile(){
+    public RoleProfile(){
 
     }
 
-    public static Profile parseStudentJSonObject(JSONObject studentObj) throws JSONException {
+    public static RoleProfile parseStudentJSonObject(JSONObject studentObj) throws JSONException {
 
-        Profile studentProfile = null;
+        RoleProfile studentProfile = null;
         if(studentObj!=null) {
 
-            studentProfile = new Profile();
+            studentProfile = new RoleProfile();
             studentProfile.setId(studentObj.getString(STUDENT_ID));
             studentProfile.setRole(ProfileRole.STUDENT.toString());
             studentProfile.setFirstName(studentObj.getString(STUDENT_FIRST_NAME));
@@ -262,12 +261,12 @@ public class Profile implements Parcelable {
 
     }
 
-    public static Profile parsePartialStudentJSonObject(JSONObject studentObj) throws JSONException {
+    public static RoleProfile parsePartialStudentJSonObject(JSONObject studentObj) throws JSONException {
 
-        Profile studentProfile = null;
+        RoleProfile studentProfile = null;
         if(studentObj!=null) {
 
-            studentProfile = new Profile();
+            studentProfile = new RoleProfile();
             studentProfile.setId(studentObj.getString(STUDENT_ID));
             studentProfile.setRole(ProfileRole.STUDENT.toString());
             studentProfile.setFirstName(studentObj.getString(STUDENT_FULL_NAME));
@@ -278,11 +277,11 @@ public class Profile implements Parcelable {
 
     }
 
-    public static Profile parseTeacherJSonObject(JSONObject teacherObj){
+    public static RoleProfile parseTeacherJSonObject(JSONObject teacherObj){
 
-        Profile teacherProfile=null;
+        RoleProfile teacherProfile=null;
         try {
-            teacherProfile = new Profile();
+            teacherProfile = new RoleProfile();
             teacherProfile.setRole(ProfileRole.TEACHER.toString());
             teacherProfile.setId(teacherObj.getString(TEACHER_ID));
             teacherProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
@@ -301,12 +300,12 @@ public class Profile implements Parcelable {
         return teacherProfile;
     }
 
-    public static List<String> GetIdsForRole(SQLiteDatabase db, Profile.ProfileRole role)
+    public static List<String> GetIdsForRole(SQLiteDatabase db, RoleProfile.ProfileRole role)
     {
         List<String> profileIds= new ArrayList<>();
 
-        List<Profile> allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
-        for(Profile profile:allProfiles){
+        List<RoleProfile> allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
+        for(RoleProfile profile:allProfiles){
             if(profile.getRole().equalsIgnoreCase(role.toString())){
                 profileIds.add(profile.getId());
             }
@@ -315,14 +314,14 @@ public class Profile implements Parcelable {
 
     }
 
-    public static boolean storeProfile(List<Profile> profiles){
+    public static boolean storeProfile(List<RoleProfile> profiles){
 
         return true;
     }
 
-    public static List<Profile> loadProfile(){
+    public static List<RoleProfile> loadProfile(){
 
-        List<Profile> profiles = new ArrayList<>();
+        List<RoleProfile> profiles = new ArrayList<>();
 
 
         return profiles;

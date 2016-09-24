@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -28,6 +30,7 @@ import com.myapp.handbook.data.HandbookContract;
 
 public class NotesFragment extends Fragment {
 
+    private static final String TAG = "NotesFragment";
     private SQLiteDatabase db;
     private Cursor cursor;
     RecyclerView mRecyclerView;
@@ -74,6 +77,10 @@ public class NotesFragment extends Fragment {
         });*/
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
 
+
+        registerForContextMenu(mRecyclerView);
+
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -85,6 +92,8 @@ public class NotesFragment extends Fragment {
         // specify an adapter (see also next example)
         mAdapter = new MyRecyclerAdapter(this.getContext(),cursor);
         mRecyclerView.setAdapter(mAdapter);
+        ((MyRecyclerAdapter)mAdapter).setActivity(getActivity());
+        ((MyRecyclerAdapter)mAdapter).setNotesContext(notesContext);
         //mRecyclerView.set
         return rootView;
 
@@ -105,10 +114,42 @@ public class NotesFragment extends Fragment {
         super.onResume();
     }
 
-    void updateIntent(){
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text");
+    private ActionMode.Callback notesContext = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            getActivity().getMenuInflater().inflate(R.menu.menu_notes_context,menu);
+            return true;
+        }
 
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.action_delete:
+                    Log.d(TAG, "onContextItemSelected: Delete Item Called");
+                    break;
+                case R.id.action_share_note:
+                    Log.d(TAG, "onContextItemSelected: Share item called");
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    };
+
+    private void setIntent(String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        shareActionProvider.setShareIntent(intent);
     }
 
     @Override

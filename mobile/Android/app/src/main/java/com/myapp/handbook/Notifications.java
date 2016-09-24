@@ -30,9 +30,10 @@ public class Notifications {
         String title = data.getString("title");
         String message = data.getString("body");
         String date = data.getString("date");
+        String image = data.getString("ImageUrl");
         int note_id = Integer.parseInt(data.getString("notification_id"));
         int priority = Integer.parseInt(data.getString("priority"));
-        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,"",note_id);
+        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,"",note_id,image);
 
     }
 
