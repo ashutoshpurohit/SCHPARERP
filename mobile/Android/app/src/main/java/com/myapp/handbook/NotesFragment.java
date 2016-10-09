@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.view.ActionMode;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
+import android.widget.Toast;
 
 import com.myapp.handbook.adapter.MyRecyclerAdapter;
 import com.myapp.handbook.adapter.NotesAdapter;
@@ -35,6 +38,8 @@ public class NotesFragment extends Fragment {
     private Cursor cursor;
     RecyclerView mRecyclerView;
     ShareActionProvider shareActionProvider;
+    Toolbar toolbar;
+    String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     @Override
@@ -45,7 +50,7 @@ public class NotesFragment extends Fragment {
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
         db = handbookDbHelper.getReadableDatabase();
-        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+
 
         cursor = db.rawQuery(query_to_fetch_earliest, null);
         /*cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
@@ -76,9 +81,9 @@ public class NotesFragment extends Fragment {
             }
         });*/
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        toolbar= (Toolbar)getActivity().findViewById(R.id.my_toolbar);
 
-
-        registerForContextMenu(mRecyclerView);
+        //registerForContextMenu(mRecyclerView);
 
 
         // use this setting to improve performance if you know that changes
@@ -89,10 +94,11 @@ public class NotesFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+
         // specify an adapter (see also next example)
         mAdapter = new MyRecyclerAdapter(this.getContext(),cursor);
         mRecyclerView.setAdapter(mAdapter);
-        ((MyRecyclerAdapter)mAdapter).setActivity(getActivity());
+        ((MyRecyclerAdapter)mAdapter).setActivity((AppCompatActivity) getActivity());
         ((MyRecyclerAdapter)mAdapter).setNotesContext(notesContext);
         //mRecyclerView.set
         return rootView;
@@ -117,6 +123,9 @@ public class NotesFragment extends Fragment {
     private ActionMode.Callback notesContext = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+
+            toolbar.setVisibility(View.GONE);
             getActivity().getMenuInflater().inflate(R.menu.menu_notes_context,menu);
             return true;
         }
@@ -128,22 +137,87 @@ public class NotesFragment extends Fragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            boolean status=false;
+            MyRecyclerAdapter adapter = (MyRecyclerAdapter)mAdapter;
+            long dbId = ((MyRecyclerAdapter)mAdapter).getDbId();
             switch (item.getItemId()){
-                case R.id.action_delete:
-                    Log.d(TAG, "onContextItemSelected: Delete Item Called");
-                    break;
-                case R.id.action_share_note:
+                case R.id.action_share_message:
+                    //Check if item has image or is plain text
+                    cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
+                            null,
+                            "_id= ?", new String[] {Long.toString(dbId)}, null, null, null, null);
+                    if(cursor.moveToFirst()) {
+
+                        int date = cursor.getInt(3);
+                        String detail = cursor.getString(4);
+                        String title = cursor.getString(5);
+                        String from = cursor.getString(6);
+                        String imageUrl = cursor.getString(7);
+                        Intent i = new Intent(Intent.ACTION_SEND);
+//                        if(imageUrl==null) {
+
+                            i.setType("text/plain");
+                            i.putExtra(Intent.EXTRA_TEXT, prepareTextMessage(title, detail, from, date));
+                            i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.handbook_share_message));
+
+//                        }
+  /*                      else{
+
+                            i.setType("image/*");
+                            i.putExtra(Intent.EXTRA_STREAM,imageUrl);
+                            //i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        }*/
+
+
+                        i = Intent.createChooser(i, getString(R.string.send_message));
+                        startActivity(i);
+                    }
+                    mode.finish();
+                    status=true;
                     Log.d(TAG, "onContextItemSelected: Share item called");
+                    break;
+                case R.id.action_delete:
+
+                    //Code to delete the item
+                    db.delete(HandbookContract.NotificationEntry.TABLE_NAME, HandbookContract.NotificationEntry._ID + "=" + dbId,null);
+
+                    //Update the view
+                    for(int i=0; i<adapter.selectedItems.size();i++ ){
+                        int key =adapter.selectedItems.keyAt(i);
+                        if(adapter.selectedItems.get(key,false)){
+                            mAdapter.notifyItemRemoved(key);
+                            adapter.selectedItems.delete((int)key);
+                        }
+                    }
+
+
+
+                    Toast.makeText(getContext(),"Deleted", Toast.LENGTH_SHORT);
+                    Log.d(TAG, "onContextItemSelected: Delete Item Called");
+                    mode.finish();
+                    status=true;
+                    break;
+
+                //case R.id.action_share_note:
+
             }
 
-            return false;
+            return status;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
 
+            //Toolbar toolbar= (Toolbar)getActivity().findViewById(R.id.appTooolbar);
+            toolbar.setVisibility(View.VISIBLE);
+
         }
     };
+
+    private String prepareTextMessage(String title, String detail, String from, int date) {
+        String message = "Message " + title + " date: "+date + " from: " +from + "\\n detail: " + detail;
+        return message;
+    }
 
     private void setIntent(String text) {
         Intent intent = new Intent(Intent.ACTION_SEND);

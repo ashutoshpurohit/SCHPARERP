@@ -5,22 +5,27 @@ package com.myapp.handbook;
  */
 
 public class ImageUploadResponse {
+
+    public ImageUploadResponse(String imageName, String imageUrl){
+        this.ImageName=imageName;
+        this.ImageUrl=imageUrl;
+    }
     public String getImageName() {
-        return imageName;
+        return ImageName;
     }
 
     public void setImageName(String imageName) {
-        this.imageName = imageName;
+        this.ImageName = imageName;
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return ImageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.ImageUrl = imageUrl;
     }
 
-    String imageName;
-    String imageUrl;
+    String ImageName;
+    String ImageUrl;
 }

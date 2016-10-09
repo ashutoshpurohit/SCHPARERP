@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ActionMode;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,9 +38,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     // support cursors, we wrap a CursorAdapter that will do all the job
     // for us.
      CursorAdapter mCursorAdapter;
-     private SparseBooleanArray selectedItems;
+     public SparseBooleanArray selectedItems;
      Context mContext;
-     Activity activity;
+     AppCompatActivity activity;
+     Toolbar toolbar;
 
      ActionMode.Callback notesContext;
 
@@ -50,8 +51,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
 
 
-     public void setActivity(Activity activity) {
+     public void setActivity(AppCompatActivity activity) {
          this.activity = activity;
+     }
+
+     public void setToolbar(Toolbar toolbar){
+         this.toolbar =toolbar;
      }
 
 
@@ -89,13 +94,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
                 viewHolder.dbId=cursor.getLong(0);
+                viewHolder.position=cursor.getPosition();
                 String imageUrl = cursor.getString(7);
                 if(imageUrl!=null && !imageUrl.isEmpty()){
                     Picasso.with(context)
                             .load(imageUrl)
                             .placeholder(R.drawable.contact_picture_placeholder)
                             .error(R.drawable.contact_picture_error)
-                            .resize(200,200)
+                            .resize(120,120)
                             .into(viewHolder.imageView);
                 }
                 else {
@@ -153,21 +159,25 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
      @Override
      public boolean onLongClick(View v) {
          long rowId =0;
+         long adapterPosition =0;
          if(v!=null){
              ViewHolder viewHolder = (ViewHolder) v.getTag();
              rowId = viewHolder.dbId;
+             adapterPosition = viewHolder.position;                     //viewHolder.getAdapterPosition();
          }
-         if (selectedItems.get((int)rowId, false)) {
-             selectedItems.delete((int)rowId);
+         if (selectedItems.get((int)adapterPosition, false)) {
+             selectedItems.delete((int)adapterPosition);
              v.setSelected(false);
          }
          else {
-             selectedItems.put((int)rowId, true);
+             selectedItems.put((int)adapterPosition, true);
              v.setSelected(true);
              setDbId(rowId);
              //Toolbar toolbar = (Toolbar) v.findViewById(R.id.my_toolbar);
-
-             node =activity.startActionMode(notesContext);
+             activity.startSupportActionMode(notesContext);
+             //toolbar.startActionMode()
+             //node =activity.startActionMode(notesContext);
+             //startSupportActionMode
              //toolbar.startActionMode(notesContext);
          }
 
@@ -175,7 +185,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
      }
 
 
-     public static class ViewHolder extends RecyclerView.ViewHolder  {
+     public  class ViewHolder extends RecyclerView.ViewHolder  {
         View v1;
         public final TextView titleView;
         public final TextView detailMsgView;
@@ -183,6 +193,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         public final TextView dateView;
         public final ImageView imageView;
         public Long dbId;
+        public int position;
         public ViewHolder(View view) {
 
             super(view);
@@ -193,7 +204,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             notificationIdView = (TextView) view.findViewById(R.id.list_item_noteid_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
-            //view.setOnCreateContextMenuListener(this);
+            //position=this.getAdapterPosition();
         }
 
 
@@ -228,7 +239,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Passing the binding operation to cursor loader
-        mCursorAdapter.getCursor().moveToPosition(position); //EDITED: added this line as suggested in the comments below, thanks :)
+        //holder.position=position;
+        mCursorAdapter.getCursor().moveToPosition(position);
         mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
 
     }

@@ -222,7 +222,7 @@ public class RoleProfile implements Parcelable {
 
 
     private String mobileNumber;
-    public RoleProfile(String id, String firstName, String middleName, String lastName, String role, String gender, String birth_date, String std, String address){
+    public RoleProfile(String id, String firstName, String middleName, String lastName, String role, String gender, String birth_date, String std, String address, String imageUrl){
         this.id = id;
         this.address=address;
         this.birth_date=birth_date;
@@ -232,6 +232,7 @@ public class RoleProfile implements Parcelable {
         this.role=role;
         this.std=std;
         this.middleName=middleName;
+        this.imageUrl=imageUrl;
     }
 
     public RoleProfile(){

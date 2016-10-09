@@ -67,8 +67,8 @@
             android:id="@+id/list_item_notes_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="80dp"
-            android:scaleType="centerCrop"
+            android:maxHeight="160dp"
+            android:scaleType="fitXY"
             android:adjustViewBounds="true"/>
         <TextView
             android:layout_width="match_parent"

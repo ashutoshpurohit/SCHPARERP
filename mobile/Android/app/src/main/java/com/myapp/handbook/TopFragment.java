@@ -94,7 +94,7 @@ public class TopFragment extends Fragment {
                     .load(profile.getImageUrl())
                     .placeholder(R.drawable.contact_picture_placeholder)
                     .error(R.drawable.contact_picture_error)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    //.networkPolicy(NetworkPolicy.OFFLINE)
                     .into(profileImage);
 
             TextView middleName = (TextView) view.findViewById(R.id.middleName);

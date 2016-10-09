@@ -38,6 +38,8 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import io.fabric.sdk.android.Fabric;
 
+import static android.support.v7.app.AppCompatDelegate.FEATURE_ACTION_MODE_OVERLAY;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         Notifications.setDb(notificationHelper.getWritableDatabase());
         //notificationHelper.onCreate(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(FEATURE_ACTION_MODE_OVERLAY);
         setContentView(R.layout.activity_main);
 
         titles = getResources().getStringArray(R.array.titles);
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             selectItem(0);
 
         }
+
         //Check if logged in
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if(sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false) == false){

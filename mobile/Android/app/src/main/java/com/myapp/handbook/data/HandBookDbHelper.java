@@ -117,7 +117,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 String gender = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_GENDER));
                 String role = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_ROLE));
                 String std = cursor.getString(cursor.getColumnIndex(HandbookContract.ProfileEntry.COLUMN_STD));
-                RoleProfile profile= new RoleProfile(id,firstName,middleName,lastName,role,gender,dob,std,address);
+                String imageUrl = cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_IMAGE));
+                RoleProfile profile= new RoleProfile(id,firstName,middleName,lastName,role,gender,dob,std,address,imageUrl);
                 profiles.add(profile);
 
             }

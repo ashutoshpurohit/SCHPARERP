@@ -19,13 +19,13 @@
             android:id="@+id/assignments"
             android:checked="false"
             android:icon="@drawable/ic_send_black"
-            android:title="@string/Assignments" />
+            android:title="@string/Events" />
 
         <item
             android:id="@+id/feedback"
             android:checked="false"
             android:icon="@drawable/ic_drafts_black"
-            android:title="@string/Feedback" />
+            android:title="@string/ParentNote" />
 
 
         <item
@@ -37,7 +37,7 @@
             android:id="@+id/trash"
             android:checked="false"
             android:icon="@drawable/ic_delete_black"
-            android:title="@string/trash_string" />
+            android:title="@string/ContactSchool" />
         <item
             android:id="@+id/logout"
             android:checked="false"

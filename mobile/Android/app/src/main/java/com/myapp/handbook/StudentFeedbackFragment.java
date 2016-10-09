@@ -162,7 +162,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             }
             try {
                 if(HttpConnectionUtil.imageUploadStatus) {
-                    message.put("ImageName", HttpConnectionUtil.imageUrl);
+                    message.put("ImageUrl", HttpConnectionUtil.imageUrl);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -106,7 +106,7 @@ public class HttpConnectionUtil {
     public interface FileUploadService {
         @Multipart
         @POST("uploadTeacherOrStudentImage")
-        Call<ResponseBody> uploadTeacherOrStudentImage(@Part("description") RequestBody description,
+        Call<ImageUploadResponse> uploadTeacherOrStudentImage(@Part("description") RequestBody description,
                                   @Part MultipartBody.Part file);
     }
 
@@ -128,18 +128,33 @@ public class HttpConnectionUtil {
 
 /*
  RequestBody id = RequestBody.create(MediaType.parse("text/plain"), AZUtils.getUserId(this));*/
-        Call<ResponseBody> call = service.uploadTeacherOrStudentImage(description, body);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ImageUploadResponse> call = service.uploadTeacherOrStudentImage(description, body);
+        /*try {
+            ImageUploadResponse imageResponse =call.execute().body();
+            imageUploadStatus=true;
+            imageUrl=imageResponse.getImageUrl();
+
+
+        } catch (IOException e) {
+            imageUploadStatus=false;
+            e.printStackTrace();
+            imageUploadStatus=false;
+        }
+        finally {
+            imageUploaded=true;
+        }*/
+
+        call.enqueue(new Callback<ImageUploadResponse>() {
 
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                imageUploaded=true;
+            public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+
                 if (response.isSuccessful()) {
                     //String resp = response.message();
 
                     try {
                         //imageUrl= response.body().string();
-                        imageUrl= response.body().toString();
+                        imageUrl= response.body().getImageUrl();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -152,11 +167,11 @@ public class HttpConnectionUtil {
                     imageUploadStatus = false;
                 }
                 Log.d(TAG,"Received response after sending file"+response);
-
+                imageUploaded=true;
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
                 Log.d(TAG,"Sending file failure"+t);
                 call.isExecuted();
                 imageUploaded=true;
@@ -164,7 +179,6 @@ public class HttpConnectionUtil {
 
             }
         });
-
 
         return response;
     }
