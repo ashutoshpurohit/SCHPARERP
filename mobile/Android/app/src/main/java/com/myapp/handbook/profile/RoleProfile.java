@@ -301,17 +301,17 @@ public class RoleProfile implements Parcelable {
         return teacherProfile;
     }
 
-    public static List<String> GetIdsForRole(SQLiteDatabase db, RoleProfile.ProfileRole role)
+    public static List<RoleProfile> GetProfileForRole(SQLiteDatabase db, RoleProfile.ProfileRole role)
     {
-        List<String> profileIds= new ArrayList<>();
+        List<RoleProfile> profiles= new ArrayList<>();
 
         List<RoleProfile> allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
         for(RoleProfile profile:allProfiles){
             if(profile.getRole().equalsIgnoreCase(role.toString())){
-                profileIds.add(profile.getId());
+                profiles.add(profile);
             }
         }
-        return  profileIds;
+        return  profiles;
 
     }
 

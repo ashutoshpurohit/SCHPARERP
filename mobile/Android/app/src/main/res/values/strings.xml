@@ -63,4 +63,5 @@
     <string name="logout_string">Log Out</string>
     <string name="handbook_share_message">Handbook message</string>
     <string name="send_message">Share message via</string>
+    <string name="profile">Profile</string>
 </resources>

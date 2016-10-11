@@ -16,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.myapp.handbook.adapter.ProfileAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.profile.RoleProfile;
 import com.myapp.handbook.profile.SchoolProfile;
@@ -43,7 +45,9 @@ public class TopFragment extends Fragment {
     private View fragmentView;
     private SQLiteDatabase db;
     private Cursor cursor;
+    View header;
     SharedPreferences sharedPreferences;
+    ListView listView;
 
     public void setNavigationView(NavigationView navigationView) {
         this.navigationView = navigationView;
@@ -54,9 +58,12 @@ public class TopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_top, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         fragmentView = view;
 
+        header = inflater.inflate(R.layout.listview_profile_header, null);
+        listView= (ListView) view.findViewById(R.id.profileListView1);
+        listView.addHeaderView(header);
         setHasOptionsMenu(true);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
@@ -85,11 +92,17 @@ public class TopFragment extends Fragment {
     public void SetUpView() {
 
         View view = fragmentView;
-        TextView firstName = (TextView) view.findViewById(R.id.firstName);
-        ImageView profileImage = (ImageView)view.findViewById(R.id.profileImage);
+        /*TextView firstName = (TextView) view.findViewById(R.id.firstName);
+        ImageView profileImage = (ImageView)view.findViewById(R.id.profileImage);*/
         //profileImage.setImageDrawable();
+        TextView headerText = (TextView) header.findViewById(R.id.profileHeader);
         if (!allProfiles.isEmpty()) {
-            RoleProfile profile = allProfiles.get(0);
+            RoleProfile [] profiles =new RoleProfile[allProfiles.size()];
+            profiles=   allProfiles.toArray(profiles);
+            ProfileAdapter adapter = new ProfileAdapter(getContext(),R.layout.list_item_profile,profiles);
+            listView.setAdapter(adapter);
+            headerText.setText("Profile");
+            /*RoleProfile profile = allProfiles.get(0);
             Picasso.with(getContext())
                     .load(profile.getImageUrl())
                     .placeholder(R.drawable.contact_picture_placeholder)
@@ -112,10 +125,12 @@ public class TopFragment extends Fragment {
             gender.setText("Gender :" + profile.getGender());
             dob.setText("Date of Birth :" + profile.getBirth_date());
             std.setText("Std :" + profile.getStd());
-            address.setText("Address :" + profile.getAddress());
+            address.setText("Address :" + profile.getAddress());*/
 
         } else {
-            firstName.setText("Loading the profile info. Please wait..");
+            //firstName.setText("Loading the profile info. Please wait..");
+
+            headerText.setText("Loading ..");
         }
 
     }

@@ -52,7 +52,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private int selectedTeacherIndex=0;
     private String selectedStudentId="105";
     private SQLiteDatabase db;
-    List<String> studentIds;
+    List<RoleProfile> studentProfiles;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
     private ImageButton photoButton;
     private ImageView photoView;
@@ -98,14 +98,14 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         Button sendButton = (Button)fragmentView.findViewById(R.id.sendButton);
         sendButton.setOnClickListener(this);
-        studentIds= RoleProfile.GetIdsForRole(db, RoleProfile.ProfileRole.STUDENT);
-        if(studentIds.size()==1)
+        studentProfiles= RoleProfile.GetProfileForRole(db, RoleProfile.ProfileRole.STUDENT);
+        if(studentProfiles.size()==1)
         {
-            selectedStudentId = studentIds.get(0);
+            selectedStudentId = studentProfiles.get(0).getId();
         }
         else{
             //TO-DO Insert logic to ask user to select one student
-            selectedStudentId = studentIds.get(0);
+            selectedStudentId = studentProfiles.get(0).getId();
         }
         SetupView();
         new FetchProfileAsyncTask().execute();
@@ -133,8 +133,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
         //To-Do hardcoded header to be changed
         //To-Do  Figure out from which profile message is sent
-        String messageHeader ="Note from Parent";
-        JSONObject messageObject = prepareMessage(mobileNo,"Parent",messageBody);
+        String from = studentProfiles.get(0).getFirstName()+" " + studentProfiles.get(0).getLastName();
+        JSONObject messageObject = prepareMessage(mobileNo,from,messageBody);
         progressDialog= ProgressDialog.show(getContext(),"Sending message","Please wait",false);
         new PostTeacherMessageAsyncTask().execute(messageObject);
     }
@@ -198,7 +198,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         }
         try {
             msgToSend.put("MessageBody",message);
-            msgToSend.put("MessageTitle","Teacher Note from "+from);
+            msgToSend.put("MessageTitle","Note from "+from);
             msgToSend.put("MobileNumbers",numbers);
         } catch (JSONException e) {
             e.printStackTrace();

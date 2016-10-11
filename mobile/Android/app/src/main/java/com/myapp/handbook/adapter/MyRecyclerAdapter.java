@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
 import com.squareup.picasso.NetworkPolicy;
@@ -97,15 +99,16 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 viewHolder.position=cursor.getPosition();
                 String imageUrl = cursor.getString(7);
                 if(imageUrl!=null && !imageUrl.isEmpty()){
-                    Picasso.with(context)
+                    Glide.with(context)
                             .load(imageUrl)
                             .placeholder(R.drawable.contact_picture_placeholder)
                             .error(R.drawable.contact_picture_error)
-                            .resize(120,120)
+                            .override(120,120)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(viewHolder.imageView);
                 }
                 else {
-                    viewHolder.imageView.setVisibility(View.INVISIBLE);
+                    viewHolder.imageView.setImageDrawable(null);
                 }
             }
         };

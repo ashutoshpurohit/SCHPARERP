@@ -42,6 +42,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     View fragmentView =null;
     SQLiteDatabase db;
     String selectedTeacherId;
+    List<RoleProfile> teacherProfile;
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
     List<String> subjects =new ArrayList<>();
@@ -59,7 +60,8 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         fragmentView= inflater.inflate(R.layout.fragment_teacher_note, container, false);
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
-        selectedTeacherId= RoleProfile.GetIdsForRole(db, RoleProfile.ProfileRole.TEACHER).get(0);
+        teacherProfile = RoleProfile.GetProfileForRole(db, RoleProfile.ProfileRole.TEACHER);
+        selectedTeacherId= teacherProfile.get(0).getId();
 
         Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
@@ -245,7 +247,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         message = fromText.getText().toString();
         try {
             msgToSend.put("MessageBody",message);
-            msgToSend.put("MessageTitle","Teacher Note");
+            msgToSend.put("MessageTitle","Teacher Note from "+ teacherProfile.get(0).getFirstName()+ " "+ teacherProfile.get(0).getLastName());
             msgToSend.put("MobileNumbers",numbers);
         } catch (JSONException e) {
             e.printStackTrace();
