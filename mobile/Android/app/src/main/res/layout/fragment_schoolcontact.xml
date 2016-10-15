@@ -2,5 +2,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/school_contact_logo"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/contact_picture_placeholder"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/contact_school_name"
+            android:text= "Delhi Public School "
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+            <TextView
+                android:id="@+id/contact_school_Address"
+                android:text= "Outer ring road Bomasandra Near Varthur Hobli Kadubeesanhalli Bellandur Taluk Bangalore 5610018"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/school_contact_number"
+            android:text="Contact Number : 986754"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+
+            android:src="@drawable/ic_inbox_black"
+            />
+
+        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal">
+
+
+
+                <TextView
+                    android:id="@+id/school_contact_email"
+                    android:text="admin@school.com"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_inbox_black"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>

@@ -34,7 +34,7 @@
             android:icon="@drawable/ic_email_black"
             android:title="@string/Teacher_Note" />
         <item
-            android:id="@+id/trash"
+            android:id="@+id/contactSchool"
             android:checked="false"
             android:icon="@drawable/ic_delete_black"
             android:title="@string/ContactSchool" />

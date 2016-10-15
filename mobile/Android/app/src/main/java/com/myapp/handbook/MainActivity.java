@@ -161,8 +161,10 @@ public class MainActivity extends AppCompatActivity {
                         currentPosition=4;
                         break;
 
-                    case R.id.trash:
-                        Toast.makeText(getApplicationContext(),"Trash Selected",Toast.LENGTH_SHORT).show();
+                    case R.id.contactSchool:
+                        Toast.makeText(getApplicationContext(),"Contact School Selected",Toast.LENGTH_SHORT).show();
+                        fragment = new SchoolContactFragment();
+                        currentPosition=5;
                         break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(),"Logging out",Toast.LENGTH_SHORT).show();
@@ -229,14 +231,15 @@ public class MainActivity extends AppCompatActivity {
                         if (fragment instanceof NotesFragment) {
                             currentPosition = 1;
                         }
-                        if (fragment instanceof PastaFragment) {
-                            currentPosition = 2;
-                        }
+
                         if (fragment instanceof StudentFeedbackFragment) {
                             currentPosition = 3;
                         }
                         if (fragment instanceof TeacherNoteFragment) {
                             currentPosition = 4;
+                        }
+                        if(fragment instanceof SchoolContactFragment){
+                            currentPosition=5;
                         }
 
                         setActionBarTitle(currentPosition);
@@ -298,14 +301,15 @@ public class MainActivity extends AppCompatActivity {
             fragment = new NotesFragment();
 
             break;
-        case 2:
-            fragment = new PastaFragment();
-            break;
+
         case 3:
             fragment = new StudentFeedbackFragment();
             break;
         case 4:
             fragment = new TeacherNoteFragment();
+            break;
+            case 5:
+            fragment = new SchoolContactFragment();
             break;
         default:
             fragment = new TopFragment();

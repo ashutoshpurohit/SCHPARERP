@@ -155,7 +155,7 @@ public class TopFragment extends Fragment {
 
     }
 
-    private class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfile>> {
+    class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfile>> {
         @Override
         protected List<RoleProfile> doInBackground(Void... params) {
             HttpConnectionUtil util = new HttpConnectionUtil();

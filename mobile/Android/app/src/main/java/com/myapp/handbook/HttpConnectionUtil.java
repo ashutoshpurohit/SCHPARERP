@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.myapp.handbook.profile.SchoolProfile;
+
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -24,9 +26,11 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 /**
  * Created by SAshutosh on 6/7/2016.
@@ -108,6 +112,12 @@ public class HttpConnectionUtil {
         @POST("uploadTeacherOrStudentImage")
         Call<ImageUploadResponse> uploadTeacherOrStudentImage(@Part("description") RequestBody description,
                                   @Part MultipartBody.Part file);
+    }
+
+    public interface SchoolService{
+        @GET("school/{id}")
+        Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
+
     }
 
     public static String UploadImage(File fileToTranser)
