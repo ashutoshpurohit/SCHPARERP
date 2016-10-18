@@ -166,6 +166,14 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new SchoolContactFragment();
                         currentPosition=5;
                         break;
+
+                    case R.id.timetable:
+                        Toast.makeText(getApplicationContext(),"Timetable Selected",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext() ,TimeTableActivity.class);
+                        //Can pass student/teacherid from here
+                        //intent.putExtra("ID",rowId);
+                        startActivity(intent);
+                        break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(),"Logging out",Toast.LENGTH_SHORT).show();
                         Logout();

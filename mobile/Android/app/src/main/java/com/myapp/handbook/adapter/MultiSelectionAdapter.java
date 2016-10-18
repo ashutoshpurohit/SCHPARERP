@@ -17,7 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
-import com.myapp.handbook.profile.RoleProfile;
+import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.R;
 
 

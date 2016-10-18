@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.profile.RoleProfile;
+import com.myapp.handbook.domain.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;

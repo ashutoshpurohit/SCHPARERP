@@ -1,6 +1,5 @@
-package com.myapp.handbook.profile;
+package com.myapp.handbook.domain;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

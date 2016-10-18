@@ -22,11 +22,17 @@
             android:title="@string/Events" />
 
         <item
+            android:id="@+id/timetable"
+            android:checked="false"
+            android:icon="@drawable/ic_restore_black_24dp"
+            android:title="@string/TimeTable" />
+
+
+        <item
             android:id="@+id/feedback"
             android:checked="false"
-            android:icon="@drawable/ic_drafts_black"
+            android:icon="@drawable/ic_insert_comment_black_24dp"
             android:title="@string/ParentNote" />
-
 
         <item
             android:id="@+id/teacherNote"

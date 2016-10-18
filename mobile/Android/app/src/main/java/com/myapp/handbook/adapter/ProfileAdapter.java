@@ -10,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myapp.handbook.R;
-import com.myapp.handbook.profile.RoleProfile;
+import com.myapp.handbook.domain.RoleProfile;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 /**
  * Created by SAshutosh on 10/9/2016.

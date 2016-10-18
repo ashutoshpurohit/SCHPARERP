@@ -15,15 +15,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.profile.RoleProfile;
-import com.myapp.handbook.profile.SchoolProfile;
+import com.myapp.handbook.domain.RoleProfile;
+import com.myapp.handbook.domain.SchoolProfile;
 
 import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by SAshutosh on 10/13/2016.

@@ -21,9 +21,8 @@ import android.widget.TextView;
 
 import com.myapp.handbook.adapter.ProfileAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.profile.RoleProfile;
-import com.myapp.handbook.profile.SchoolProfile;
-import com.squareup.picasso.NetworkPolicy;
+import com.myapp.handbook.domain.RoleProfile;
+import com.myapp.handbook.domain.SchoolProfile;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;

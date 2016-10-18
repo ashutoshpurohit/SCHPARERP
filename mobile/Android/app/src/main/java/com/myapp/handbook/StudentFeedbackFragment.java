@@ -1,6 +1,5 @@
 package com.myapp.handbook;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.profile.RoleProfile;
+import com.myapp.handbook.domain.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;

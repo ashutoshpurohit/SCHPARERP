@@ -1,4 +1,4 @@
-package com.myapp.handbook.profile;
+package com.myapp.handbook.domain;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;

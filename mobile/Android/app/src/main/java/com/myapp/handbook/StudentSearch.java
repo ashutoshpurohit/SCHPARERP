@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.myapp.handbook.adapter.MultiSelectionAdapter;
-import com.myapp.handbook.profile.RoleProfile;
+import com.myapp.handbook.domain.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;

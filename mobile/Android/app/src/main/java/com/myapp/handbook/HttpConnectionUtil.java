@@ -4,13 +4,13 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.myapp.handbook.profile.SchoolProfile;
+import com.myapp.handbook.domain.SchoolProfile;
+import com.myapp.handbook.domain.TimeTable;
 
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -22,7 +22,6 @@ import java.util.Date;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -118,6 +117,11 @@ public class HttpConnectionUtil {
         @GET("school/{id}")
         Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
 
+    }
+
+    public interface TimeTableService {
+        @GET("StudentTimeTable/{id}")
+        Call<TimeTable> getStudentTimeTable(@Path("id") String id);
     }
 
     public static String UploadImage(File fileToTranser)
