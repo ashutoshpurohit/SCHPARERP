@@ -9,9 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
+import com.myapp.handbook.domain.TimeSlots;
+import com.myapp.handbook.domain.TimeTable;
+import com.myapp.handbook.domain.WeeklyTimeTable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,8 +65,23 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 ProfileEntry.COLUMN_ADDRESS + " TEXT" + " );";
 
 
+        final String SQL_CREATE_TIMETABLE_TABLE = "CREATE TABLE " + HandbookContract.TimetableEntry.TABLE_NAME + " (" +
+                HandbookContract.TimetableEntry.COLUMN_ID +" TEXT NOT NULL,"+
+                HandbookContract.TimetableEntry.COLUMN_STD + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID + " TEXT, " +
+                HandbookContract.TimetableEntry.COLUMN_DAY + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_START_TIME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_END_TIME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_SUBJECT + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
+
+
+
+
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
         HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"");
 
     }
@@ -99,6 +118,24 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         long retVal= sqliteDatabase.insert(ProfileEntry.TABLE_NAME, null, note);
     }
 
+    public static long insertTimeTableEntry(SQLiteDatabase sqliteDatabase, String id,String dayOfWeek, String school_id, String std, String teacher_id, String teacher_name, String start_time,
+                                     String end_time, String subject) {
+
+        ContentValues note = new ContentValues();
+        note.put(HandbookContract.TimetableEntry.COLUMN_ID,id);
+        note.put(HandbookContract.TimetableEntry.COLUMN_DAY,dayOfWeek);
+        note.put(HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID,school_id);
+        note.put(HandbookContract.TimetableEntry.COLUMN_TEACHER_ID,teacher_id);
+        note.put(HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME,teacher_name);
+        note.put(HandbookContract.TimetableEntry.COLUMN_START_TIME,start_time);
+        note.put(HandbookContract.TimetableEntry.COLUMN_END_TIME,end_time);
+        note.put(HandbookContract.TimetableEntry.COLUMN_SUBJECT,subject);
+        note.put(HandbookContract.TimetableEntry.COLUMN_STD,std);
+
+        long retVal= sqliteDatabase.insert(HandbookContract.TimetableEntry.TABLE_NAME, null, note);
+        return retVal;
+    }
+
     public static List<RoleProfile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
         ArrayList<RoleProfile> profiles = new ArrayList<>();
 
@@ -129,6 +166,49 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
+    public static TimeTable loadTimeTable(SQLiteDatabase sqliteDatabase,String id) {
+
+        TimeTable table = new TimeTable();
+        HashMap<String , ArrayList<TimeSlots>> dayTimeSlotMap = new HashMap<>();
+        Cursor cursor= sqliteDatabase.query(HandbookContract.TimetableEntry.TABLE_NAME,null,"id=?", new String[] {id},null,null,null);
+
+        try {
+
+            while(cursor.moveToNext()){
+
+                String std= cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_STD));
+                String school_id = cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID));
+                String dayOfWeek = cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_DAY));
+                String start_time =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_START_TIME));
+                String end_time =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_END_TIME));
+                String subject =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_SUBJECT));
+                String teacherName =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME));
+                String teacher_id =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_TEACHER_ID));
+                TimeSlots t = new TimeSlots(start_time,end_time,subject,teacher_id,teacherName);
+                ArrayList<TimeSlots> timeSlotsForTheDay = dayTimeSlotMap.get(dayOfWeek);
+                if(timeSlotsForTheDay==null) {
+                    timeSlotsForTheDay = new ArrayList<>();
+                    dayTimeSlotMap.put(dayOfWeek,timeSlotsForTheDay);
+                }
+
+                timeSlotsForTheDay.add(t);
+            }
+            List<WeeklyTimeTable> weeklyTimeTable = new ArrayList<>();
+            for(String dayOfWeek:dayTimeSlotMap.keySet()){
+                WeeklyTimeTable w = new WeeklyTimeTable(dayOfWeek,dayTimeSlotMap.get(dayOfWeek));
+                weeklyTimeTable.add(w);
+            }
+            table.setWeeklyTimeTableList(weeklyTimeTable);
+        }
+        finally {
+            cursor.close();
+        }
+
+
+
+        return  table;
+    }
+
 
 
     @Override
@@ -138,4 +218,6 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         onCreate((sqLiteDatabase));
 
     }
+
+
 }

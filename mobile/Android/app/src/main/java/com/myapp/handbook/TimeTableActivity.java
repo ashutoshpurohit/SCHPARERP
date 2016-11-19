@@ -1,9 +1,11 @@
 package com.myapp.handbook;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,11 +34,15 @@ import retrofit2.Call;
 public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
 
     TimeTable profileTimeTable;
-    SQLiteDatabase db;
     ListView timeTableListView;
     View headerView;
     Button datePickerButton;
     Date selectedDate;
+    private SharedPreferences sharedPreferences;
+    List<RoleProfile> profiles;
+    private SQLiteDatabase db;
+    String selectedProfileId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +61,6 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(this);
 
         db = handbookDbHelper.getReadableDatabase();
@@ -71,7 +76,23 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         selectedDate = new Date();
 
-        new FetchTimeTableAsyncTask().execute();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //TO-DO read the value of selectedProfileId as per app logic
+        //Get the id of teacher or student
+        profiles = HandBookDbHelper.LoadProfilefromDb(db);
+        selectedProfileId =profiles.get(0).getId();
+
+        if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED, false) == false) {
+            new FetchTimeTableAsyncTask(selectedProfileId).execute();
+        }
+        else
+        {
+            profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId);
+
+        }
+        SetupView();
+
     }
 
     /**
@@ -96,13 +117,16 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
     }
 
     private class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, TimeTable> {
+        String id;
+
+        public FetchTimeTableAsyncTask(String id) {
+            this.id = id;
+        }
+
         @Override
         protected TimeTable doInBackground(Void... params) {
             HttpConnectionUtil.TimeTableService timeTableService = ServiceGenerator.createService(HttpConnectionUtil.TimeTableService.class);
-            //Get the id of teacher or student
-            List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
-            //TO-DO Hardcoded to 0th indexed need to be changed based on currently selected profile
-            String id = profiles.get(0).getId();
+
             //String id ="100";
             Call<TimeTable> call = timeTableService.getStudentTimeTable(id);
             try {
@@ -118,9 +142,31 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         @Override
         protected void onPostExecute(TimeTable timeTable) {
             profileTimeTable =timeTable;
-            SetupView();
+            if(timeTable!=null) {
+                boolean result =saveTimeTable(id, profileTimeTable);
+                if(result)
+                {
+                    sharedPreferences.edit().putBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED, true).commit();
+                }
+            }
         }
 
+    }
+
+    private boolean saveTimeTable(String id, TimeTable profileTimeTable) {
+
+        boolean success=true;
+        String school_id = profileTimeTable.getSchoolId();
+        String std = profileTimeTable.getClassStandard();
+        for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
+            String dayOfWeek = day.getDayOfWeek();
+            for(TimeSlots timeSlot: day.getTimeSlotsList()){
+                long row_id =HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+                if(row_id<0)
+                    success =false;
+            }
+        }
+        return success;
     }
 
     private void SetupView() {
@@ -143,9 +189,6 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
                 view.setVisibility(View.VISIBLE);
 
             }
-
-
-
         }
     }
 
@@ -180,6 +223,6 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         //calendar.setFirstDayOfWeek(Calendar.MONDAY);
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         //Subtract a day to adjust for 0th index
-        return day -2;
+        return day;
     }
 }

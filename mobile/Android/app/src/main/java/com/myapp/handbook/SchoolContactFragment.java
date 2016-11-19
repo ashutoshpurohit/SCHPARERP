@@ -91,7 +91,7 @@ public class SchoolContactFragment extends Fragment {
                     .load(schoolProfile.getSchoolLogoImageURL())
                     .placeholder(R.drawable.contact_picture_placeholder)
                     .error(R.drawable.contact_picture_error)
-                    .override(120,120)
+                    //.override(120,120)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(schoolLogo);
             schoolName.setText(schoolProfile.getSchoolName());

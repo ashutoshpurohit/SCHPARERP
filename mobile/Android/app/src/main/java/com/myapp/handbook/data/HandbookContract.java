@@ -73,5 +73,22 @@ public class HandbookContract {
 
     }
 
+    public static final class TimetableEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "timetable";
+
+        // Column with the foreign key into the location table.
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_STD = "class";
+        public static final String COLUMN_SCHOOL_ID = "school_id";
+        public static final String COLUMN_DAY = "day_of_week";
+        public static final String COLUMN_START_TIME = "start_time";
+        public static final String COLUMN_END_TIME = "end_time";
+        public static final String COLUMN_SUBJECT = "subject";
+        public static final String COLUMN_TEACHER_NAME = "teacher_name";
+        public static final String COLUMN_TEACHER_ID = "teacher_id";
+
+    }
+
 
 }

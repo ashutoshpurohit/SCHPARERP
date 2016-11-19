@@ -6,6 +6,7 @@
     tools:context="com.myapp.handbook.NotesDetailFragment">
 
     <LinearLayout
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="top"
@@ -41,6 +42,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="5dp"
         android:id="@+id/detail_image"
         android:scaleType="centerCrop"
         android:layout_weight="0.75"/>

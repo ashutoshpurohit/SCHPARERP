@@ -7,6 +7,11 @@ public class WeeklyTimeTable {
     String Day;
     List<TimeSlots> TimeSlots;
 
+    public WeeklyTimeTable(String day, List<com.myapp.handbook.domain.TimeSlots> timeSlots) {
+        Day = day;
+        TimeSlots = timeSlots;
+    }
+
     public String getDayOfWeek() {
         return Day;
     }

@@ -78,19 +78,24 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("position",0);
             //setActionBarTitle(currentPosition);
             myToolbar.setTitle("Handbook");
-            selectItem(currentPosition);
+            //selectItem(currentPosition);
+
         } else {
 
-            selectItem(0);
+            currentPosition=0;
+            //selectItem(0);
 
         }
+        Intent fragmentIntent =getIntent();
+        currentPosition= fragmentIntent.getIntExtra("position",0);
+        selectItem(currentPosition);
 
         //Check if logged in
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -398,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             title = titles[position];
         }
-        getSupportActionBar().setTitle(title);
+         getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -409,12 +414,12 @@ public class MainActivity extends AppCompatActivity {
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         setIntent("This is example text");*/
         // Associate searchable configuration with the SearchView
-        /*SearchManager searchManager =
+        SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));*/
+                searchManager.getSearchableInfo(getComponentName()));
 
 
         return true;
@@ -429,7 +434,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-            return super.onOptionsItemSelected(item);
+        if(item.getItemId()== R.id.action_search){
+            startSearch(null,false,null,false);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -11,6 +11,14 @@ public class TimeSlots {
         return StartTime;
     }
 
+    public TimeSlots(String startTime, String endTime, String subjectName, String teacherId, String teacherName) {
+        StartTime = startTime;
+        EndTime = endTime;
+        SubjectName = subjectName;
+        TeacherId = teacherId;
+        TeacherName = teacherName;
+    }
+
     public void setStartTime(String startTime) {
         this.StartTime = startTime;
     }

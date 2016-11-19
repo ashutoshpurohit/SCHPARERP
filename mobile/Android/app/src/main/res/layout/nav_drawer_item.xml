@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sunshine_light_blue">
+    android:background="@color/primary">
 
     <ImageView
         android:id="@+id/icon"
@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceSmall"
         android:paddingTop="25dp"
-        android:textColor="@color/sunshine_dark_blue"
+        android:textColor="@color/primary_dark"
         android:layout_marginLeft="4dp"
         android:layout_width="wrap_content"
         android:layout_height="55dp" />

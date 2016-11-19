@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +28,9 @@ public class NotesDetailActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.notes_detail_container, fragment)
-                .commit();
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+
 
     }
 
@@ -49,7 +52,25 @@ public class NotesDetailActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        else if(id == android.R.id.home)
+        {
+            LaunchNotificationFragment();
+        }
+
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        //Launch the main activity to go to the notes fragment
+        LaunchNotificationFragment();
+
+    }
+
+    private void LaunchNotificationFragment() {
+        Intent intent = new Intent(this, MainActivity.class);
+        //Bundle extras = intent.getExtras();
+        intent.putExtra("position", 1);
+        startActivity(intent);
     }
 }

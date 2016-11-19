@@ -15,6 +15,8 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 import com.squareup.picasso.NetworkPolicy;
@@ -106,10 +108,11 @@ public class NotesDetailFragment extends Fragment {
             dateTextView.setText(Integer.toString(date));
             fromTextView.setText(from);
             if(imageUrl!=null && !imageUrl.isEmpty()){
-                Picasso.with(getContext())
+                Glide.with(getContext())
                         .load(imageUrl)
                         .placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.contact_picture_error)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imageDetailView);
             }
             else {

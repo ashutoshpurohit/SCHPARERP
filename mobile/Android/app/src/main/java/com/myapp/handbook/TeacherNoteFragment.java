@@ -201,7 +201,8 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent result){
 
-        selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
+        if(result!=null)
+            selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
 
 
     }

@@ -205,7 +205,7 @@ public class TopFragment extends Fragment {
         protected void onPostExecute(List<RoleProfile> profiles) {
             if(profiles!=null && profiles.size()>0) {
                 allProfiles = profiles;
-                sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).apply();
+                sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
                 // Toast.makeText(getActivity().getApplicationContext(), "Successfully downloaded the profiles from server)",
                 //       Toast.LENGTH_LONG).show();
                 SetUpView();
