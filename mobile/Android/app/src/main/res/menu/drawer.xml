@@ -6,43 +6,43 @@
         <item
             android:id="@+id/home"
             android:checked="false"
-            android:icon="@drawable/ic_inbox_black"
+            android:icon="@drawable/ic_home"
             android:title="@string/home" />
 
         <item
             android:id="@+id/notifications"
             android:checked="false"
-            android:icon="@drawable/ic_star_black"
+            android:icon="@drawable/ic_view_list"
             android:title="@string/Notifications" />
 
         <item
             android:id="@+id/assignments"
             android:checked="false"
-            android:icon="@drawable/ic_send_black"
+            android:icon="@drawable/ic_event"
             android:title="@string/Events" />
 
         <item
             android:id="@+id/timetable"
             android:checked="false"
-            android:icon="@drawable/ic_restore_black_24dp"
+            android:icon="@drawable/ic_schedule"
             android:title="@string/TimeTable" />
 
 
         <item
             android:id="@+id/feedback"
             android:checked="false"
-            android:icon="@drawable/ic_insert_comment_black_24dp"
+            android:icon="@drawable/ic_comment"
             android:title="@string/ParentNote" />
 
         <item
             android:id="@+id/teacherNote"
             android:checked="false"
-            android:icon="@drawable/ic_email_black"
+            android:icon="@drawable/ic_note"
             android:title="@string/Teacher_Note" />
         <item
             android:id="@+id/contactSchool"
             android:checked="false"
-            android:icon="@drawable/ic_delete_black"
+            android:icon="@drawable/ic_delete"
             android:title="@string/ContactSchool" />
         <item
             android:id="@+id/logout"

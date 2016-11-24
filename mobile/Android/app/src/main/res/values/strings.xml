@@ -52,10 +52,10 @@
     <string name="selectStudent">Select student</string>
     <string name="home">Home</string>
     <string name="profiles">Profiles</string>
-    <string name="Notifications">Notifications</string>
-    <string name="Events">Events</string>
+    <string name="Notifications">Diary Notes</string>
+    <string name="Events">School Calendar</string>
     <string name="Feedback">Feedback</string>
-    <string name="ParentNote">Parent Note</string>
+    <string name="ParentNote">Send Note</string>
     <string name="Teacher_Note">Teacher Note</string>
     <string name="ContactSchool">Contact School</string>
     <string name="spam_string">Spam</string>
