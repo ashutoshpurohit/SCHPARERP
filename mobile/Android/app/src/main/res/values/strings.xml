@@ -38,6 +38,7 @@
         <item>Teacher Note</item>
         <item>Contact School</item>
         <item>Spam</item>
+        <item>Profile</item>
 
     </string-array>
     <string name="open_drawer">Open drawer</string>
@@ -66,4 +67,5 @@
     <string name="profile">Profile</string>
     <string name="TimeTable">Timetable</string>
     <string name="today">Today</string>
+    <string name="Homework">Homework</string>
 </resources>

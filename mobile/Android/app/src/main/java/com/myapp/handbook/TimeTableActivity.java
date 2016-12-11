@@ -34,6 +34,7 @@ import retrofit2.Call;
 public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
 
     TimeTable profileTimeTable;
+    String selectedProfileId;
     ListView timeTableListView;
     View headerView;
     Button datePickerButton;
@@ -41,7 +42,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
     private SharedPreferences sharedPreferences;
     List<RoleProfile> profiles;
     private SQLiteDatabase db;
-    String selectedProfileId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

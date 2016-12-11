@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
@@ -165,6 +166,29 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
         return profiles;
     }
+
+    public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int count){
+        List<DiaryNote> diaryNotes = new ArrayList<>();
+        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+        int fetchedCount=0;
+        Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
+        try {
+            while (cursor.moveToNext() && fetchedCount < count){
+                DiaryNote currentNote = new DiaryNote();
+                currentNote.setDate(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DATE)));
+                currentNote.setTitle(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_TITLE)));
+                currentNote.setDetail(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DETAIL)));
+                diaryNotes.add(currentNote);
+                fetchedCount++;
+
+            }
+        }
+        finally {
+            cursor.close();
+        }
+        return diaryNotes;
+    }
+
 
     public static TimeTable loadTimeTable(SQLiteDatabase sqliteDatabase,String id) {
 

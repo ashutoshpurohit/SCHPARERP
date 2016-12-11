@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diary_note_summary_title"
+        android:text="Dummy header message"
+        android:textSize="16sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diary_note_summary_date"
+        android:text="27/11/2016"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="8sp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diary_note_summary_msg"
+        android:text="Loreum ipsum some dummy message for reference to show the detils"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="12sp"/>
+
+</LinearLayout>

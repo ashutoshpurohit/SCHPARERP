@@ -219,13 +219,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
                 String fullName = allTeacherProfiles.get(i).firstName+ " "+allTeacherProfiles.get(i).lastName;
                 teacherNames.add(fullName);
             }
-            //Set up the adapter for spinner
+            //Set up the timetableAdapter for spinner
             Spinner spinner = (Spinner)fragmentView.findViewById(R.id.teachers_spinner);
             // Create an ArrayAdapter using the string array and a default spinner layout
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,teacherNames);
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
+            // Apply the timetableAdapter to the spinner
             spinner.setAdapter(adapter);
 
 
@@ -245,7 +245,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
      *
      * @param parent   The AdapterView where the selection happened
      * @param view     The view within the AdapterView that was clicked
-     * @param position The position of the view in the adapter
+     * @param position The position of the view in the timetableAdapter
      * @param id       The row id of the item that is selected
      */
     @Override
@@ -257,7 +257,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     /**
      * Callback method to be invoked when the selection disappears from this
      * view. The selection can disappear for instance when touch is activated
-     * or when the adapter becomes empty.
+     * or when the timetableAdapter becomes empty.
      *
      * @param parent The AdapterView that now contains no selected item.
      */

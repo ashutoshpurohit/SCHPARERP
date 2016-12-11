@@ -63,9 +63,9 @@ public class NotesFragment extends Fragment {
         //NotesAdapter listAdapter = new NotesAdapter(inflater.getContext(),cursor,0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        /*ListView listView = (ListView) rootView.findViewById(R.id.listview_notes);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*ListView timeTableListView = (ListView) rootView.findViewById(R.id.listview_notes);
+        timeTableListView.setAdapter(listAdapter);
+        timeTableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
@@ -95,7 +95,7 @@ public class NotesFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        // specify an adapter (see also next example)
+        // specify an timetableAdapter (see also next example)
         mAdapter = new MyRecyclerAdapter(this.getContext(),cursor);
         mRecyclerView.setAdapter(mAdapter);
         ((MyRecyclerAdapter)mAdapter).setActivity((AppCompatActivity) getActivity());
@@ -107,11 +107,11 @@ public class NotesFragment extends Fragment {
 
 
 
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        /*ArrayAdapter<String> timetableAdapter = new ArrayAdapter<String>(
                                                                 inflater.getContext(),
                                                                 android.R.layout.simple_list_item_1,
                                                                 Notifications.notes);
-        setListAdapter(adapter);*/
+        setListAdapter(timetableAdapter);*/
         //return super.onCreateView(inflater, container, savedInstanceState);
     }
 

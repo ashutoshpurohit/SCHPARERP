@@ -8,7 +8,11 @@
             android:checked="false"
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
-
+        <item
+            android:id="@+id/profiles"
+            android:checked="false"
+            android:icon="@drawable/ic_home"
+            android:title="@string/profile" />
         <item
             android:id="@+id/notifications"
             android:checked="false"
@@ -16,7 +20,7 @@
             android:title="@string/Notifications" />
 
         <item
-            android:id="@+id/assignments"
+            android:id="@+id/schoolCalendar"
             android:checked="false"
             android:icon="@drawable/ic_event"
             android:title="@string/Events" />

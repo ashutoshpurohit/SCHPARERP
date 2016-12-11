@@ -21,6 +21,7 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
     private final Context context;
     private final int layoutResourceId;
     private final List<TimeSlots> timeslots;
+    private TimeTableViewType viewType;
 
     /**
      * Constructor
@@ -36,7 +37,12 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
         this.context = context;
         this.layoutResourceId = resource;
         this.timeslots = timeSlots;
+        viewType=TimeTableViewType.DETAIL;
+    }
 
+    public void setType(TimeTableViewType type)
+    {
+        viewType=type;
     }
 
     @Override
@@ -48,14 +54,39 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
             currentRow = inflater.inflate(layoutResourceId, parent, false);
 
         }
+
         TimeSlots currentTimeSlot = timeslots.get(position);
 
-        TextView timeSlot = (TextView) currentRow.findViewById(R.id.timetable_duration);
-        TextView subject = (TextView) currentRow.findViewById(R.id.timetable_subject);
+        if(viewType==TimeTableViewType.DETAIL) {
+            TextView timeSlot = (TextView) currentRow.findViewById(R.id.timetable_duration);
+            TextView subject = (TextView) currentRow.findViewById(R.id.timetable_subject);
 
-        timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
-        subject.setText(currentTimeSlot.getSubject());
+            timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
+            subject.setText(currentTimeSlot.getSubject());
+
+        }
+        else {
+            TextView timeSlot = (TextView) currentRow.findViewById(R.id.timetable_summary_duration);
+            TextView subject = (TextView) currentRow.findViewById(R.id.timetable_summary_subject);
+
+            timeSlot.setText(getStartTime(currentTimeSlot.getCurrentTimeSlot()));
+            subject.setText(getSubjectInitials(currentTimeSlot.getSubject()));
+        }
         return currentRow;
+
+    }
+
+    private String getSubjectInitials(String subject) {
+        return subject.substring(0,3);
+    }
+
+    private String getStartTime(String currentTimeSlot) {
+
+         int index= currentTimeSlot.indexOf('-');
+        String startTime= currentTimeSlot.substring(0,4);
+        if(index >1)
+            currentTimeSlot.substring(0,index-1);
+        return startTime;
     }
 }
 

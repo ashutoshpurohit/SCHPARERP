@@ -143,16 +143,21 @@ public class MainActivity extends AppCompatActivity {
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.home:
+                        fragment = new HomeFragment();
+                        ((HomeFragment)fragment).setNavigationView(navigationView);
+                        currentPosition=0;
+                        break;
+                    case R.id.profiles:
                         fragment = new TopFragment();
                         ((TopFragment)fragment).setNavigationView(navigationView);
-                        currentPosition=0;
+                        currentPosition=7;
                         break;
                     case R.id.notifications:
                         Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
                         fragment = new NotesFragment();
                         currentPosition=1;
                         break;
-                    case R.id.assignments:
+                    case R.id.schoolCalendar:
                         Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.feedback:
@@ -239,7 +244,11 @@ public class MainActivity extends AppCompatActivity {
                         android.support.v4.app.FragmentManager fragMan = getSupportFragmentManager();
                         Fragment fragment = fragMan.findFragmentByTag("visible_fragment");
                         if (fragment instanceof TopFragment) {
-                            currentPosition = 0;
+                            currentPosition = 7;
+                        }
+
+                        if(fragment instanceof HomeFragment ){
+                            currentPosition= 0;
                         }
                         if (fragment instanceof NotesFragment) {
                             currentPosition = 1;
@@ -321,12 +330,17 @@ public class MainActivity extends AppCompatActivity {
         case 4:
             fragment = new TeacherNoteFragment();
             break;
-            case 5:
+        case 5:
             fragment = new SchoolContactFragment();
             break;
+            case 7:
+                fragment = new TopFragment();
+                ((TopFragment)fragment).setNavigationView(navigationView);
+                break;
+
         default:
-            fragment = new TopFragment();
-            ((TopFragment)fragment).setNavigationView(navigationView);
+            fragment = new HomeFragment();
+            ((HomeFragment)fragment).setNavigationView(navigationView);
         }
         android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         //ft.replace(R.id.content_frame, fragment, "visible_fragment");
