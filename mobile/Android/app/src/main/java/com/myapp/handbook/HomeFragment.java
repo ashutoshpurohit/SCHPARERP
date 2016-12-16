@@ -61,7 +61,6 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         fragmentView = view;
 
-
         timeTableListView = (RecyclerView) view.findViewById(R.id.summaryTimetableListView1);
         diaryNoteSummaryView =(RecyclerView)view.findViewById(R.id.summaryDiaryNotetView1);
 
@@ -84,9 +83,9 @@ public class HomeFragment extends Fragment {
 
         allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
 
-        selectedProfileId =allProfiles.get(0).getId();
+        selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
-        profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId);
+        profileTimeTable = HandBookDbHelper.loadStudentTimeTable(db,selectedProfileId);
 
         timeTableListView.setLayoutManager(layoutManager);
         diaryNoteSummaryView.setLayoutManager(diaryNoteLayoutManager);

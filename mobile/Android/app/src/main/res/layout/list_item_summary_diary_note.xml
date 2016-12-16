@@ -14,14 +14,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/diary_note_summary_date"
         android:text="27/11/2016"
-        android:fontFamily="sans-serif-condensed"
         android:textSize="8sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/diary_note_summary_msg"
         android:text="Loreum ipsum some dummy message for reference to show the detils"
-        android:fontFamily="sans-serif-condensed"
         android:textSize="12sp"/>
 
 </LinearLayout>

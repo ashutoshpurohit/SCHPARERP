@@ -106,6 +106,18 @@ public class HttpConnectionUtil {
         return mobileNumber;
     }
 
+    static String selectedProfileId;
+
+    public static String getSelectedProfileId()
+    {
+        return "005";
+    }
+
+    public static void setSelectedProfileId(String profileId)
+    {
+        selectedProfileId = profileId;
+    }
+
     public interface FileUploadService {
         @Multipart
         @POST("uploadTeacherOrStudentImage")
@@ -122,6 +134,10 @@ public class HttpConnectionUtil {
     public interface TimeTableService {
         @GET("StudentTimeTable/{id}")
         Call<TimeTable> getStudentTimeTable(@Path("id") String id);
+
+        @GET("TeacherTimeTable/{id}")
+        Call<TimeTable> getTeacherTimeTable(@Path("id") String id);
+
     }
 
     public static String UploadImage(File fileToTranser)

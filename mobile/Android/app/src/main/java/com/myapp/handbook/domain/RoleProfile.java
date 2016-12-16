@@ -34,7 +34,7 @@ public class RoleProfile implements Parcelable {
         mobileNumber = in.readString();
     }
 
-    public static final Creator<RoleProfile> CREATOR = new Creator<RoleProfile>() {
+        public static final Creator<RoleProfile> CREATOR = new Creator<RoleProfile>() {
         @Override
         public RoleProfile createFromParcel(Parcel in) {
             return new RoleProfile(in);
@@ -326,6 +326,16 @@ public class RoleProfile implements Parcelable {
 
 
         return profiles;
+    }
+
+    public static RoleProfile getProfile(SQLiteDatabase db,String profileId) {
+
+        List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
+        for(int i=0;i< profiles.size();i++){
+            if(profiles.get(i).getId()==profileId)
+                return profiles.get(i);
+        }
+        return null;
     }
 
 

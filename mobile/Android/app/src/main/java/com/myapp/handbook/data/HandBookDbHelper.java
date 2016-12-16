@@ -190,7 +190,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public static TimeTable loadTimeTable(SQLiteDatabase sqliteDatabase,String id) {
+    public static TimeTable loadStudentTimeTable(SQLiteDatabase sqliteDatabase, String id) {
 
         TimeTable table = new TimeTable();
         HashMap<String , ArrayList<TimeSlots>> dayTimeSlotMap = new HashMap<>();
@@ -227,9 +227,46 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         finally {
             cursor.close();
         }
+        return  table;
+    }
 
+    public static TimeTable loadTeacherTimeTable(SQLiteDatabase sqliteDatabase, String id) {
 
+        TimeTable table = new TimeTable();
+        HashMap<String , ArrayList<TimeSlots>> dayTimeSlotMap = new HashMap<>();
+        Cursor cursor= sqliteDatabase.query(HandbookContract.TimetableEntry.TABLE_NAME,null,"id=?", new String[] {id},null,null,null);
 
+        try {
+
+            while(cursor.moveToNext()){
+
+                String std= cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_STD));
+                String school_id = cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID));
+                String dayOfWeek = cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_DAY));
+                String start_time =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_START_TIME));
+                String end_time =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_END_TIME));
+                String subject =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_SUBJECT));
+                String teacherName =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME));
+                String teacher_id =cursor.getString(cursor.getColumnIndex(HandbookContract.TimetableEntry.COLUMN_TEACHER_ID));
+                TimeSlots t = new TimeSlots(start_time,end_time,subject,std);
+                ArrayList<TimeSlots> timeSlotsForTheDay = dayTimeSlotMap.get(dayOfWeek);
+                if(timeSlotsForTheDay==null) {
+                    timeSlotsForTheDay = new ArrayList<>();
+                    dayTimeSlotMap.put(dayOfWeek,timeSlotsForTheDay);
+                }
+
+                timeSlotsForTheDay.add(t);
+            }
+            List<WeeklyTimeTable> weeklyTimeTable = new ArrayList<>();
+            for(String dayOfWeek:dayTimeSlotMap.keySet()){
+                WeeklyTimeTable w = new WeeklyTimeTable(dayOfWeek,dayTimeSlotMap.get(dayOfWeek));
+                weeklyTimeTable.add(w);
+            }
+            table.setWeeklyTimeTableList(weeklyTimeTable);
+        }
+        finally {
+            cursor.close();
+        }
         return  table;
     }
 

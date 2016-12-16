@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TimeTable {
 
-    String ClassStandard;
+    String studentClassStandard;
     String SchoolId;
     List<WeeklyTimeTable> Days;
 
@@ -28,12 +28,12 @@ public class TimeTable {
         this.SchoolId = schoolId;
     }
 
-    public String getClassStandard() {
-        return ClassStandard;
+    public String getStudentClassStandard() {
+        return studentClassStandard;
     }
 
-    public void setClassStandard(String classStandard) {
-        this.ClassStandard = classStandard;
+    public void setStudentClassStandard(String studentClassStandard) {
+        this.studentClassStandard = studentClassStandard;
     }
 }
 

@@ -35,6 +35,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
     TimeTable profileTimeTable;
     String selectedProfileId;
+    RoleProfile selectedProfile;
     ListView timeTableListView;
     View headerView;
     Button datePickerButton;
@@ -81,20 +82,23 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         //TO-DO read the value of selectedProfileId as per app logic
         //Get the id of teacher or student
-        profiles = HandBookDbHelper.LoadProfilefromDb(db);
-        selectedProfileId =profiles.get(0).getId();
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED, false) == false) {
-            new FetchTimeTableAsyncTask(selectedProfileId).execute();
+        //selectedProfileId =profiles.get(0).getId();
+        selectedProfile = RoleProfile.getProfile(db,HttpConnectionUtil.getSelectedProfileId());
+
+        if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED+"_"+selectedProfile.getId(), false) == false) {
+            new FetchTimeTableAsyncTask(selectedProfile).execute();
         }
         else
         {
-            profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId);
+            profileTimeTable = HandBookDbHelper.loadStudentTimeTable(db,selectedProfileId);
 
         }
         SetupView();
 
     }
+
+
 
     /**
      * Called when a view has been clicked.
@@ -118,18 +122,27 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
     }
 
     private class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, TimeTable> {
-        String id;
 
-        public FetchTimeTableAsyncTask(String id) {
-            this.id = id;
+        RoleProfile currentProfile;
+
+
+        public FetchTimeTableAsyncTask(RoleProfile profile) {
+            this.currentProfile =profile;
         }
 
         @Override
         protected TimeTable doInBackground(Void... params) {
             HttpConnectionUtil.TimeTableService timeTableService = ServiceGenerator.createService(HttpConnectionUtil.TimeTableService.class);
 
-            //String id ="100";
-            Call<TimeTable> call = timeTableService.getStudentTimeTable(id);
+            Call<TimeTable> call=null;
+            if(currentProfile.getRole() == RoleProfile.ProfileRole.STUDENT.toString())//String id ="100";
+            {
+                call = timeTableService.getStudentTimeTable(currentProfile.getId());
+            }
+            else
+            {
+                call = timeTableService.getTeacherTimeTable(currentProfile.getId());
+            }
             try {
                 TimeTable timeTable = call.execute().body();
                 return timeTable;
@@ -144,25 +157,47 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         protected void onPostExecute(TimeTable timeTable) {
             profileTimeTable =timeTable;
             if(timeTable!=null) {
-                boolean result =saveTimeTable(id, profileTimeTable);
+                boolean result =false;
+                if(currentProfile.getRole()== RoleProfile.ProfileRole.STUDENT.toString()) {
+                    result =saveStudentTimeTable(currentProfile.getId(), profileTimeTable);
+                }
+                else if(currentProfile.getRole()==RoleProfile.ProfileRole.TEACHER.toString()){
+                    result = saveTeacherTimeTable(currentProfile.getId(),profileTimeTable);
+                }
                 if(result)
                 {
-                    sharedPreferences.edit().putBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED, true).commit();
+                    sharedPreferences.edit().putBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED+"_" +currentProfile.getId() , true).commit();
                 }
             }
         }
 
     }
 
-    private boolean saveTimeTable(String id, TimeTable profileTimeTable) {
+    private boolean saveStudentTimeTable(String id, TimeTable profileTimeTable) {
 
         boolean success=true;
         String school_id = profileTimeTable.getSchoolId();
-        String std = profileTimeTable.getClassStandard();
+        String std = profileTimeTable.getStudentClassStandard();
         for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
             String dayOfWeek = day.getDayOfWeek();
             for(TimeSlots timeSlot: day.getTimeSlotsList()){
                 long row_id =HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+                if(row_id<0)
+                    success =false;
+            }
+        }
+        return success;
+    }
+
+    private boolean saveTeacherTimeTable(String id, TimeTable profileTimeTable) {
+
+        boolean success=true;
+        String school_id = profileTimeTable.getSchoolId();
+
+        for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
+            String dayOfWeek = day.getDayOfWeek();
+            for(TimeSlots timeSlot: day.getTimeSlotsList()){
+                long row_id =HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,timeSlot.getTeacherClassStd(),timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
                 if(row_id<0)
                     success =false;
             }
