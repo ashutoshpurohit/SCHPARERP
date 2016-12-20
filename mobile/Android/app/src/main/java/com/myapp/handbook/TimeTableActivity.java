@@ -16,15 +16,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 
+import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
+import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
 import com.myapp.handbook.adapter.TimeTableAdapter;
 import com.myapp.handbook.controls.DatePickerFragment;
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +37,7 @@ import retrofit2.Call;
 
 public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TimeTable profileTimeTable;
+    BaseTimeTable profileTimeTable;
     String selectedProfileId;
     RoleProfile selectedProfile;
     ListView timeTableListView;
@@ -86,19 +90,30 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         //selectedProfileId =profiles.get(0).getId();
         selectedProfile = RoleProfile.getProfile(db,HttpConnectionUtil.getSelectedProfileId());
 
+        FetchTimeTableAsyncTask.TaskListener uiUpdater = new FetchTimeTableAsyncTask.TaskListener() {
+            @Override
+            public void onFinished(BaseTimeTable table) {
+                SetupView(table);
+            }
+        };
+
+        FetchTimeTableAsyncTask.TaskListener dbUpdater = new TimeTableDbUpdateListener(db,selectedProfile,sharedPreferences);
+
+        List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
+        listeners.add(uiUpdater);
+        listeners.add(dbUpdater);
+
         if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED+"_"+selectedProfile.getId(), false) == false) {
-            new FetchTimeTableAsyncTask(selectedProfile).execute();
+            new FetchTimeTableAsyncTask(selectedProfile,listeners).execute();
         }
         else
         {
-            profileTimeTable = HandBookDbHelper.loadStudentTimeTable(db,selectedProfileId);
+            profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId, selectedProfile.getProfileRole());
 
         }
-        SetupView();
+        SetupView(null);
 
     }
-
-
 
     /**
      * Called when a view has been clicked.
@@ -114,98 +129,16 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 selectedDate = new Date(year,monthOfYear,dayOfMonth);
                 setButtonText();
-                SetupView();
+                SetupView(profileTimeTable);
             }
         });
         dialog.show(getSupportFragmentManager(),"Select date");
 
     }
 
-    private class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, TimeTable> {
+    private void SetupView(BaseTimeTable table) {
 
-        RoleProfile currentProfile;
-
-
-        public FetchTimeTableAsyncTask(RoleProfile profile) {
-            this.currentProfile =profile;
-        }
-
-        @Override
-        protected TimeTable doInBackground(Void... params) {
-            HttpConnectionUtil.TimeTableService timeTableService = ServiceGenerator.createService(HttpConnectionUtil.TimeTableService.class);
-
-            Call<TimeTable> call=null;
-            if(currentProfile.getRole() == RoleProfile.ProfileRole.STUDENT.toString())//String id ="100";
-            {
-                call = timeTableService.getStudentTimeTable(currentProfile.getId());
-            }
-            else
-            {
-                call = timeTableService.getTeacherTimeTable(currentProfile.getId());
-            }
-            try {
-                TimeTable timeTable = call.execute().body();
-                return timeTable;
-            } catch (IOException e) {
-                Log.d("SchoolContact", "Error in fetching school profile");
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(TimeTable timeTable) {
-            profileTimeTable =timeTable;
-            if(timeTable!=null) {
-                boolean result =false;
-                if(currentProfile.getRole()== RoleProfile.ProfileRole.STUDENT.toString()) {
-                    result =saveStudentTimeTable(currentProfile.getId(), profileTimeTable);
-                }
-                else if(currentProfile.getRole()==RoleProfile.ProfileRole.TEACHER.toString()){
-                    result = saveTeacherTimeTable(currentProfile.getId(),profileTimeTable);
-                }
-                if(result)
-                {
-                    sharedPreferences.edit().putBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED+"_" +currentProfile.getId() , true).commit();
-                }
-            }
-        }
-
-    }
-
-    private boolean saveStudentTimeTable(String id, TimeTable profileTimeTable) {
-
-        boolean success=true;
-        String school_id = profileTimeTable.getSchoolId();
-        String std = profileTimeTable.getStudentClassStandard();
-        for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
-            String dayOfWeek = day.getDayOfWeek();
-            for(TimeSlots timeSlot: day.getTimeSlotsList()){
-                long row_id =HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
-                if(row_id<0)
-                    success =false;
-            }
-        }
-        return success;
-    }
-
-    private boolean saveTeacherTimeTable(String id, TimeTable profileTimeTable) {
-
-        boolean success=true;
-        String school_id = profileTimeTable.getSchoolId();
-
-        for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
-            String dayOfWeek = day.getDayOfWeek();
-            for(TimeSlots timeSlot: day.getTimeSlotsList()){
-                long row_id =HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,timeSlot.getTeacherClassStd(),timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
-                if(row_id<0)
-                    success =false;
-            }
-        }
-        return success;
-    }
-
-    private void SetupView() {
+        profileTimeTable =table;
 
         if(profileTimeTable!=null){
 
@@ -214,7 +147,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
             List<WeeklyTimeTable> weekly= profileTimeTable.getWeeklyTimeTableList();
             List<TimeSlots> todaysTimeSlot=null;
             View view =findViewById(R.id.empty_list_view);
-            if(dayOfWeek > -1) {
+            if(dayOfWeek > -1 && dayOfWeek < weekly.size()) {
                 todaysTimeSlot = weekly.get(dayOfWeek).getTimeSlotsList();
                 TimeTableAdapter adapter = new TimeTableAdapter(this, R.layout.list_timetable_item, todaysTimeSlot);
                 timeTableListView.setAdapter(adapter);

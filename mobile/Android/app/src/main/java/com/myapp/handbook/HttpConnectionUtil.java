@@ -1,10 +1,16 @@
 package com.myapp.handbook;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
+import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeTable;
 
 import org.json.JSONObject;
@@ -18,6 +24,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -40,6 +47,36 @@ public class HttpConnectionUtil {
     public static boolean imageUploaded =false;
     public static boolean imageUploadStatus =false;
     public static String imageUrl="";
+    static List<RoleProfile> profiles;
+
+    public static List<RoleProfile> getProfiles() {
+        return profiles;
+    }
+
+    public static void setProfiles(List<RoleProfile> profiles) {
+        HttpConnectionUtil.profiles = profiles;
+    }
+
+
+    public static SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
+
+    public static void setSharedPreferences(SharedPreferences sharedPreferences) {
+        HttpConnectionUtil.sharedPreferences = sharedPreferences;
+    }
+
+    static SharedPreferences sharedPreferences;
+
+    public static void clearAllPreferences(SQLiteDatabase db, SharedPreferences sharedPreferences) {
+
+        sharedPreferences.edit().clear().commit();
+        //Clear all tables
+        db.execSQL("delete from "+ HandbookContract.ProfileEntry.TABLE_NAME);
+        db.execSQL("delete from "+ HandbookContract.TimetableEntry.TABLE_NAME);
+
+    }
+
     public enum RESTMethod {
         GET,
         POST,
@@ -110,12 +147,16 @@ public class HttpConnectionUtil {
 
     public static String getSelectedProfileId()
     {
-        return "005";
+
+        selectedProfileId= sharedPreferences.getString(QuickstartPreferences.SELECTED_PROFILE_ID,"");
+        return selectedProfileId;
     }
 
     public static void setSelectedProfileId(String profileId)
     {
         selectedProfileId = profileId;
+        sharedPreferences.edit().putString(QuickstartPreferences.SELECTED_PROFILE_ID,selectedProfileId).commit();
+
     }
 
     public interface FileUploadService {
@@ -136,7 +177,7 @@ public class HttpConnectionUtil {
         Call<TimeTable> getStudentTimeTable(@Path("id") String id);
 
         @GET("TeacherTimeTable/{id}")
-        Call<TimeTable> getTeacherTimeTable(@Path("id") String id);
+        Call<TeacherTimeTable> getTeacherTimeTable(@Path("id") String id);
 
     }
 

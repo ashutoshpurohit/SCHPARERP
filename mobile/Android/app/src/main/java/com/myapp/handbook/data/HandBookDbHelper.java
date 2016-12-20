@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
+import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
@@ -189,8 +191,19 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return diaryNotes;
     }
 
+    public static BaseTimeTable loadTimeTable(SQLiteDatabase sqliteDatabase, String id, RoleProfile.ProfileRole role)
+    {
+        BaseTimeTable table=null;
+        if(role== RoleProfile.ProfileRole.STUDENT){
+            table = loadStudentTimeTable(sqliteDatabase,id);
+        }
+        else if(role == RoleProfile.ProfileRole.TEACHER){
+            table = loadTeacherTimeTable(sqliteDatabase,id);
+        }
+        return table;
+    }
 
-    public static TimeTable loadStudentTimeTable(SQLiteDatabase sqliteDatabase, String id) {
+    private static TimeTable loadStudentTimeTable(SQLiteDatabase sqliteDatabase, String id) {
 
         TimeTable table = new TimeTable();
         HashMap<String , ArrayList<TimeSlots>> dayTimeSlotMap = new HashMap<>();
@@ -230,9 +243,9 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return  table;
     }
 
-    public static TimeTable loadTeacherTimeTable(SQLiteDatabase sqliteDatabase, String id) {
+    private static TeacherTimeTable loadTeacherTimeTable(SQLiteDatabase sqliteDatabase, String id) {
 
-        TimeTable table = new TimeTable();
+        TeacherTimeTable table = new TeacherTimeTable();
         HashMap<String , ArrayList<TimeSlots>> dayTimeSlotMap = new HashMap<>();
         Cursor cursor= sqliteDatabase.query(HandbookContract.TimetableEntry.TABLE_NAME,null,"id=?", new String[] {id},null,null,null);
 

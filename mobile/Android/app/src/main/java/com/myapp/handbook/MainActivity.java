@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(FEATURE_ACTION_MODE_OVERLAY);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        HttpConnectionUtil.setSharedPreferences(sharedPreferences);
         titles = getResources().getStringArray(R.array.titles);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -81,24 +84,9 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt("position",0);
-            //setActionBarTitle(currentPosition);
-            myToolbar.setTitle("Handbook");
-            //selectItem(currentPosition);
-
-        } else {
-
-            currentPosition=0;
-            //selectItem(0);
-
-        }
-        Intent fragmentIntent =getIntent();
-        currentPosition= fragmentIntent.getIntExtra("position",0);
-        selectItem(currentPosition);
 
         //Check if logged in
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         if(sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false) == false){
             //Launch the digits app
             Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
@@ -118,6 +106,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt("position",0);
+            //setActionBarTitle(currentPosition);
+            myToolbar.setTitle("Handbook");
+            //selectItem(currentPosition);
+
+        } else {
+
+            currentPosition=0;
+            //selectItem(0);
+
+        }
+        Intent fragmentIntent =getIntent();
+        currentPosition= fragmentIntent.getIntExtra("position",0);
+        selectItem(currentPosition);
 
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
@@ -450,6 +453,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()== R.id.action_search){
             startSearch(null,false,null,false);
+            return true;
+        }
+        else if(item.getItemId()==R.id.action_refresh){
+            SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(this);
+
+            SQLiteDatabase db = handbookDbHelper.getReadableDatabase();
+            HttpConnectionUtil.clearAllPreferences(db,sharedPreferences);
             return true;
         }
         return super.onOptionsItemSelected(item);

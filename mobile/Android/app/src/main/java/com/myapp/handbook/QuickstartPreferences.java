@@ -24,5 +24,6 @@ public class QuickstartPreferences {
     public static final String TIMETABLE_DOWNLOADED ="timetableDownloaded";
     public static final String LOGGED_IN ="loginCompleted";
     public static final String LOGGED_MOBILE ="mobileNumber";
+    public static final String SELECTED_PROFILE_ID ="selectedProfileId";
 
 }

@@ -1,10 +1,12 @@
 package com.myapp.handbook.domain;
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.myapp.handbook.QuickstartPreferences;
 import com.myapp.handbook.data.HandBookDbHelper;
 
 import org.json.JSONArray;
@@ -135,6 +137,16 @@ public class RoleProfile implements Parcelable {
 
     public String getRole() {
         return role;
+    }
+
+    public ProfileRole getProfileRole(){
+        if (role.equals(ProfileRole.STUDENT.toString()))
+            return ProfileRole.STUDENT;
+        else if(role.equals(ProfileRole.TEACHER.toString()))
+            return ProfileRole.TEACHER;
+        else {
+            return ProfileRole.PRINCIPAL;
+        }
     }
 
     public void setRole(String role) {
@@ -315,6 +327,18 @@ public class RoleProfile implements Parcelable {
 
     }
 
+    public static void savetoDB(List<RoleProfile> profiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
+
+        for(RoleProfile profile:profiles) {
+
+            HandBookDbHelper.insertProfile(db,profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getMiddleName(),profile.getRole(),profile.getGender(),profile.getStd(),profile.getAddress(),profile.getBirth_date(),profile.getImageUrl());
+        }
+
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
+
+    }
+
+
     public static boolean storeProfile(List<RoleProfile> profiles){
 
         return true;
@@ -332,7 +356,7 @@ public class RoleProfile implements Parcelable {
 
         List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
         for(int i=0;i< profiles.size();i++){
-            if(profiles.get(i).getId()==profileId)
+            if(profiles.get(i).getId().equals(profileId))
                 return profiles.get(i);
         }
         return null;

@@ -7,14 +7,14 @@ public class TimeSlots {
     String TeacherId;
     String TeacherName;
 
-    String teacherClassStd;
+    String ClassStandard;
 
     public String getTeacherClassStd() {
-        return teacherClassStd;
+        return ClassStandard;
     }
 
     public void setTeacherClassStd(String teacherClassStd) {
-        this.teacherClassStd = teacherClassStd;
+        this.ClassStandard = teacherClassStd;
     }
 
     public String getStartTime() {
@@ -34,7 +34,7 @@ public class TimeSlots {
         StartTime = startTime;
         EndTime= endTime;
         SubjectName = subjectName;
-        this.teacherClassStd = teacherClassStd;
+        this.ClassStandard = teacherClassStd;
     }
 
     public void setStartTime(String startTime) {
@@ -66,7 +66,10 @@ public class TimeSlots {
     }
 
     public String getTeacherName() {
-        return TeacherName;
+        if(TeacherName!=null)
+            return TeacherName;
+        else
+            return " ";
     }
 
     public void setTeacherName(String teacherName) {

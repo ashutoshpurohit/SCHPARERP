@@ -16,10 +16,14 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
+import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
+import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
 import com.myapp.handbook.adapter.DiaryNoteSummaryAdapter;
 import com.myapp.handbook.adapter.TimeTableRecylerViewAdapter;
 import com.myapp.handbook.adapter.TimeTableViewType;
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
@@ -29,6 +33,8 @@ import com.myapp.handbook.domain.WeeklyTimeTable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.myapp.handbook.domain.RoleProfile.savetoDB;
 
 public class HomeFragment extends Fragment {
 
@@ -43,10 +49,11 @@ public class HomeFragment extends Fragment {
     private SQLiteDatabase db;
     private Cursor cursor;
     View header;
-    TimeTable profileTimeTable;
+    BaseTimeTable profileTimeTable;
     String selectedProfileId;
     SharedPreferences sharedPreferences;
     RecyclerView timeTableListView;
+    RoleProfile selectedProfile;
     RecyclerView diaryNoteSummaryView;
     TimeTableRecylerViewAdapter timetableAdapter;
     DiaryNoteSummaryAdapter diaryNoteSummaryAdapter;
@@ -73,6 +80,10 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager diaryNoteLayoutManager = new LinearLayoutManager(getContext());
         diaryNoteLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        timeTableListView.setLayoutManager(layoutManager);
+        diaryNoteSummaryView.setLayoutManager(diaryNoteLayoutManager);
+
+
         setHasOptionsMenu(true);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
@@ -81,21 +92,60 @@ public class HomeFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
+        if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
+
+            List<FetchProfileAsyncTask.ProfileDownloadListener> profileDownloadListeners = new ArrayList<>();
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles) {
+
+                    savetoDB(profiles,db,sharedPreferences);
+                }
+            });
+
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles) {
+
+                    if(profiles!=null && profiles.size() >0 )
+                        HttpConnectionUtil.setSelectedProfileId(profiles.get(0).getId());
+                    HttpConnectionUtil.setProfiles(profiles);
+                }
+            });
+            //Download the profile
+            new FetchProfileAsyncTask(profileDownloadListeners).execute();
+        }
+        else
+        {
+            allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
+        }
 
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
-        profileTimeTable = HandBookDbHelper.loadStudentTimeTable(db,selectedProfileId);
+        selectedProfile = RoleProfile.getProfile(db, selectedProfileId);
 
-        timeTableListView.setLayoutManager(layoutManager);
-        diaryNoteSummaryView.setLayoutManager(diaryNoteLayoutManager);
+        if(selectedProfile!=null)
+        {
 
+            if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false) == false) {
 
-        setUpTimeTableView();
+                List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
+                listeners.add(new TimeTableDbUpdateListener(db, selectedProfile, sharedPreferences));
+                listeners.add(new FetchTimeTableAsyncTask.TaskListener() {
+                    @Override
+                    public void onFinished(BaseTimeTable table) {
+                        setUpTimeTableView(table);
+                    }
+                });
+                new FetchTimeTableAsyncTask(selectedProfile, listeners).execute();
+            }
+            else {
+
+                profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
+            }
+            setUpTimeTableView(profileTimeTable);
+        }
         setupDiaryNotesView();
-
-
-        //UpdateSchoolDetails(schoolProfile);
         return view;
     }
 
@@ -109,12 +159,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void setUpTimeTableView() {
+    public void setUpTimeTableView(BaseTimeTable table) {
 
-        if(profileTimeTable!=null){
+        if(table!=null){
 
             int dayOfWeek = 1;//getDayOfTheWeek();
-            List<WeeklyTimeTable> weekly= profileTimeTable.getWeeklyTimeTableList();
+            List<WeeklyTimeTable> weekly= table.getWeeklyTimeTableList();
             List<TimeSlots> todaysTimeSlot=null;
 
             if(dayOfWeek > -1) {

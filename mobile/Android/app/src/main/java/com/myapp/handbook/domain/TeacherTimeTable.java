@@ -7,12 +7,13 @@ import com.myapp.handbook.data.HandBookDbHelper;
 import java.util.List;
 
 /**
- * Created by SAshutosh on 10/15/2016.
+ * Created by SAshutosh on 12/17/2016.
  */
 
-public class TimeTable implements BaseTimeTable {
+public class TeacherTimeTable implements BaseTimeTable {
 
-    String ClassStandard;
+    String TeacherId;
+
     String SchoolId;
     List<WeeklyTimeTable> Days;
 
@@ -33,36 +34,32 @@ public class TimeTable implements BaseTimeTable {
 
     @Override
     public void setSchoolId(String schoolId) {
-        this.SchoolId = schoolId;
+        SchoolId = schoolId;
     }
 
     @Override
     public String getStudentClassStandard() {
-        return ClassStandard;
+        return null;
     }
 
     @Override
     public void setStudentClassStandard(String studentClassStandard) {
-        this.ClassStandard = studentClassStandard;
+
     }
 
-    public static boolean saveStudentTimeTable(SQLiteDatabase db,String id, TimeTable profileTimeTable) {
+    public static boolean saveTeacherTimeTable(SQLiteDatabase db, String id, TeacherTimeTable profileTimeTable) {
 
         boolean success=true;
         String school_id = profileTimeTable.getSchoolId();
-        String std = profileTimeTable.getStudentClassStandard();
+
         for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
             String dayOfWeek = day.getDayOfWeek();
             for(TimeSlots timeSlot: day.getTimeSlotsList()){
-                long row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+                long row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,timeSlot.getTeacherClassStd(),timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
                 if(row_id<0)
                     success =false;
             }
         }
         return success;
     }
-
-
 }
-
-
