@@ -41,6 +41,8 @@ public class HandbookContract {
         public static final String COLUMN_PRIORITY = "priority";
         public static final String COLUMN_IMAGE = "image";
         public static final String COLUMN_TIMESTAMP ="timestamp";
+        public static final String COLUMN_TO_IDS="msg_to_ids";
+        public static final String COLUMN_MSG_TYPE= "msg_type";
 
         }
 

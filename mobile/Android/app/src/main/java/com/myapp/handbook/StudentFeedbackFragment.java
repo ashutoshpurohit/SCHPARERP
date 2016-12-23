@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     public static final String MESSAGE_HEADER ="MessageTitle";
     public static final String MESSAGE_BODY ="MessageBody";
     public static final String MOBILE_TO_SEND ="MobileNumbers";
-    private static final int REQUEST_PHOTO = 2;
+    //private static final int REQUEST_PHOTO = 2;
 
 
     View fragmentView=null;
@@ -51,12 +52,9 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private int selectedTeacherIndex=0;
     private String selectedStudentId="105";
     private SQLiteDatabase db;
-    List<RoleProfile> studentProfiles;
+    //List<RoleProfile> studentProfiles;
+    RoleProfile selectedStudentProfile;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
-    private ImageButton photoButton;
-    private ImageView photoView;
-    private File photoFile;
-    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,82 +66,35 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         fragmentView= inflater.inflate(R.layout.fragment_feedback, container, false);
         //Set up the listener for the spinner
         Spinner spinner = (Spinner) fragmentView.findViewById(R.id.teachers_spinner);
-        photoButton =(ImageButton)fragmentView.findViewById(R.id.camera_button);
-        photoView =(ImageView)fragmentView.findViewById(R.id.message_image);
-        photoFile = HttpConnectionUtil.getPhotoFile(getContext(),HttpConnectionUtil.getPhotoFileName());
 
         final Intent captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //Check if permission is available to create file and access camera
-        boolean canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
-        photoButton.setEnabled(canTakePhoto);
-
-        if (canTakePhoto) {
-            Uri uri = Uri.fromFile( photoFile);
-            captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
-        }
-
-        photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(captureImage,REQUEST_PHOTO);
-            }
-        });
-
-
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
         spinner.setOnItemSelectedListener(this);
         Button sendButton = (Button)fragmentView.findViewById(R.id.sendButton);
         sendButton.setOnClickListener(this);
-        studentProfiles= RoleProfile.GetProfileForRole(db, RoleProfile.ProfileRole.STUDENT);
-        if(studentProfiles.size()==1)
-        {
-            selectedStudentId = studentProfiles.get(0).getId();
-        }
-        else{
-            //TO-DO Insert logic to ask user to select one student
-            selectedStudentId = studentProfiles.get(0).getId();
-        }
+        selectedStudentProfile= RoleProfile.getProfile(db,HttpConnectionUtil.getSelectedProfileId());
+        selectedStudentId = selectedStudentProfile.getId();
         SetupView();
         new FetchProfileAsyncTask().execute();
-        updatePhotoView();
         return fragmentView;
     }
 
-    public void updatePhotoView(){
-        if(photoFile==null|| photoFile.exists()==false ){
-            photoView.setImageDrawable(null);
-            photoView.setVisibility(View.GONE);
-        }
-        else{
-            Bitmap bitmap = PictureUtil.getScaledBitmap(photoFile.getPath(),getActivity());
-            photoView.setImageBitmap(bitmap);
-            photoView.setVisibility(View.VISIBLE);
-        }
-    }
 
     public void onClick(View v){
         //Post message for notification
         EditText et=((EditText)fragmentView.findViewById(R.id.feeback_message));
         String messageBody= et.getText().toString();
-        String[] mobileNo= {allTeacherProfiles.get(selectedTeacherIndex).mobileNumber};
-
-        //To-Do hardcoded header to be changed
-        //To-Do  Figure out from which profile message is sent
-        String from = studentProfiles.get(0).getFirstName()+" " + studentProfiles.get(0).getLastName();
-        JSONObject messageObject = prepareMessage(mobileNo,from,messageBody);
-        progressDialog= ProgressDialog.show(getContext(),"Sending message","Please wait",false);
+        TeacherProfile teacherProfile =allTeacherProfiles.get(selectedTeacherIndex);
+        String[] mobileNo= {teacherProfile.mobileNumber};
+        String [] toIds = {teacherProfile.id};
+        String from = selectedStudentProfile.getFirstName()+" " + selectedStudentProfile.getLastName();
+        String fromId =selectedStudentId;
+        JSONObject messageObject = prepareMessage(mobileNo,toIds,from,fromId,messageBody);
         new PostTeacherMessageAsyncTask().execute(messageObject);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent result){
-        if(requestCode==REQUEST_PHOTO)
-            updatePhotoView();
-
-    }
 
     private class PostTeacherMessageAsyncTask extends AsyncTask<JSONObject, Void, String> {
 
@@ -155,17 +106,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
             JSONObject message = params[0];
             //Upload the Image file if attached
-            util.UploadImage(photoFile);
-            while (HttpConnectionUtil.imageUploaded==false){
-
-            }
-            try {
-                if(HttpConnectionUtil.imageUploadStatus) {
-                    message.put("ImageUrl", HttpConnectionUtil.imageUrl);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, message);
             return result;
         }
@@ -173,16 +113,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         protected void onPostExecute(String result){
             if(result!=null && result.length()> 0 ){
                 Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+                HttpConnectionUtil.launchHomePage(getContext());
             }
-            progressDialog.dismiss();
         }
 
     }
 
-
-
-
-    private JSONObject prepareMessage(String[] toMobileNumbers, String from, String message) {
+    private JSONObject prepareMessage(String[] toMobileNumbers,String[] toIds, String from, String  fromId, String message) {
         JSONArray numbers = new JSONArray();
         JSONObject msgToSend = new JSONObject();
         int i=0;
@@ -197,8 +134,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         }
         try {
             msgToSend.put("MessageBody",message);
+            msgToSend.put("type", MsgType.PARENT_NOTE);
             msgToSend.put("MessageTitle","Note from "+from);
             msgToSend.put("MobileNumbers",numbers);
+            msgToSend.put("FromId",fromId);
+            msgToSend.put("ToIds", toIds);
+            msgToSend.put("FromType", "Parent for " + selectedStudentProfile.getFirstName()+" "+ selectedStudentProfile.getLastName());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

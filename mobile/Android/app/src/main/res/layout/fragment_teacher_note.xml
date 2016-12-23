@@ -18,6 +18,35 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.25"
+            android:layout_gravity="center_vertical"
+            android:text="Type"/>
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <RadioButton android:id="@+id/msg_type_homework"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Homework"
+                />
+            <RadioButton android:id="@+id/msg_type_diarynote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/diary_notes"
+                />
+        </RadioGroup>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height= "wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="0.25"
             android:id="@+id/Teacher_To"
             android:text= "@string/std"
@@ -52,17 +81,39 @@
 
     <View style="@style/Divider"></View>
 
-    <Button
-        android:id="@+id/studentSelect"
-        android:layout_width="100dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="@string/select"
+        android:orientation="horizontal">
 
-        />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:layout_height="match_parent"
+            android:text="Selected: 0"
+            android:id="@+id/selected_student_count"/>
+        <Button
+            android:id="@+id/studentSelect"
+            android:layout_weight="0.3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/select"
+
+            />
+
+
+    </LinearLayout>
 
     <View style="@style/Divider"></View>
 
+    <ImageView
+        android:id="@+id/message_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -72,6 +123,13 @@
         android:hint="Message">
         <requestFocus/>
     </EditText>
+    <ImageButton
+        android:id="@+id/camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_a_photo"
+        android:gravity="right"
+        android:layout_gravity="right"/>
     <Button
         android:id="@+id/sendButton"
         android:layout_width="100dp"

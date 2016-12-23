@@ -1,10 +1,8 @@
 package com.myapp.handbook.domain;
 
-/**
- * Created by SAshutosh on 12/4/2016.
- */
-
 public class DiaryNote {
+
+
 
     String title;
     String detail;

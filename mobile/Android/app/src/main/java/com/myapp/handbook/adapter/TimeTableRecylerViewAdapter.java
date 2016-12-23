@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.myapp.handbook.R;
 import com.myapp.handbook.TimeTableActivity;
+import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
 
 import java.util.List;
@@ -26,19 +27,18 @@ import java.util.List;
 public class TimeTableRecylerViewAdapter extends RecyclerView.Adapter<TimeTableRecylerViewAdapter.TimeTableViewHolder> implements View.OnClickListener {
 
     private final List<TimeSlots> timeslots;
-    private TimeTableViewType viewType;
+
     private final Context context;
 
-    public TimeTableRecylerViewAdapter(Context context,List<TimeSlots> slots)
+    private final RoleProfile.ProfileRole profileRole;
+
+    public TimeTableRecylerViewAdapter(Context context, List<TimeSlots> slots, RoleProfile.ProfileRole role)
     {
         this.context = context;
         this.timeslots=slots;
+        this.profileRole = role;
     }
 
-    public void setType(TimeTableViewType type)
-    {
-        viewType=type;
-    }
 
 
 
@@ -108,7 +108,15 @@ public class TimeTableRecylerViewAdapter extends RecyclerView.Adapter<TimeTableR
         TimeSlots currentSlot = timeslots.get(position);
         holder.subject.setText(getSubjectInitials(currentSlot.getSubject()));
         holder.timeSlot.setText(currentSlot.getStartTime());
-        holder.subject.setBackgroundColor(getColor(position));
+        if(profileRole.equals(RoleProfile.ProfileRole.TEACHER)){
+            holder.std.setVisibility(View.VISIBLE);
+            holder.std.setText(currentSlot.getTeacherClassStd());
+        }
+        else if(profileRole.equals(RoleProfile.ProfileRole.STUDENT)){
+            holder.std.setVisibility(View.GONE);
+        }
+        holder.subject_std_container.refreshDrawableState();
+        holder.subject_std_container.setBackgroundColor(getColor(position));
     }
 
     private int getColor(int position) {
@@ -132,13 +140,16 @@ public class TimeTableRecylerViewAdapter extends RecyclerView.Adapter<TimeTableR
     }
 
     public class TimeTableViewHolder extends RecyclerView.ViewHolder{
-        TextView timeSlot, subject;
+        TextView timeSlot, subject, std;
+        View subject_std_container;
 
 
         public TimeTableViewHolder(View itemView) {
             super(itemView);
             timeSlot= (TextView)itemView.findViewById(R.id.timetable_summary_duration);
             subject= (TextView)itemView.findViewById(R.id.timetable_summary_subject);
+            std = (TextView)itemView.findViewById(R.id.timetable_summary_std);
+            subject_std_container = itemView.findViewById(R.id.timetable_summary_subject_std_holder);
             //itemView.setOnClickListener((View.OnClickListener) this);
 
         }

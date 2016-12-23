@@ -47,6 +47,8 @@ public class GcmIntentService extends IntentService {
         String msgType =data.getString("type");
         String title = data.getString("title");
         String message = data.getString("body");
+        String ToIds = data.getString("ToIds");
+
         //if ((msgType.equalsIgnoreCase(getResources().getString(R.string.app_notice))))
         Notifications.notify(data);
         /*else if( (msgType.equalsIgnoreCase(getResources().getString(R.string.app_assignment)))){

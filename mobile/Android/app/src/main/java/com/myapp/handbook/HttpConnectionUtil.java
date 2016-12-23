@@ -1,6 +1,7 @@
 package com.myapp.handbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
@@ -8,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
@@ -44,6 +46,10 @@ import retrofit2.http.Path;
 public class HttpConnectionUtil {
 
     private static final String TAG = "HttConnectionUtil";
+    public static final int HOMEWORK_TYPE = 1;
+    public static final int DIARY_NOTE_TYPE = 2;
+    public  static final int OTHER_NOTE_TYPE=0;
+
     public static boolean imageUploaded =false;
     public static boolean imageUploadStatus =false;
     public static String imageUrl="";
@@ -75,6 +81,16 @@ public class HttpConnectionUtil {
         db.execSQL("delete from "+ HandbookContract.ProfileEntry.TABLE_NAME);
         db.execSQL("delete from "+ HandbookContract.TimetableEntry.TABLE_NAME);
 
+    }
+
+    public static int getMessageType(String msgType) {
+        if(msgType.equals(MsgType.DIARY_NOTE.toString()))
+            return DIARY_NOTE_TYPE;
+        else if(msgType.equals(MsgType.HOMEWORK.toString()))
+            return HOMEWORK_TYPE;
+        else
+            return OTHER_NOTE_TYPE;
+            
     }
 
     public enum RESTMethod {
@@ -252,6 +268,13 @@ public class HttpConnectionUtil {
         });
 
         return response;
+    }
+
+    public static void launchHomePage(Context context) {
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("position", 0);
+        context.startActivity(intent);
     }
 
     public static void setMobilenumber(String number) {

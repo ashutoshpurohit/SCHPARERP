@@ -53,6 +53,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
                 NotificationEntry.COLUMN_FROM + " TEXT NOT NULL," +
                 NotificationEntry.COLUMN_IMAGE+ " TEXT," +
+                NotificationEntry.COLUMN_MSG_TYPE+ " INTEGER, "+
+                NotificationEntry.COLUMN_TO_IDS+ " TEXT, "+
                 NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" +" );";
 
         final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
@@ -85,11 +87,11 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
-        HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"");
+        HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"",101,"110,105");
 
     }
 
-    public static void insertNotification(SQLiteDatabase sqliteDatabase, String title, String detail, String date, int priority, String from, int note_id, String image){
+    public static void insertNotification(SQLiteDatabase sqliteDatabase, String title, String detail, String date, int priority, String from, int note_id, String image, int msg_type, String toIds ){
 
         ContentValues note = new ContentValues();
         note.put(NotificationEntry.COLUMN_PRIORITY,priority);
@@ -99,6 +101,9 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         note.put(NotificationEntry.COLUMN_FROM, from);
         note.put(NotificationEntry.COLUMN_NOTIFICATION_ID, note_id);
         note.put(NotificationEntry.COLUMN_IMAGE,image);
+        note.put(NotificationEntry.COLUMN_MSG_TYPE,msg_type);
+        note.put(NotificationEntry.COLUMN_TO_IDS,toIds);
+
         sqliteDatabase.insert(NotificationEntry.TABLE_NAME, null, note);
     }
 
@@ -169,9 +174,10 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return profiles;
     }
 
-    public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int count){
+    public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int type, String profileId, int count){
         List<DiaryNote> diaryNotes = new ArrayList<>();
-        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+
+                NotificationEntry.COLUMN_MSG_TYPE+ " = '"+ type+ "' and "+ NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+profileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
         int fetchedCount=0;
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
         try {

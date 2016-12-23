@@ -13,16 +13,32 @@
         android:textSize="22sp"
         android:textColor="@color/white"
         android:text="9:15"/>
+    <LinearLayout
+        android:id="@+id/timetable_summary_subject_std_holder"
+        android:layout_width="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textColor="@color/black"
+        android:background="@drawable/border"
+        >
 
     <TextView
-        android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/border"
-        android:id="@+id/timetable_summary_subject"
         android:textSize="22sp"
-        android:textColor="@color/black"
+        android:id="@+id/timetable_summary_subject"
         android:text="MTH"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textSize="22sp"
+        android:id="@+id/timetable_summary_std"
+        android:text="IV A"/>
+
+    </LinearLayout>
 
 </LinearLayout>

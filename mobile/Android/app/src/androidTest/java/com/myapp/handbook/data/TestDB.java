@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
@@ -75,7 +76,7 @@ public class TestDB extends AndroidTestCase {
                 this.mContext).getWritableDatabase();
 
         String title="Holiday tomorrow";
-        HandBookDbHelper.insertNotification(db, title, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"http://floating-bastion-86283.herokuapp.com/uploadTeacherOrStudentImage/IMG_11 Sep 2016 6:50:47 am.jpg");
+        HandBookDbHelper.insertNotification(db, title, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"http://floating-bastion-86283.herokuapp.com/uploadTeacherOrStudentImage/IMG_11 Sep 2016 6:50:47 am.jpg", HttpConnectionUtil.HOMEWORK_TYPE,"110, 105");
         Cursor cursor = db.query("notifications", null, null, null, null, null, null);
         if(cursor.moveToFirst()){
             Assert.assertEquals(title,cursor.getString(5));

@@ -68,4 +68,7 @@
     <string name="TimeTable">Timetable</string>
     <string name="today">Today</string>
     <string name="Homework">Homework</string>
+    <string name="diary_notes">Diary Notes</string>
+    <string name="parent_messages">Parent Messages</string>
+    <string name="school_events">Events</string>
 </resources>

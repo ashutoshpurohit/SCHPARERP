@@ -26,6 +26,7 @@ public class Notifications {
 
     public static void notify(Bundle data){
 
+        int type=0;
         String msgType =data.getString("type");
         String title = data.getString("title");
         String message = data.getString("body");
@@ -33,7 +34,16 @@ public class Notifications {
         String image = data.getString("ImageUrl");
         int note_id = Integer.parseInt(data.getString("notification_id"));
         int priority = Integer.parseInt(data.getString("priority"));
-        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,"",note_id,image);
+        String toIds = data.getString("ToIds");
+        type= HttpConnectionUtil.getMessageType(msgType);
+
+        //if(toIds.)
+       /* StringBuilder sb = new StringBuilder();
+        for (String n : toIds) {
+            if (sb.length() > 0) sb.append(',');
+            sb.append("'").append(n).append("'");
+        }*/
+        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,"",note_id,image,type,toIds);
 
     }
 

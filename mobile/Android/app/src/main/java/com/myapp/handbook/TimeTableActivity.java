@@ -84,11 +84,11 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //TO-DO read the value of selectedProfileId as per app logic
+
         //Get the id of teacher or student
 
-        //selectedProfileId =profiles.get(0).getId();
-        selectedProfile = RoleProfile.getProfile(db,HttpConnectionUtil.getSelectedProfileId());
+        selectedProfileId =HttpConnectionUtil.getSelectedProfileId();
+        selectedProfile = RoleProfile.getProfile(db,selectedProfileId);
 
         FetchTimeTableAsyncTask.TaskListener uiUpdater = new FetchTimeTableAsyncTask.TaskListener() {
             @Override
@@ -111,7 +111,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
             profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId, selectedProfile.getProfileRole());
 
         }
-        SetupView(null);
+        SetupView(profileTimeTable);
 
     }
 

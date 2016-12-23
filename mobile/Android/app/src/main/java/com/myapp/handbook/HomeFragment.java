@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
@@ -28,7 +29,6 @@ import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TimeSlots;
-import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
 import java.util.ArrayList;
@@ -55,8 +55,10 @@ public class HomeFragment extends Fragment {
     RecyclerView timeTableListView;
     RoleProfile selectedProfile;
     RecyclerView diaryNoteSummaryView;
+    RecyclerView homeWorkSummaryView;
     TimeTableRecylerViewAdapter timetableAdapter;
     DiaryNoteSummaryAdapter diaryNoteSummaryAdapter;
+    DiaryNoteSummaryAdapter homeWorkSummaryAdapter;
 
     public void setNavigationView(NavigationView navigationView) {
         this.navigationView = navigationView;
@@ -70,9 +72,11 @@ public class HomeFragment extends Fragment {
 
         timeTableListView = (RecyclerView) view.findViewById(R.id.summaryTimetableListView1);
         diaryNoteSummaryView =(RecyclerView)view.findViewById(R.id.summaryDiaryNotetView1);
+        homeWorkSummaryView = (RecyclerView)view.findViewById(R.id.summaryRecyclerView3);
 
         diaryNoteSummaryView.setHasFixedSize(true);
         timeTableListView.setHasFixedSize(true);
+        homeWorkSummaryView.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -80,9 +84,12 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager diaryNoteLayoutManager = new LinearLayoutManager(getContext());
         diaryNoteLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        LinearLayoutManager summary3LayoutManager = new LinearLayoutManager(getContext());
+        summary3LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
         timeTableListView.setLayoutManager(layoutManager);
         diaryNoteSummaryView.setLayoutManager(diaryNoteLayoutManager);
-
+        homeWorkSummaryView.setLayoutManager(summary3LayoutManager);
 
         setHasOptionsMenu(true);
 
@@ -124,8 +131,11 @@ public class HomeFragment extends Fragment {
 
         selectedProfile = RoleProfile.getProfile(db, selectedProfileId);
 
+
+
         if(selectedProfile!=null)
         {
+            customizeScreenBasedOnProfile(selectedProfile.getProfileRole(), fragmentView);
 
             if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false) == false) {
 
@@ -134,7 +144,7 @@ public class HomeFragment extends Fragment {
                 listeners.add(new FetchTimeTableAsyncTask.TaskListener() {
                     @Override
                     public void onFinished(BaseTimeTable table) {
-                        setUpTimeTableView(table);
+                        setUpTimeTableView(table,selectedProfile.getProfileRole() );
                     }
                 });
                 new FetchTimeTableAsyncTask(selectedProfile, listeners).execute();
@@ -143,23 +153,44 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
-            setUpTimeTableView(profileTimeTable);
+            setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
         }
         setupDiaryNotesView();
         return view;
     }
 
+    private void customizeScreenBasedOnProfile(RoleProfile.ProfileRole role, View view) {
+
+        TextView summaryView2Header = (TextView) view.findViewById(R.id.summaryView2Header);
+        TextView summaryView3Header = (TextView) view.findViewById(R.id.summaryView3Header);
+        if(role.equals(RoleProfile.ProfileRole.TEACHER)){
+
+            summaryView2Header.setText(getResources().getString(R.string.parent_messages));
+            summaryView3Header.setText(getResources().getString(R.string.school_events));
+        }
+        else if(role.equals(RoleProfile.ProfileRole.STUDENT)){
+
+            summaryView2Header.setText(getResources().getString(R.string.diary_notes));
+            summaryView3Header.setText(getResources().getString(R.string.Homework));
+
+        }
+    }
+
     private void setupDiaryNotesView() {
 
         List<DiaryNote> latestDiaryNotes = new ArrayList<>();
-        latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db,5);
+        List<DiaryNote> latestHomeWork = new ArrayList<>();
+        latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.DIARY_NOTE_TYPE,selectedProfileId,3);
+        latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.HOMEWORK_TYPE,selectedProfileId,3);
         diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(), latestDiaryNotes);
         diaryNoteSummaryView.setAdapter(diaryNoteSummaryAdapter);
+        homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(),latestHomeWork);
+        homeWorkSummaryView.setAdapter(homeWorkSummaryAdapter);
 
     }
 
 
-    public void setUpTimeTableView(BaseTimeTable table) {
+    public void setUpTimeTableView(BaseTimeTable table, RoleProfile.ProfileRole role) {
 
         if(table!=null){
 
@@ -170,8 +201,7 @@ public class HomeFragment extends Fragment {
             if(dayOfWeek > -1) {
 
                 todaysTimeSlot = weekly.get(dayOfWeek).getTimeSlotsList();
-                timetableAdapter = new TimeTableRecylerViewAdapter(getContext(), todaysTimeSlot);
-                timetableAdapter.setType(TimeTableViewType.SUMMARY);
+                timetableAdapter = new TimeTableRecylerViewAdapter(getContext(), todaysTimeSlot,role);
                 timeTableListView.setAdapter(timetableAdapter);
                 timetableAdapter.notifyDataSetChanged();
 

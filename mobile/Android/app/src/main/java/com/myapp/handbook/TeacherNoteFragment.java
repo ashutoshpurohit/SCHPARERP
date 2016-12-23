@@ -1,11 +1,15 @@
 package com.myapp.handbook;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,19 +19,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.myapp.handbook.HttpConnectionUtil.launchHomePage;
 
 
 public class TeacherNoteFragment extends Fragment implements View.OnClickListener {
@@ -37,6 +48,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         public String subject;
     }
 
+    private static final int REQUEST_PHOTO = 2;
     private OnFragmentInteractionListener mListener;
     public static final String TAG = "Teacher Note Fragment";
     View fragmentView =null;
@@ -46,6 +58,15 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
     List<String> subjects =new ArrayList<>();
+    private ImageButton photoButton;
+    private ImageView photoView;
+    private TextView studentCountTextView;
+    TextView messageText;
+    RadioButton homeworkButton;
+    RadioButton diaryNoteButton;
+    ProgressDialog progressDialog;
+    private File photoFile;
+    MsgType msgType;
     ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,26 +83,88 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         db = handbookDbHelper.getReadableDatabase();
         teacherProfile = RoleProfile.GetProfileForRole(db, RoleProfile.ProfileRole.TEACHER);
         selectedTeacherId= teacherProfile.get(0).getId();
-
+        studentCountTextView = (TextView)fragmentView.findViewById(R.id.selected_student_count);
+        messageText = (TextView) fragmentView.findViewById(R.id.teacher_note);
         Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
+        photoButton =(ImageButton)fragmentView.findViewById(R.id.camera_button);
+        photoView =(ImageView)fragmentView.findViewById(R.id.message_image);
+
+        homeworkButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_homework);
+        diaryNoteButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_diarynote);
+        diaryNoteButton.setChecked(true);
+        msgType = MsgType.DIARY_NOTE;
+
+        homeworkButton.setOnClickListener(this);
+        diaryNoteButton.setOnClickListener(this);
+
+        photoFile = HttpConnectionUtil.getPhotoFile(getContext(),HttpConnectionUtil.getPhotoFileName());
+
+        final Intent captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+        //Check if permission is available to create file and access camera
+        boolean canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
+        photoButton.setEnabled(canTakePhoto);
+
+        if (canTakePhoto) {
+            Uri uri = Uri.fromFile( photoFile);
+            captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
+        }
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(captureImage,REQUEST_PHOTO);
+            }
+        });
 
         Button clickButton = (Button) fragmentView.findViewById(R.id.sendButton);
         clickButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new PostTeacherMessageAsyncTask().execute();
+
+                boolean canSend = checkMessageForValidity();
+                if(canSend) {
+                    progressDialog = ProgressDialog.show(getContext(), "Sending message", "Please wait", false);
+                    new PostTeacherMessageAsyncTask().execute();
+                }
             }
         });
 
         new FetchTeacherAssignmentAsyncTask().execute();
         SetupView();
 
-
+        updatePhotoView();
         return fragmentView;
     }
+
+    private boolean checkMessageForValidity() {
+        boolean status=true;
+        if(selectedStudents ==null ||selectedStudents.size() <= 0){
+            Toast.makeText(getContext(), "Failure Sending! No students selected. Please select student before sending", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(messageText.getText().length() <= 0){
+
+            Toast.makeText(getContext(), "Failure Sending! Message is empty. Please input some message.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return status;
+    }
+
+    public void updatePhotoView(){
+        if(photoFile==null|| photoFile.exists()==false ){
+            photoView.setImageDrawable(null);
+            photoView.setVisibility(View.GONE);
+        }
+        else{
+            Bitmap bitmap = PictureUtil.getScaledBitmap(photoFile.getPath(),getActivity());
+            photoView.setImageBitmap(bitmap);
+            photoView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 
     public void SetupView() {
         View view = fragmentView;
@@ -170,10 +253,24 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
      */
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
 
-        Intent intent = new Intent(getActivity(),StudentSearch.class);
-        intent.putExtra("Teacher_ID",selectedTeacherId);
-        startActivityForResult(intent,111);
+            case R.id.studentSelect:
+                Intent intent = new Intent(getActivity(), StudentSearch.class);
+                intent.putExtra("Teacher_ID", selectedTeacherId);
+                startActivityForResult(intent, 111);
+                break;
+            case R.id.msg_type_homework:
+                homeworkButton.setChecked(true);
+                msgType=MsgType.HOMEWORK;
+                break;
+            case R.id.msg_type_diarynote:
+                diaryNoteButton.setChecked(true);
+                msgType= MsgType.DIARY_NOTE;
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -201,11 +298,21 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent result){
 
-        if(result!=null)
-            selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
+       if(requestCode==REQUEST_PHOTO)
+            updatePhotoView();
+
+
+       if(result!=null) {
+           selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
+           int count = selectedStudents.size();
+           studentCountTextView.setText("Selected: " + count);
+
+       }
 
 
     }
+
+
 
     private class PostTeacherMessageAsyncTask extends AsyncTask<Void, Void, String> {
         @Override
@@ -215,27 +322,47 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
             String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
             JSONObject messageJson = prepareMessage();
+            util.UploadImage(photoFile);
+            while (HttpConnectionUtil.imageUploaded==false){
+
+            }
+            try {
+                if(HttpConnectionUtil.imageUploadStatus) {
+                    messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
             return result;
 
         }
         @Override
         protected void onPostExecute(String result){
+            progressDialog.dismiss();
             if(result!=null && result.length()> 0 ){
                 Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+                //Go to home page
+                HttpConnectionUtil.launchHomePage(getContext());
             }
+
         }
 
     }
 
+
+
     private JSONObject prepareMessage() {
         JSONArray numbers = new JSONArray();
+        JSONArray ids = new JSONArray();
         JSONObject msgToSend = new JSONObject();
         int i=0;
         for (RoleProfile student:selectedStudents
              ) {
             try {
                 numbers.put(i,student.getMobileNumber());
+                ids.put(student.getId());
                 i++;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -244,12 +371,17 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
         String message ="";
         View view = fragmentView;
-        TextView fromText = (TextView) view.findViewById(R.id.teacher_note);
-        message = fromText.getText().toString();
+
+        message = messageText.getText().toString();
         try {
             msgToSend.put("MessageBody",message);
-            msgToSend.put("MessageTitle","Teacher Note from "+ teacherProfile.get(0).getFirstName()+ " "+ teacherProfile.get(0).getLastName());
+            msgToSend.put("MessageTitle","Teacher Note ");
             msgToSend.put("MobileNumbers",numbers);
+            msgToSend.put("type",msgType.toString());
+            msgToSend.put("ToIds",ids);
+            msgToSend.put("FromType","Teacher:"+ teacherProfile.get(0).getFirstName()+ " "+ teacherProfile.get(0).getLastName());
+            msgToSend.put("FromId",selectedTeacherId);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
