@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
 import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
 import com.myapp.handbook.adapter.DiaryNoteSummaryAdapter;
 import com.myapp.handbook.adapter.TimeTableRecylerViewAdapter;
-import com.myapp.handbook.adapter.TimeTableViewType;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
@@ -153,10 +153,36 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
+            updateNavigationViewBasedOnProfileRole(allProfiles,fragmentView);
             setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
+            setupDiaryNotesView(selectedProfile.getProfileRole());
         }
-        setupDiaryNotesView();
+
         return view;
+    }
+
+    private void updateNavigationViewBasedOnProfileRole(List<RoleProfile> allProfiles, View fragmentView) {
+        if(checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.STUDENT))
+        {
+            MenuItem parentNote = (MenuItem)fragmentView.findViewById(R.id.feedback);
+            parentNote.setVisible(false);
+
+        }
+        if(checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.TEACHER))
+        {
+            MenuItem itemTeacherNote = (MenuItem)fragmentView.findViewById(R.id.teacherNote);
+            itemTeacherNote.setVisible(false);
+
+        }
+    }
+
+    private boolean checkRoleNotPresent(List<RoleProfile> allProfiles, RoleProfile.ProfileRole role) {
+        for (RoleProfile profile:allProfiles
+             ) {
+            if(profile.getProfileRole().equals(role))
+                return false;
+        }
+        return true;
     }
 
     private void customizeScreenBasedOnProfile(RoleProfile.ProfileRole role, View view) {
@@ -176,17 +202,24 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void setupDiaryNotesView() {
-
+    private void setupDiaryNotesView(RoleProfile.ProfileRole role) {
         List<DiaryNote> latestDiaryNotes = new ArrayList<>();
         List<DiaryNote> latestHomeWork = new ArrayList<>();
-        latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.DIARY_NOTE_TYPE,selectedProfileId,3);
-        latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.HOMEWORK_TYPE,selectedProfileId,3);
-        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(), latestDiaryNotes);
-        diaryNoteSummaryView.setAdapter(diaryNoteSummaryAdapter);
-        homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(),latestHomeWork);
-        homeWorkSummaryView.setAdapter(homeWorkSummaryAdapter);
 
+        if(role.equals(RoleProfile.ProfileRole.STUDENT)) {
+
+            latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.DIARY_NOTE_TYPE, selectedProfileId, 3);
+            latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.HOMEWORK_TYPE, selectedProfileId, 3);
+
+            homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestHomeWork);
+            homeWorkSummaryView.setAdapter(homeWorkSummaryAdapter);
+        }
+        if(role.equals(RoleProfile.ProfileRole.TEACHER)){
+            latestDiaryNotes =HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.PARENT_NOTE_TYPE,selectedProfileId,3);
+
+        }
+        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestDiaryNotes);
+        diaryNoteSummaryView.setAdapter(diaryNoteSummaryAdapter);
     }
 
 

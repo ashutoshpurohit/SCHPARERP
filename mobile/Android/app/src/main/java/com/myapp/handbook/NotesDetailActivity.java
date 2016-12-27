@@ -60,12 +60,7 @@ public class NotesDetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onBackPressed() {
-        //Launch the main activity to go to the notes fragment
-        LaunchNotificationFragment();
 
-    }
 
     private void LaunchNotificationFragment() {
         Intent intent = new Intent(this, MainActivity.class);

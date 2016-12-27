@@ -226,6 +226,8 @@ public class NotesFragment extends Fragment {
         shareActionProvider.setShareIntent(intent);
     }
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
 

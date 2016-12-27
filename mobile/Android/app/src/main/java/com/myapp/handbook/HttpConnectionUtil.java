@@ -48,6 +48,7 @@ public class HttpConnectionUtil {
     private static final String TAG = "HttConnectionUtil";
     public static final int HOMEWORK_TYPE = 1;
     public static final int DIARY_NOTE_TYPE = 2;
+    public static final int PARENT_NOTE_TYPE = 3;
     public  static final int OTHER_NOTE_TYPE=0;
 
     public static boolean imageUploaded =false;
@@ -88,7 +89,10 @@ public class HttpConnectionUtil {
             return DIARY_NOTE_TYPE;
         else if(msgType.equals(MsgType.HOMEWORK.toString()))
             return HOMEWORK_TYPE;
+        else if(msgType.equals(MsgType.PARENT_NOTE.toString()))
+            return PARENT_NOTE_TYPE;
         else
+
             return OTHER_NOTE_TYPE;
             
     }

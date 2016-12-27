@@ -121,6 +121,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
     private JSONObject prepareMessage(String[] toMobileNumbers,String[] toIds, String from, String  fromId, String message) {
         JSONArray numbers = new JSONArray();
+        JSONArray idList = new JSONArray();
+
         JSONObject msgToSend = new JSONObject();
         int i=0;
         for (String number:toMobileNumbers
@@ -132,13 +134,22 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
                 e.printStackTrace();
             }
         }
+        i=0;
+        for(String id:toIds){
+            try {
+                idList.put(i,id);
+                i++;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             msgToSend.put("MessageBody",message);
             msgToSend.put("type", MsgType.PARENT_NOTE);
             msgToSend.put("MessageTitle","Note from "+from);
             msgToSend.put("MobileNumbers",numbers);
             msgToSend.put("FromId",fromId);
-            msgToSend.put("ToIds", toIds);
+            msgToSend.put("ToIds",idList );
             msgToSend.put("FromType", "Parent for " + selectedStudentProfile.getFirstName()+" "+ selectedStudentProfile.getLastName());
 
         } catch (JSONException e) {

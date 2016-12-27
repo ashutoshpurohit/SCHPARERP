@@ -9,6 +9,11 @@
         <!--item name="android:toolbarStyle" tools:targetApi="lollipop">@style/Toolbar</item-->
     </style>
 
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">14sp</item><!-- text size in menu-->
+        <item name="android:listPreferredItemHeightSmall">40dp</item><!-- item size in menu-->
+    </style>
+
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:popupTheme" tools:targetApi="lollipop">@style/Theme.AppCompat.Light</item>

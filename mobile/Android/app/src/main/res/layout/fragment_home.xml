@@ -27,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:textSize="24sp"
-                android:layout_marginBottom="2dp"
                 android:layout_marginLeft="5dp"
                 android:text="@string/TimeTable"/>
 
@@ -36,8 +35,7 @@
             <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_marginTop="40dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 xmlns:tools="http://schemas.android.com/tools"
@@ -72,13 +70,12 @@
                     android:fontFamily="sans-serif-condensed"
                     android:id="@+id/summaryView2Header"
                     android:textSize="24sp"
-                    android:layout_marginBottom="2dp"
                     android:text="@string/diary_notes"/>
                 <View style="@style/Divider"></View>
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_marginTop="40dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     xmlns:tools="http://schemas.android.com/tools"
@@ -120,13 +117,12 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="24sp"
-                    android:layout_marginBottom="2dp"
                     android:text="@string/Homework"/>
                 <View style="@style/Divider"></View>
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     xmlns:tools="http://schemas.android.com/tools"

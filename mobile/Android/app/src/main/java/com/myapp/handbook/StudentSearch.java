@@ -32,8 +32,17 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_student_search);
 
         studentList = (ListView)findViewById(R.id.studentList);
+
         Button ok =(Button) findViewById(R.id.doneButton);
         ok.setOnClickListener(this);
+
+        Button select =(Button) findViewById(R.id.selectallButton);
+        select.setOnClickListener(this);
+
+        Button clear =(Button) findViewById(R.id.clearallButton);
+        clear.setOnClickListener(this);
+
+
                 //Get the teacher Id
         Intent intent = getIntent();
         teacherId = intent.getStringExtra("Teacher_ID");
@@ -57,11 +66,23 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        selectedStudents = multiSelectAdapter.getCheckedItems();
-        Intent result = new Intent();
-        result.putParcelableArrayListExtra("selectedStudent",selectedStudents);
-        setResult(RESULT_OK,result);
-        finish();
+        switch (v.getId()) {
+
+            case R.id.doneButton:
+                selectedStudents = multiSelectAdapter.getCheckedItems();
+                Intent result = new Intent();
+                result.putParcelableArrayListExtra("selectedStudent", selectedStudents);
+                setResult(RESULT_OK, result);
+                finish();
+                break;
+            case R.id.selectallButton:
+                multiSelectAdapter.changeAllItemCheckedState(true);
+                break;
+            case R.id.clearallButton:
+                multiSelectAdapter.changeAllItemCheckedState(false);
+                break;
+
+        }
     }
 
 
