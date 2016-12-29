@@ -162,7 +162,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private void SetupView() {
         View view = fragmentView;
         TextView fromText = (TextView) view.findViewById(R.id.feedback_from);
-        if (!allTeacherProfiles.isEmpty()) {
+        if (allTeacherProfiles!=null &&!allTeacherProfiles.isEmpty()) {
             //Clear the loading message
             fromText.setText("");
             //Extract teachers name from profiles array

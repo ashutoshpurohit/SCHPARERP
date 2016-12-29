@@ -6,7 +6,11 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.myapp.handbook.data.HandbookContract;
 import com.myapp.handbook.domain.MsgType;
@@ -14,6 +18,7 @@ import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeTable;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -83,6 +88,8 @@ public class HttpConnectionUtil {
         db.execSQL("delete from "+ HandbookContract.TimetableEntry.TABLE_NAME);
 
     }
+
+
 
     public static int getMessageType(String msgType) {
         if(msgType.equals(MsgType.DIARY_NOTE.toString()))

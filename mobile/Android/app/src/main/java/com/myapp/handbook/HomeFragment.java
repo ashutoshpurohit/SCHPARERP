@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
 import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
+import com.myapp.handbook.Tasks.UpdateNavigationViewHeader;
 import com.myapp.handbook.adapter.DiaryNoteSummaryAdapter;
 import com.myapp.handbook.adapter.TimeTableRecylerViewAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
@@ -154,6 +155,7 @@ public class HomeFragment extends Fragment {
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
             updateNavigationViewBasedOnProfileRole(allProfiles,fragmentView);
+            new UpdateNavigationViewHeader(allProfiles,navigationView,getContext()).onSelectionChanged(selectedProfileId);
             setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
             setupDiaryNotesView(selectedProfile.getProfileRole());
         }
@@ -162,17 +164,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateNavigationViewBasedOnProfileRole(List<RoleProfile> allProfiles, View fragmentView) {
-        if(checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.STUDENT))
+        NavigationView navigationView= (NavigationView) getActivity().findViewById(R.id.navigation_view);
+        Menu menuNav=navigationView.getMenu();
+
+        MenuItem parentNote = menuNav.findItem(R.id.feedback);
+        MenuItem itemTeacherNote = menuNav.findItem(R.id.teacherNote);
+        if(parentNote!=null && checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.STUDENT))
         {
-            MenuItem parentNote = (MenuItem)fragmentView.findViewById(R.id.feedback);
             parentNote.setVisible(false);
-
         }
-        if(checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.TEACHER))
+        if(itemTeacherNote!=null && checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.TEACHER))
         {
-            MenuItem itemTeacherNote = (MenuItem)fragmentView.findViewById(R.id.teacherNote);
             itemTeacherNote.setVisible(false);
-
         }
     }
 
