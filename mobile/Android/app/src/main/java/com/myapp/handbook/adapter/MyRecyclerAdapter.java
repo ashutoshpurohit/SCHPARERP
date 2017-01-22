@@ -1,34 +1,28 @@
 package com.myapp.handbook.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+
+import static com.myapp.handbook.HttpConnectionUtil.DIARY_NOTE_TYPE;
+import static com.myapp.handbook.HttpConnectionUtil.HOMEWORK_TYPE;
 
 /**
  * Created by SAshutosh on 7/19/2016.
@@ -92,10 +86,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 // Binding operations
                 ViewHolder viewHolder = (ViewHolder) view.getTag();
                 viewHolder.titleView.setText(cursor.getString(5));
-                viewHolder.notificationIdView.setText(cursor.getString(1));
+                viewHolder.fromMsgView.setText(cursor.getString(6));
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
                 viewHolder.dbId=cursor.getLong(0);
+                int msgType = cursor.getInt(8);
+                if(msgType == DIARY_NOTE_TYPE){
+                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
+                }
+                else if(msgType ==HOMEWORK_TYPE){
+                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
+                }
+
                 viewHolder.position=cursor.getPosition();
                 String imageUrl = cursor.getString(7);
                 if(imageUrl!=null && !imageUrl.isEmpty()){
@@ -131,8 +133,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         if(v!=null){
             //long rowId = cursor.getLong(0);
             //long rowId = v.getId();
-            //TextView notificationIdView = (TextView) v.findViewById(R.id.list_item_noteid_textview);
-            //long rowId = Integer.parseInt(notificationIdView.getText().toString());
+            //TextView fromMsgView = (TextView) v.findViewById(R.id.list_item_noteid_textview);
+            //long rowId = Integer.parseInt(fromMsgView.getText().toString());
             ViewHolder viewHolder = (ViewHolder) v.getTag();
             rowId = viewHolder.dbId;
 
@@ -192,9 +194,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         View v1;
         public final TextView titleView;
         public final TextView detailMsgView;
-        public final TextView notificationIdView;
+        public final TextView fromMsgView;
         public final TextView dateView;
         public final ImageView imageView;
+         public final ImageView msgTypeIcon;
         public Long dbId;
         public int position;
         public ViewHolder(View view) {
@@ -202,11 +205,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             super(view);
             //view.setOnClickListener(this);
             //view.setOnLongClickListener(this);
+
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             detailMsgView = (TextView) view.findViewById(R.id.list_item_msgdetail_textview);
-            notificationIdView = (TextView) view.findViewById(R.id.list_item_noteid_textview);
+            fromMsgView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
+            msgTypeIcon=(ImageView)view.findViewById(R.id.list_item_msg_type_icon);
             //position=this.getAdapterPosition();
         }
 

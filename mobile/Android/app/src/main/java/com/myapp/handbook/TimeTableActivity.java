@@ -4,13 +4,11 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,17 +23,13 @@ import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
-import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
 
 public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -73,7 +67,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         db = handbookDbHelper.getReadableDatabase();
 
-        //headerView =getLayoutInflater().inflate(R.layout.listview_timetable_header,null);
+        //headerView =getLayoutInflater().inflate(R.layout.listview_timetable_footer,null);
         timeTableListView = (ListView) findViewById(R.id.timeTableListView);
         //timeTableListView.addHeaderView(headerView);
         timeTableListView.setEmptyView(findViewById(R.id.empty_list_view));
@@ -90,7 +84,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         //Get the id of teacher or student
 
         selectedProfileId =HttpConnectionUtil.getSelectedProfileId();
-        selectedProfile = RoleProfile.getProfile(db,selectedProfileId);
+        selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),selectedProfileId);
 
         FetchTimeTableAsyncTask.TaskListener uiUpdater = new FetchTimeTableAsyncTask.TaskListener() {
             @Override

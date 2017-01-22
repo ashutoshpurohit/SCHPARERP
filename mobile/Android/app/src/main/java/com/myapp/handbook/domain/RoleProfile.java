@@ -352,12 +352,14 @@ public class RoleProfile implements Parcelable {
         return profiles;
     }
 
-    public static RoleProfile getProfile(SQLiteDatabase db,String profileId) {
+    public static RoleProfile getProfile(List<RoleProfile> allProfiles, String profileId) {
 
-        List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
-        for(int i=0;i< profiles.size();i++){
-            if(profiles.get(i).getId().equals(profileId))
-                return profiles.get(i);
+        List<RoleProfile> profiles = allProfiles;//HandBookDbHelper.LoadProfilefromDb(db);
+        if(profiles!=null) {
+            for (int i = 0; i < profiles.size(); i++) {
+                if (profiles.get(i).getId().equals(profileId))
+                    return profiles.get(i);
+            }
         }
         return null;
     }

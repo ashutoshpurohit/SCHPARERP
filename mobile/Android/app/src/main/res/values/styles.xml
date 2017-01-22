@@ -16,7 +16,8 @@
 
     <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:popupTheme" tools:targetApi="lollipop">@style/Theme.AppCompat.Light</item>
+        <item name="android:popupTheme" tools:targetApi="lollipop">@style/Theme.AppCompat.Light
+        </item>
     </style>
 
     <!-- main activity action bar styles -->

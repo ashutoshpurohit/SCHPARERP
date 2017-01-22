@@ -36,11 +36,11 @@
             android:icon="@drawable/ic_comment"
             android:title="@string/ParentNote" />
 
-        <item
+        <!--item
             android:id="@+id/teacherNote"
             android:checked="false"
             android:icon="@drawable/ic_note"
-            android:title="@string/Teacher_Note" />
+            android:title="@string/Teacher_Note" /-->
         <item
             android:id="@+id/contactSchool"
             android:checked="false"

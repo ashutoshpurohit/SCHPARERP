@@ -51,15 +51,31 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
 
     public MultiSelectionAdapter(Context context, ArrayList<T> list) {
 
-
-        // TODO Auto-generated constructor stub
-
-
         this.mContext = context;
         mInflater = LayoutInflater.from(mContext);
         mSparseBooleanArray = new SparseBooleanArray();
         mList = new ArrayList<T>();
         this.mList = list;
+    }
+
+    public MultiSelectionAdapter(Context context, ArrayList<T> list, ArrayList<T> selectedItemList){
+        this(context,list);
+        //Logic to put items from selectedItem list into checked state
+        if(selectedItemList!=null && selectedItemList.size()>0)
+        {
+            for(int i=0;i<selectedItemList.size();i++)
+            {
+                RoleProfile currentSelectedItem = (RoleProfile) selectedItemList.get(i);
+                for(int j=0;j<list.size();j++)
+                {
+                    RoleProfile currentItem = (RoleProfile) list.get(j);
+                    if(currentSelectedItem.getId().equals(currentItem.getId())){
+                        mSparseBooleanArray.put(j,true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public ArrayList<T> getCheckedItems() {

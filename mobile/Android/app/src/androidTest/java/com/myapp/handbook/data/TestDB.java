@@ -8,6 +8,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.MsgType;
 
 import junit.framework.Assert;
 
@@ -95,8 +96,8 @@ public class TestDB extends AndroidTestCase {
 
         String title1="Holiday tomorrow";
         String title2="Test";
-        HandBookDbHelper.insertNotification(db, title1, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,null);
-        HandBookDbHelper.insertNotification(db,title2 , "This is wonderful day", new Date().toString(), 2, "Admin", 10002,null);
+        HandBookDbHelper.insertNotification(db, title1, "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,null, 0,"100");
+        HandBookDbHelper.insertNotification(db,title2 , "This is wonderful day", new Date().toString(), 2, "Admin", 10002,null,0,"100");
         String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") ASC ";
 
         Cursor cursor = db.rawQuery(query_to_fetch_earliest, null);

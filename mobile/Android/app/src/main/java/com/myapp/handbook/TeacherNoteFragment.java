@@ -1,7 +1,6 @@
 package com.myapp.handbook;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,11 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -38,10 +37,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.myapp.handbook.HttpConnectionUtil.launchHomePage;
-
 
 public class TeacherNoteFragment extends Fragment implements View.OnClickListener {
+
+
+
 
     private class Assignment{
         public String std;
@@ -58,7 +58,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
     List<String> subjects =new ArrayList<>();
-    private ImageButton photoButton;
+    //private ImageButton photoButton;
     private ImageView photoView;
     private TextView studentCountTextView;
     TextView messageText;
@@ -67,6 +67,9 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     ProgressDialog progressDialog;
     private File photoFile;
     MsgType msgType;
+    Intent captureImage;
+    boolean canTakePhoto;
+    Spinner stdSpinner;
     ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         messageText = (TextView) fragmentView.findViewById(R.id.teacher_note);
         Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
-        photoButton =(ImageButton)fragmentView.findViewById(R.id.camera_button);
         photoView =(ImageView)fragmentView.findViewById(R.id.message_image);
 
         homeworkButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_homework);
@@ -100,36 +102,15 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         photoFile = HttpConnectionUtil.getPhotoFile(getContext(),HttpConnectionUtil.getPhotoFileName());
 
-        final Intent captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+        captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
         //Check if permission is available to create file and access camera
-        boolean canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
-        photoButton.setEnabled(canTakePhoto);
+        canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
+
 
         if (canTakePhoto) {
             Uri uri = Uri.fromFile( photoFile);
             captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
         }
-
-        photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(captureImage,REQUEST_PHOTO);
-            }
-        });
-
-        Button clickButton = (Button) fragmentView.findViewById(R.id.sendButton);
-        clickButton.setOnClickListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                boolean canSend = checkMessageForValidity();
-                if(canSend) {
-                    progressDialog = ProgressDialog.show(getContext(), "Sending message", "Please wait", false);
-                    new PostTeacherMessageAsyncTask().execute();
-                }
-            }
-        });
 
         new FetchTeacherAssignmentAsyncTask().execute();
         SetupView();
@@ -169,7 +150,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     public void SetupView() {
         View view = fragmentView;
         TextView fromText = (TextView) view.findViewById(R.id.feedback_from);
-        if (!teacherAssignments.isEmpty()) {
+        if (teacherAssignments!=null && !teacherAssignments.isEmpty()) {
             fromText.setText("");
             stds.clear();
             subjects.clear();
@@ -182,21 +163,21 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
                 if(!subjects.contains(subject))
                     subjects.add(subject);
             }
-            //Set up the timetableAdapter for spinner
-            Spinner spinner = (Spinner)fragmentView.findViewById(R.id.std_spinner);
-            // Create an ArrayAdapter using the string array and a default spinner layout
+            //Set up the timetableAdapter for stdSpinner
+            stdSpinner = (Spinner)fragmentView.findViewById(R.id.std_spinner);
+            // Create an ArrayAdapter using the string array and a default stdSpinner layout
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,stds);
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the timetableAdapter to the spinner
-            spinner.setAdapter(adapter);
+            // Apply the timetableAdapter to the stdSpinner
+            stdSpinner.setAdapter(adapter);
 
             Spinner subjectSpinner = (Spinner)fragmentView.findViewById(R.id.subject_spinner);
-            // Create an ArrayAdapter using the string array and a default spinner layout
+            // Create an ArrayAdapter using the string array and a default stdSpinner layout
             ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,subjects);
             // Specify the layout to use when the list of choices appears
             subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the timetableAdapter to the spinner
+            // Apply the timetableAdapter to the stdSpinner
             subjectSpinner.setAdapter(subjectAdapter);
 
         }
@@ -239,12 +220,10 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         @Override
         protected void onPostExecute(List<Assignment> curteacherAssignment) {
-           teacherAssignments= curteacherAssignment;
-           SetupView();
+            teacherAssignments= curteacherAssignment;
+            SetupView();
         }
     }
-
-
 
     /**
      * Called when a view has been clicked.
@@ -257,7 +236,10 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
             case R.id.studentSelect:
                 Intent intent = new Intent(getActivity(), StudentSearch.class);
+                String selectedClass = (String)stdSpinner.getSelectedItem();
                 intent.putExtra("Teacher_ID", selectedTeacherId);
+                intent.putExtra("Std",selectedClass);
+                intent.putParcelableArrayListExtra("lastSelectedStudents",selectedStudents);
                 startActivityForResult(intent, 111);
                 break;
             case R.id.msg_type_homework:
@@ -298,21 +280,19 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent result){
 
-       if(requestCode==REQUEST_PHOTO)
+        if(requestCode==REQUEST_PHOTO) {
             updatePhotoView();
+            return;
 
-
-       if(result!=null) {
-           selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
-           int count = selectedStudents.size();
-           studentCountTextView.setText("Selected: " + count);
-
-       }
-
-
+        }
+        else if(result!=null) {
+            selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
+            if(selectedStudents!=null) {
+                int count = selectedStudents.size();
+                studentCountTextView.setText("Selected: " + count);
+            }
+        }
     }
-
-
 
     private class PostTeacherMessageAsyncTask extends AsyncTask<Void, Void, String> {
         @Override
@@ -350,16 +330,13 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
 
     }
-
-
-
     private JSONObject prepareMessage() {
         JSONArray numbers = new JSONArray();
         JSONArray ids = new JSONArray();
         JSONObject msgToSend = new JSONObject();
         int i=0;
         for (RoleProfile student:selectedStudents
-             ) {
+                ) {
             try {
                 numbers.put(i,student.getMobileNumber());
                 ids.put(student.getId());
@@ -388,13 +365,51 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         return msgToSend;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_add_picture:
+                startActivityForResult(captureImage,REQUEST_PHOTO);
+                break;
+            case R.id.action_send:
+                boolean canSend = checkMessageForValidity();
+                if(canSend) {
+                    progressDialog = ProgressDialog.show(getContext(), "Sending message", "Please wait", false);
+                    new PostTeacherMessageAsyncTask().execute();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
         //Hide all menu icon
         for (int i = 0; i < menu.size()-1; i++)
             menu.getItem(i).setVisible(false);
-    }
 
+        MenuItem sendItem = menu.findItem(R.id.action_send);
+        MenuItem addPicture = menu.findItem(R.id.action_add_picture);
+        sendItem.setVisible(true);
+        /*sendItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });*/
+        //sendItem.setOnMenuItemClickListener(this);
+        addPicture.setVisible(true);
+        addPicture.setEnabled(canTakePhoto);
+        /*addPicture.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                startActivityForResult(captureImage,REQUEST_PHOTO);
+                return false;
+            }
+        });*/
+        //addPicture.setOnMenuItemClickListener(this);
+    }
 
 }

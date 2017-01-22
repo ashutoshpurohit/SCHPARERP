@@ -22,9 +22,11 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "StudentSearch";
     String teacherId;
+    String std;
     ArrayList<RoleProfile> allStudentsProfile= new ArrayList<>();
     ArrayList<RoleProfile> selectedStudents = new ArrayList<>();
     MultiSelectionAdapter<RoleProfile> multiSelectAdapter;
+
     ListView studentList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
                 //Get the teacher Id
         Intent intent = getIntent();
         teacherId = intent.getStringExtra("Teacher_ID");
+        std= intent.getStringExtra("Std");
+        selectedStudents =intent.getParcelableArrayListExtra("lastSelectedStudents");
         new FetchStudentProfileAsyncTask().execute();
         SetupView();
 
@@ -53,7 +57,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
 
     private void SetupView() {
 
-        multiSelectAdapter = new MultiSelectionAdapter<RoleProfile>(this,allStudentsProfile);
+        multiSelectAdapter = new MultiSelectionAdapter<RoleProfile>(this,allStudentsProfile,selectedStudents);
         studentList.setAdapter(multiSelectAdapter);
 
     }
@@ -92,7 +96,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
             HttpConnectionUtil util = new HttpConnectionUtil();
             ArrayList<RoleProfile> profiles=null;
 
-            String url =HttpConnectionUtil.URL_ENPOINT + "/GetAllStudentDetailsForTeacher/"+ teacherId;
+            String url =HttpConnectionUtil.URL_ENPOINT + "/GetStudentDetailsForTeacherForClassStandard"+ "?TeacherId="+teacherId+"&ClassStandard="+std;
             String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.GET, null);
             Log.i(TAG, "Received JSON :" + result);
             try {

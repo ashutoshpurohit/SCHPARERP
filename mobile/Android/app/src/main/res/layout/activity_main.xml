@@ -4,27 +4,35 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
 
+    tools:context=".MainActivity">
+<!--
+    <ScrollView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+-->
     <LinearLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:orientation="vertical"
         >
         <include
             android:id="@+id/my_toolbar"
             layout="@layout/toolbar"
             />
-        <FrameLayout
+
+
+                <FrameLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </FrameLayout>
 
     </LinearLayout>
-
+<!--
+    </ScrollView>
+-->
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"

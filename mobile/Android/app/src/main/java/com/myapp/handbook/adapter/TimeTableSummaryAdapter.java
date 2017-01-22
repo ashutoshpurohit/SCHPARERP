@@ -1,15 +1,12 @@
 package com.myapp.handbook.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,7 +21,7 @@ import java.util.List;
  * Created by SAshutosh on 10/16/2016.
  */
 
-public class TimeTableRecylerViewAdapter extends RecyclerView.Adapter<TimeTableRecylerViewAdapter.TimeTableViewHolder> implements View.OnClickListener {
+public class TimeTableSummaryAdapter extends RecyclerView.Adapter<TimeTableSummaryAdapter.TimeTableViewHolder> implements View.OnClickListener {
 
     private final List<TimeSlots> timeslots;
 
@@ -32,7 +29,7 @@ public class TimeTableRecylerViewAdapter extends RecyclerView.Adapter<TimeTableR
 
     private final RoleProfile.ProfileRole profileRole;
 
-    public TimeTableRecylerViewAdapter(Context context, List<TimeSlots> slots, RoleProfile.ProfileRole role)
+    public TimeTableSummaryAdapter(Context context, List<TimeSlots> slots, RoleProfile.ProfileRole role)
     {
         this.context = context;
         this.timeslots=slots;

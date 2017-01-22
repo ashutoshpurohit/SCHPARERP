@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.CalendarEvents;
+import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
@@ -67,7 +69,9 @@ public class HttpConnectionUtil {
 
     public static void setProfiles(List<RoleProfile> profiles) {
         HttpConnectionUtil.profiles = profiles;
+
     }
+
 
 
     public static SharedPreferences getSharedPreferences() {
@@ -109,9 +113,12 @@ public class HttpConnectionUtil {
         POST,
         PUT,
         DELETE
-    }
+    };
 
-    ;
+    public enum ViewType{
+        SUMMARY,
+        DETAIL
+    }
 
     public static String URL_ENPOINT = "https://floating-bastion-86283.herokuapp.com";
     public static int GCM_NOTIFICATION = 1000;
@@ -196,6 +203,12 @@ public class HttpConnectionUtil {
     public interface SchoolService{
         @GET("school/{id}")
         Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
+
+    }
+
+    public interface SchoolCalendarService{
+        @GET("Events")
+        Call<List<Event>> getSchoolCalendar();
 
     }
 

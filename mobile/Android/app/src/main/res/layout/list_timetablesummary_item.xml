@@ -26,6 +26,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="22sp"
@@ -38,6 +39,7 @@
         android:visibility="invisible"
         android:gravity="center"
         android:textSize="22sp"
+        android:textColor="@color/black"
         android:id="@+id/timetable_summary_std"
         android:text="IV A"/>
 

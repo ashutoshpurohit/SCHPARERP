@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -14,14 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,11 +31,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentFeedbackFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class StudentFeedbackFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "Network Connect";
     public static final String MESSAGE_HEADER ="MessageTitle";
@@ -64,7 +60,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
 
         fragmentView= inflater.inflate(R.layout.fragment_feedback, container, false);
-        //Set up the listener for the spinner
+        //Set up the listener for the stdSpinner
         Spinner spinner = (Spinner) fragmentView.findViewById(R.id.teachers_spinner);
 
         final Intent captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
@@ -72,17 +68,26 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
         spinner.setOnItemSelectedListener(this);
-        Button sendButton = (Button)fragmentView.findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(this);
-        selectedStudentProfile= RoleProfile.getProfile(db,HttpConnectionUtil.getSelectedProfileId());
+        selectedStudentProfile= RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
         selectedStudentId = selectedStudentProfile.getId();
         SetupView();
         new FetchProfileAsyncTask().execute();
         return fragmentView;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_send:
+                sendMessage();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-    public void onClick(View v){
+
+    private void sendMessage(){
         //Post message for notification
         EditText et=((EditText)fragmentView.findViewById(R.id.feeback_message));
         String messageBody= et.getText().toString();
@@ -172,13 +177,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
                 String fullName = allTeacherProfiles.get(i).firstName+ " "+allTeacherProfiles.get(i).lastName;
                 teacherNames.add(fullName);
             }
-            //Set up the timetableAdapter for spinner
+            //Set up the timetableAdapter for stdSpinner
             Spinner spinner = (Spinner)fragmentView.findViewById(R.id.teachers_spinner);
-            // Create an ArrayAdapter using the string array and a default spinner layout
+            // Create an ArrayAdapter using the string array and a default stdSpinner layout
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,teacherNames);
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the timetableAdapter to the spinner
+            // Apply the timetableAdapter to the stdSpinner
             spinner.setAdapter(adapter);
 
 
@@ -244,8 +249,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
                 e.printStackTrace();
                 return null;
             }
-
-
         }
 
         @Override
@@ -261,6 +264,10 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         //Hide all menu icon
         for (int i = 0; i < menu.size()-1; i++)
             menu.getItem(i).setVisible(false);
+
+        MenuItem sendItem = menu.findItem(R.id.action_send);
+        sendItem.setVisible(true);
+
     }
 
 

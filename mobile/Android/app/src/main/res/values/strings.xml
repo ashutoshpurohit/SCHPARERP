@@ -70,9 +70,10 @@
     <string name="Homework">Homework</string>
     <string name="diary_notes">Diary Notes</string>
     <string name="parent_messages">Parent Messages</string>
-    <string name="school_events">Events</string>
+    <string name="school_events">Upcoming Events</string>
     <string name="timetable_not_found">No timetable found for today</string>
     <string name="timetable_not_downloaded">Unable to download timetable. \\nPlease try again after some time</string>
     <string name="select_all">Select All</string>
     <string name="clear">Clear</string>
+    <string name="title_activity_calendar_events">CalendarEvents</string>
 </resources>
