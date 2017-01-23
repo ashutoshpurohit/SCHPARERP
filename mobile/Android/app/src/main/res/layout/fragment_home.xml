@@ -38,7 +38,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-condensed"
-                            android:textSize="24sp"
+                            android:textSize="20sp"
                             android:layout_marginLeft="5dp"
                             android:text="@string/TimeTable"/>
 
@@ -81,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-condensed"
                             android:id="@+id/summaryView2Header"
-                            android:textSize="24sp"
+                            android:textSize="20sp"
                             android:text="@string/diary_notes"/>
 
                         <View style="@style/Divider"></View>
@@ -120,7 +120,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-condensed"
-                            android:textSize="24sp"
+                            android:textSize="20sp"
                             android:text="@string/Homework"/>
                         <View style="@style/Divider"></View>
 

@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment {
     private void setupEventsView(String selectedProfileId, RoleProfile.ProfileRole role, List<Event> currentEvents) {
 
         if(role.equals(RoleProfile.ProfileRole.TEACHER)){
-            if(currentEvents.size()>0){
+            if(currentEvents!=null && currentEvents.size()>0){
                 SchoolCalendarAdapter adapter = new SchoolCalendarAdapter(getContext(),currentEvents, HttpConnectionUtil.ViewType.SUMMARY,null);
                 homeSummaryView3.setAdapter(adapter);
             }

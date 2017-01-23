@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:id="@+id/diaryNote_summary_title"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:text="School holiday tomorrow"/>
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="2dp"
         android:id="@+id/diaryNote_summary_msg"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:text="School will remain closed tomorrow on account of.."/>
 
     <View style="@style/Divider"></View>
