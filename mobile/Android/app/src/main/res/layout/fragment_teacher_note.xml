@@ -107,21 +107,25 @@
 
     <View style="@style/Divider"></View>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <ImageView
         android:id="@+id/message_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_weight="1"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/teacher_note"
-        android:gravity="top|left"
-        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.3"
         android:hint="Message">
         <requestFocus/>
     </EditText>
-
+    </LinearLayout>
 </LinearLayout>

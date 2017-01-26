@@ -37,9 +37,8 @@
                             android:id="@+id/summaryView1Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
                             android:textSize="20sp"
-                            android:layout_marginLeft="5dp"
+                            android:background="@color/primary_light"
                             android:text="@string/TimeTable"/>
 
                         <View style="@style/Divider"></View>
@@ -79,8 +78,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
                             android:id="@+id/summaryView2Header"
+                            android:background="@color/primary_light"
                             android:textSize="20sp"
                             android:text="@string/diary_notes"/>
 
@@ -119,7 +118,7 @@
                             android:id="@+id/summaryView3Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-condensed"
+                            android:background="@color/primary_light"
                             android:textSize="20sp"
                             android:text="@string/Homework"/>
                         <View style="@style/Divider"></View>

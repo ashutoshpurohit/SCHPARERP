@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
 import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
@@ -183,7 +185,15 @@ public class HomeFragment extends Fragment {
 
         if(role.equals(RoleProfile.ProfileRole.TEACHER)){
             if(currentEvents!=null && currentEvents.size()>0){
-                SchoolCalendarAdapter adapter = new SchoolCalendarAdapter(getContext(),currentEvents, HttpConnectionUtil.ViewType.SUMMARY,null);
+                RecycleViewClickListener launchEventsPage = new RecycleViewClickListener() {
+                    @Override
+                    public void recyclerViewClicked(View v, int position) {
+                        Intent intent = new Intent(getContext(), CalendarEventsActivity.class);
+                        getContext().startActivity(intent);
+                    }
+                };
+
+                SchoolCalendarAdapter adapter = new SchoolCalendarAdapter(getContext(),currentEvents, HttpConnectionUtil.ViewType.SUMMARY,launchEventsPage);
                 homeSummaryView3.setAdapter(adapter);
             }
         }
