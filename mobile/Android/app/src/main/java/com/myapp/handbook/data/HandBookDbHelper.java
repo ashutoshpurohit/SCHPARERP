@@ -6,11 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.myapp.handbook.data.HandbookContract.NotificationEntry;
+import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.RoleProfile;
-import com.myapp.handbook.data.HandbookContract.NotificationEntry;
-import com.myapp.handbook.data.HandbookContract.ProfileEntry;
+import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.TimeTable;
@@ -81,12 +82,24 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
 
+        final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME + " TEXT NOT NULL, " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_2 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_3 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_1 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_2 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_EMAIL_ID + " TEXT,"+
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE +" TEXT,"+
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO + " BLOB);";
 
 
 
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
         HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"",101,"110,105");
 
     }
@@ -143,6 +156,30 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         long retVal= sqliteDatabase.insert(HandbookContract.TimetableEntry.TABLE_NAME, null, note);
         return retVal;
     }
+    public static long insertSchoolContactEntry(SQLiteDatabase sqliteDatabase,String school_id, String schoolName, String address_1,
+                                                String address_2, String address_3, String contact_number_1, String contact_number_2,
+                                                String school_email_id, String school_website, String school_logo) {
+
+        ContentValues contacts = new ContentValues();
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID,school_id);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME,schoolName);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1,address_1);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_2,address_2);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_3,address_3);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_1,contact_number_1);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_2,contact_number_2);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_EMAIL_ID,school_email_id);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE,school_website);
+        contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO,school_logo);
+
+        long retVal= sqliteDatabase.insert(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, contacts);
+        return retVal;
+    }
+
+    public static SchoolProfile loadSchoolContactsFromDb(SQLiteDatabase sqliteDatabase){
+
+        return null;
+    }
 
     public static List<RoleProfile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
         ArrayList<RoleProfile> profiles = new ArrayList<>();
@@ -173,6 +210,45 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
         return profiles;
     }
+
+    //Load School profile from DB if already exists..
+    public static SchoolProfile LoadSchoolProfilefromDb(SQLiteDatabase sqliteDatabase) {
+        SchoolProfile profile = new SchoolProfile();
+
+        Cursor cursor= sqliteDatabase.query(HandbookContract.ContactSchoolEntry.TABLE_NAME,
+                null,
+                null, null, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID));
+                String schoolName = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME));
+                String schoolAddress1 = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1));
+                String schoolAddress2 = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_2));
+                String schoolAddress3 = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_3));
+                String schoolPrimaryContact = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_1));
+                String schoolSecondaryContact = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_2));
+                String schoolEmailId = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_EMAIL_ID));
+                String schoolWebsite = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE));
+                String schoolLogo = cursor.getString(cursor.getColumnIndex(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO));
+                profile.setSchoolId(id);
+                profile.setSchoolName(schoolName);
+                profile.setSchoolFullAddress(schoolAddress1);
+                profile.setSchoolAddress_2(schoolAddress2);
+                profile.setSchoolAddress_3(schoolAddress3);
+                profile.setSchoolMainTelephoneNumber(schoolPrimaryContact);
+                profile.setSchoolSecondaryTelephoneNumber(schoolSecondaryContact);
+                profile.setSchoolEmailId(schoolEmailId);
+                profile.setSchoolWebSite(schoolWebsite);
+                profile.setSchoolLogoImageURL(schoolLogo);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return profile;
+    }
+
 
     public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int type, String profileId, int count){
         List<DiaryNote> diaryNotes = new ArrayList<>();

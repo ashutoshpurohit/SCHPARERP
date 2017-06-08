@@ -6,8 +6,6 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.myapp.handbook.HttpConnectionUtil;
-import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.data.HandbookContract;
 
 import junit.framework.Assert;
 
@@ -89,6 +87,27 @@ public class TestDB extends AndroidTestCase {
     }
 
     @SmallTest
+    public void testInsertToSchoolContactEntryTable() throws Throwable{
+        SQLiteDatabase db = new HandBookDbHelper(
+                this.mContext).getWritableDatabase();
+
+        String title="Holiday tomorrow";
+        HandBookDbHelper.insertSchoolContactEntry("100","Test School Name","Test Address1","Test Address2",
+                "Test Address3","13445555","5555555","website.com","email@email.com",null );
+
+        Cursor cursor = db.query(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, null, null, null, null, null);
+        if(cursor.moveToFirst()){
+            Assert.assertEquals(title,cursor.getString(5));
+            Assert.assertNotNull(cursor.getString(7));
+        }
+        cursor.close();
+        db.close();
+
+
+    }
+
+
+   /* @SmallTest
     public void testOrderByQueryNotificationsTable() throws Throwable{
         SQLiteDatabase db = new HandBookDbHelper(
                 this.mContext).getWritableDatabase();
@@ -113,7 +132,7 @@ public class TestDB extends AndroidTestCase {
 
 
     }
-
+*/
     public void testSearchQueryNotificationsTable() throws Throwable{
         SQLiteDatabase db = new HandBookDbHelper(
                 this.mContext).getWritableDatabase();

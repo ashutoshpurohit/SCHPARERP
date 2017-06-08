@@ -92,5 +92,24 @@ public class HandbookContract {
 
     }
 
+    //Table for School Contact Details
+    public static final class ContactSchoolEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "schoolcontacts";
+
+        public static final String COLUMN_SCHOOL_ID = "school_id";
+        public static final String COLUMN_SCHOOL_NAME = "school_name";
+        public static final String COLUMN_SCHOOL_ADDRESS_1 = "school_address_1";
+        public static final String COLUMN_SCHOOL_ADDRESS_2 = "school_address_2";
+        public static final String COLUMN_SCHOOL_ADDRESS_3 = "school_address_3";
+        public static final String COLUMN_SCHOOL_CONTACT_NUMBER_1 = "contact_number_1";
+        public static final String COLUMN_SCHOOL_CONTACT_NUMBER_2 = "contact_number_2";
+        public static final String COLUMN_SCHOOL_EMAIL_ID = "school_email_id";
+        public static final String COLUMN_SCHOOL_WEBSITE = "school_website";
+        public static final String COLUMN_SCHOOL_LOGO = "school_logo";
+
+
+    }
+
 
 }
