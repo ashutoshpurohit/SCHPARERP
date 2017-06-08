@@ -27,4 +27,5 @@ public class QuickstartPreferences {
     public static final String LOGGED_MOBILE ="mobileNumber";
     public static final String SELECTED_PROFILE_ID ="selectedProfileId";
 
+    public static final String CALENDAR_DOWNLOADED = "calendarDownloaded";
 }

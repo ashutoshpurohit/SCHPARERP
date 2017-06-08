@@ -44,6 +44,7 @@ public class HandbookContract {
         public static final String COLUMN_TO_IDS="msg_to_ids";
         public static final String COLUMN_MSG_TYPE= "msg_type";
 
+
         }
 
     public static final class ProfileEntry implements BaseColumns {

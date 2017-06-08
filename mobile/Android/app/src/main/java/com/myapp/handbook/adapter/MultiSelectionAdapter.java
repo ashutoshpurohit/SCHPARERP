@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.R;
 
@@ -25,15 +26,10 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
 
 
     Context mContext;
-
-
     LayoutInflater mInflater;
-
-
     ArrayList<T> mList;
-
-
     SparseBooleanArray mSparseBooleanArray;
+
     OnCheckedChangeListener mCheckedChangeListener = new OnCheckedChangeListener() {
 
         @Override
@@ -43,96 +39,70 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
         }
     };
 
+    public void changeAllItemCheckedState(boolean state){
+
+        for (int i = 0; i < mList.size(); i++) {
+            mSparseBooleanArray.put(i,state);
+        }
+        notifyDataSetChanged();
+    }
+
+
 
     public MultiSelectionAdapter(Context context, ArrayList<T> list) {
 
-
-        // TODO Auto-generated constructor stub
-
-
         this.mContext = context;
-
-
         mInflater = LayoutInflater.from(mContext);
-
-
         mSparseBooleanArray = new SparseBooleanArray();
-
-
         mList = new ArrayList<T>();
-
-
         this.mList = list;
+    }
 
-
+    public MultiSelectionAdapter(Context context, ArrayList<T> list, ArrayList<T> selectedItemList){
+        this(context,list);
+        //Logic to put items from selectedItem list into checked state
+        if(selectedItemList!=null && selectedItemList.size()>0)
+        {
+            for(int i=0;i<selectedItemList.size();i++)
+            {
+                RoleProfile currentSelectedItem = (RoleProfile) selectedItemList.get(i);
+                for(int j=0;j<list.size();j++)
+                {
+                    RoleProfile currentItem = (RoleProfile) list.get(j);
+                    if(currentSelectedItem.getId().equals(currentItem.getId())){
+                        mSparseBooleanArray.put(j,true);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public ArrayList<T> getCheckedItems() {
-
-
         ArrayList<T> mTempArry = new ArrayList<T>();
-
-
         for (int i = 0; i < mList.size(); i++) {
-
-
             if (mSparseBooleanArray.get(i)) {
-
-
                 mTempArry.add(mList.get(i));
-
-
             }
-
-
         }
-
-
         return mTempArry;
-
-
     }
 
     @Override
 
 
     public int getCount() {
-
-
-        // TODO Auto-generated method stub
-
-
         return mList.size();
-
-
     }
 
     @Override
-
-
     public Object getItem(int position) {
-
-
-        // TODO Auto-generated method stub
-
-
         return mList.get(position);
-
-
     }
 
     @Override
-
-
     public long getItemId(int position) {
-
-
-        // TODO Auto-generated method stub
-
-
         return position;
-
-
     }
 
     @Override
@@ -143,7 +113,7 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
         }
         TextView studentName = (TextView) convertView.findViewById(R.id.search_studentName);
         RoleProfile studentProfile = (RoleProfile) mList.get(position);
-        String studentFullName = studentProfile.getFirstName()+ " " + studentProfile.getLastName();
+        String studentFullName = studentProfile.getFirstName();
         studentName.setText(studentFullName);
         String studentId = studentProfile.getId();
 

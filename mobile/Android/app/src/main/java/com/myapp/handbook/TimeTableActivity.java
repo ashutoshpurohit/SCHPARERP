@@ -4,17 +4,16 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
 import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
@@ -24,16 +23,13 @@ import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
-import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
+import java.util.Locale;
 
 public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,7 +67,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         db = handbookDbHelper.getReadableDatabase();
 
-        //headerView =getLayoutInflater().inflate(R.layout.listview_timetable_header,null);
+        //headerView =getLayoutInflater().inflate(R.layout.listview_timetable_footer,null);
         timeTableListView = (ListView) findViewById(R.id.timeTableListView);
         //timeTableListView.addHeaderView(headerView);
         timeTableListView.setEmptyView(findViewById(R.id.empty_list_view));
@@ -88,7 +84,7 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         //Get the id of teacher or student
 
         selectedProfileId =HttpConnectionUtil.getSelectedProfileId();
-        selectedProfile = RoleProfile.getProfile(db,selectedProfileId);
+        selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),selectedProfileId);
 
         FetchTimeTableAsyncTask.TaskListener uiUpdater = new FetchTimeTableAsyncTask.TaskListener() {
             @Override
@@ -140,15 +136,16 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
         profileTimeTable =table;
 
+        TextView view =(TextView) findViewById(R.id.empty_list_view);
         if(profileTimeTable!=null){
 
             //setButtonText();
-            int dayOfWeek = getDayOfTheWeek();
+            String dayOfWeek = getDayOfTheWeek();
             List<WeeklyTimeTable> weekly= profileTimeTable.getWeeklyTimeTableList();
-            List<TimeSlots> todaysTimeSlot=null;
-            View view =findViewById(R.id.empty_list_view);
-            if(dayOfWeek > -1 && dayOfWeek < weekly.size()) {
-                todaysTimeSlot = weekly.get(dayOfWeek).getTimeSlotsList();
+            List<TimeSlots> todaysTimeSlot=getTimeSlot(profileTimeTable,dayOfWeek);
+
+            if(todaysTimeSlot!=null) {
+
                 TimeTableAdapter adapter = new TimeTableAdapter(this, R.layout.list_timetable_item, todaysTimeSlot);
                 timeTableListView.setAdapter(adapter);
                 view.setVisibility(View.INVISIBLE);
@@ -156,9 +153,27 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
             else {
 
                 view.setVisibility(View.VISIBLE);
+                view.setText(R.string.timetable_not_found);
 
             }
         }
+        else {
+            view.setVisibility(View.VISIBLE);
+            view.setText(R.string.timetable_not_downloaded);
+        }
+    }
+
+    private List<TimeSlots> getTimeSlot(BaseTimeTable profileTimeTable, String dayOfWeek) {
+        List<TimeSlots> slots=null;
+        for (WeeklyTimeTable table: profileTimeTable.getWeeklyTimeTableList()
+             ) {
+            if(table.getDayOfWeek().equalsIgnoreCase(dayOfWeek)) {
+                slots = table.getTimeSlotsList();
+                break;
+            }
+
+        }
+        return slots;
     }
 
     private void setButtonText() {
@@ -186,12 +201,13 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private int getDayOfTheWeek() {
+    private String getDayOfTheWeek() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
         //calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        //Subtract a day to adjust for 0th index
-        return day;
+        String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+
+
+        return dayLongName;
     }
 }

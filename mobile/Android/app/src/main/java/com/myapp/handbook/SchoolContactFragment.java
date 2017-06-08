@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -63,7 +65,17 @@ public class SchoolContactFragment extends Fragment {
             UpdateView();
         }
 
+        setHasOptionsMenu(true);
+
         return contactView;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item=menu.findItem(R.id.action_search);
+        item.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
     private class FetchSchoolProfileAsyncTask extends AsyncTask<Void, Void, SchoolProfile > {

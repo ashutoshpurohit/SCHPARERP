@@ -13,13 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
+import com.myapp.handbook.Tasks.UpdateNavigationViewHeader;
 import com.myapp.handbook.adapter.ProfileAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
@@ -63,9 +66,10 @@ public class TopFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         fragmentView = view;
 
-        header = inflater.inflate(R.layout.listview_profile_header, null);
+        //header = inflater.inflate(R.layout.listview_profile_header, null);
         listView= (ListView) view.findViewById(R.id.profileListView1);
-        listView.addHeaderView(header);
+        //listView.addHeaderView(header);
+
         setHasOptionsMenu(true);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
@@ -108,45 +112,36 @@ public class TopFragment extends Fragment {
     }
 
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem item=menu.findItem(R.id.action_search);
+        item.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+    }
 
     public void SetUpView(List<RoleProfile> allProfiles, View fragmentView) {
 
         View view = fragmentView;
-        TextView headerText = (TextView) header.findViewById(R.id.profileHeader);
+
+        //TextView headerText = (TextView) header.findViewById(R.id.profileHeader);
         if (!allProfiles.isEmpty()) {
             RoleProfile [] profiles =new RoleProfile[allProfiles.size()];
             profiles=   allProfiles.toArray(profiles);
-            ProfileAdapter adapter = new ProfileAdapter(getContext(),R.layout.list_item_profile,profiles);
+            List<SelectionChangeListener> selectionChangedListeners = new ArrayList<>();
+            selectionChangedListeners.add(new UpdateNavigationViewHeader(allProfiles,navigationView,getContext()));
+            ProfileAdapter adapter = new ProfileAdapter(getContext(),R.layout.list_item_profile,profiles,selectionChangedListeners);
 
             listView.setAdapter(adapter);
-            headerText.setText("Profile");
+            //headerText.setText("Profile");
         } else {
             //firstName.setText("Loading the profile info. Please wait..");
 
-            headerText.setText("Loading ..");
+            //headerText.setText("Loading ..");
         }
 
     }
 
-    private void UpdateSchoolDetails(SchoolProfile profile) {
-
-        View view = fragmentView;
-        NavigationView navView =  navigationView;
-        if(schoolProfile!=null){
-            View header= navView.getHeaderView(0);
-            TextView schoolName = (TextView) header.findViewById(R.id.schoolName);
-            ImageView profileImage = (ImageView)header.findViewById(R.id.school_logo);
-
-            Picasso.with(getContext())
-                    .load(profile.getSchoolLogoImageURL())
-                    .placeholder(R.drawable.contact_picture_placeholder)
-                    .error(R.drawable.contact_picture_error)
-                    .into(profileImage);
-            schoolName.setText(profile.getSchoolName());
-
-        }
-
-    }
 
 
 
@@ -158,4 +153,6 @@ public class TopFragment extends Fragment {
         //Hide search menu icon
         menu.getItem(0).setVisible(false);
     }
+
+
 }

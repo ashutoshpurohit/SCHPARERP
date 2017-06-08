@@ -3,7 +3,7 @@ package com.myapp.handbook.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myapp.handbook.HttpConnectionUtil;
+import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.RoleProfile;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * Created by SAshutosh on 10/9/2016.
  */
 
 public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.OnClickListener {
+
     Context context;
     int layoutResourceId;
     RoleProfile [] roles=null;
     String selectedProfileId;
+    List<SelectionChangeListener> listeners;
 
     /**
      * Constructor
@@ -34,12 +39,18 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
      *                 instantiating views.
      * @param roles  The objects to represent in the ListView.
      */
-    public ProfileAdapter(Context context, int resource, RoleProfile[] roles) {
+    public ProfileAdapter(Context context, int resource, RoleProfile[] roles, List<SelectionChangeListener> selectionChangeListenerList) {
         super(context, resource, roles);
         this.context=context;
         this.layoutResourceId=resource;
         this.roles=roles;
+
+        this.listeners=selectionChangeListenerList;
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
+        for (SelectionChangeListener listener:listeners
+             ) {
+            listener.onSelectionChanged(selectedProfileId);
+        }
 
     }
 
@@ -65,7 +76,6 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         Picasso.with(getContext())
                 .load(profile.getImageUrl())
                 .placeholder(R.drawable.contact_picture_placeholder)
-                .error(R.drawable.contact_picture_error)
                 //.networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imageView);
 
@@ -88,6 +98,14 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         TextView profileId = (TextView)v.findViewById(R.id.profileId);
         selectedProfileId = profileId.getText().toString();
         HttpConnectionUtil.setSelectedProfileId(selectedProfileId);
+        for (SelectionChangeListener listener:listeners
+             ) {
+            listener.onSelectionChanged(selectedProfileId);
+
+        }
+
         notifyDataSetChanged();
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.myapp.handbook.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,11 +30,12 @@ import static android.R.attr.fragment;
 public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSummaryAdapter.DiaryNoteSummaryViewHolder> implements View.OnClickListener{
 
     private final List<DiaryNote> diaryNotes;
-    private final Context context;
+   // private final Context context;
+    private final Activity parentActivity;
 
-    public DiaryNoteSummaryAdapter(Context context,List<DiaryNote> notes)
+    public DiaryNoteSummaryAdapter(Activity activity,List<DiaryNote> notes)
     {
-        this.context=context;
+        this.parentActivity = activity;
         this.diaryNotes=notes;
     }
 
@@ -119,9 +121,19 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
     @Override
     public void onClick(View v) {
 
-        Intent intent = new Intent(context, MainActivity.class);
+        /*Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("position", 1);
-        context.startActivity(intent);
+        context.startActivity(intent);*/
+
+        Fragment fragment = new NotesFragment();
+        MainActivity mainActivity = (MainActivity)parentActivity;
+        android.support.v4.app.FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+        //ft.replace(R.id.content_frame, fragment, "visible_fragment");
+        ft.replace(R.id.frame, fragment, "visible_fragment");
+        ft.addToBackStack(null);
+        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commitAllowingStateLoss();
+        //Set the action bar title
 
     }
 

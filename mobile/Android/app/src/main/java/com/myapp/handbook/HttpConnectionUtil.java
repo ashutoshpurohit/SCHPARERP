@@ -6,14 +6,21 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.CalendarEvents;
+import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeTable;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -48,6 +55,7 @@ public class HttpConnectionUtil {
     private static final String TAG = "HttConnectionUtil";
     public static final int HOMEWORK_TYPE = 1;
     public static final int DIARY_NOTE_TYPE = 2;
+    public static final int PARENT_NOTE_TYPE = 3;
     public  static final int OTHER_NOTE_TYPE=0;
 
     public static boolean imageUploaded =false;
@@ -61,7 +69,9 @@ public class HttpConnectionUtil {
 
     public static void setProfiles(List<RoleProfile> profiles) {
         HttpConnectionUtil.profiles = profiles;
+
     }
+
 
 
     public static SharedPreferences getSharedPreferences() {
@@ -83,12 +93,17 @@ public class HttpConnectionUtil {
 
     }
 
+
+
     public static int getMessageType(String msgType) {
         if(msgType.equals(MsgType.DIARY_NOTE.toString()))
             return DIARY_NOTE_TYPE;
         else if(msgType.equals(MsgType.HOMEWORK.toString()))
             return HOMEWORK_TYPE;
+        else if(msgType.equals(MsgType.PARENT_NOTE.toString()))
+            return PARENT_NOTE_TYPE;
         else
+
             return OTHER_NOTE_TYPE;
             
     }
@@ -98,9 +113,12 @@ public class HttpConnectionUtil {
         POST,
         PUT,
         DELETE
-    }
+    };
 
-    ;
+    public enum ViewType{
+        SUMMARY,
+        DETAIL
+    }
 
     public static String URL_ENPOINT = "https://floating-bastion-86283.herokuapp.com";
     public static int GCM_NOTIFICATION = 1000;
@@ -144,6 +162,7 @@ public class HttpConnectionUtil {
                     os.write(buffer, 0, bytesRead);
                 }
                 response = os.toString("UTF-8");
+                os.close();
             }
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
@@ -185,6 +204,12 @@ public class HttpConnectionUtil {
     public interface SchoolService{
         @GET("school/{id}")
         Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
+
+    }
+
+    public interface SchoolCalendarService{
+        @GET("Events")
+        Call<List<Event>> getSchoolCalendar();
 
     }
 

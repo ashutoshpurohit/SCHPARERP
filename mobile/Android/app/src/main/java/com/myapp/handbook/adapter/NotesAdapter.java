@@ -29,7 +29,7 @@ public class NotesAdapter extends CursorAdapter {
 
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             detailMsgView = (TextView) view.findViewById(R.id.list_item_msgdetail_textview);
-            notificationIdView = (TextView) view.findViewById(R.id.list_item_noteid_textview);
+            notificationIdView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
         }
     }

@@ -35,6 +35,7 @@ import com.digits.sdk.android.Digits;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.*;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import io.fabric.sdk.android.Fabric;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+                Intent intent;
 
                 Fragment fragment=null;
                 android.support.v4.app.FragmentTransaction fragmentTransaction=null;
@@ -162,16 +164,23 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.schoolCalendar:
                         Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
+                        intent = new Intent(getApplicationContext() , CalendarEventsActivity.class);
+                        //Can pass student/teacherid from here
+                        //intent.putExtra("ID",rowId);
+                        startActivity(intent);
+
                         return true;
                     case R.id.feedback:
-                        Toast.makeText(getApplicationContext(),"Drafts Selected",Toast.LENGTH_SHORT).show();
-                        fragment = new StudentFeedbackFragment();
-                        currentPosition=3;
-                        break;
-                    case R.id.teacherNote:
-                        Toast.makeText(getApplicationContext(),"All Mail Selected",Toast.LENGTH_SHORT).show();
-                        fragment = new TeacherNoteFragment();
-                        currentPosition=4;
+
+                        if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
+                            fragment = new StudentFeedbackFragment();
+                            currentPosition=3;
+                        }
+                        else {
+                            fragment = new TeacherNoteFragment();
+                            currentPosition=4;
+                        }
+
                         break;
 
                     case R.id.contactSchool:
@@ -182,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.timetable:
                         Toast.makeText(getApplicationContext(),"Timetable Selected",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext() ,TimeTableActivity.class);
+                        intent = new Intent(getApplicationContext() ,TimeTableActivity.class);
                         //Can pass student/teacherid from here
                         //intent.putExtra("ID",rowId);
                         startActivity(intent);
@@ -328,11 +337,14 @@ public class MainActivity extends AppCompatActivity {
             break;
 
         case 3:
-            fragment = new StudentFeedbackFragment();
+            //Route to teacher or student
+            if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT)
+                 fragment = new StudentFeedbackFragment();
+            else
+                fragment = new TeacherNoteFragment();
+
             break;
-        case 4:
-            fragment = new TeacherNoteFragment();
-            break;
+
         case 5:
             fragment = new SchoolContactFragment();
             break;

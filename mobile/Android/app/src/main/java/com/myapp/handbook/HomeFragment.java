@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,15 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.Listeners.TimeTableDbUpdateListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
+import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
 import com.myapp.handbook.Tasks.FetchTimeTableAsyncTask;
+import com.myapp.handbook.Tasks.UpdateNavigationViewHeader;
 import com.myapp.handbook.adapter.DiaryNoteSummaryAdapter;
-import com.myapp.handbook.adapter.TimeTableRecylerViewAdapter;
-import com.myapp.handbook.adapter.TimeTableViewType;
+import com.myapp.handbook.adapter.SchoolCalendarAdapter;
+import com.myapp.handbook.adapter.TimeTableSummaryAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
+import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TimeSlots;
@@ -54,9 +59,9 @@ public class HomeFragment extends Fragment {
     SharedPreferences sharedPreferences;
     RecyclerView timeTableListView;
     RoleProfile selectedProfile;
-    RecyclerView diaryNoteSummaryView;
-    RecyclerView homeWorkSummaryView;
-    TimeTableRecylerViewAdapter timetableAdapter;
+    RecyclerView homeSummaryView2;
+    RecyclerView homeSummaryView3;
+    TimeTableSummaryAdapter timetableAdapter;
     DiaryNoteSummaryAdapter diaryNoteSummaryAdapter;
     DiaryNoteSummaryAdapter homeWorkSummaryAdapter;
 
@@ -71,12 +76,12 @@ public class HomeFragment extends Fragment {
         fragmentView = view;
 
         timeTableListView = (RecyclerView) view.findViewById(R.id.summaryTimetableListView1);
-        diaryNoteSummaryView =(RecyclerView)view.findViewById(R.id.summaryDiaryNotetView1);
-        homeWorkSummaryView = (RecyclerView)view.findViewById(R.id.summaryRecyclerView3);
+        homeSummaryView2 =(RecyclerView)view.findViewById(R.id.summaryDiaryNotetView1);
+        homeSummaryView3 = (RecyclerView)view.findViewById(R.id.summaryRecyclerView3);
 
-        diaryNoteSummaryView.setHasFixedSize(true);
+        homeSummaryView2.setHasFixedSize(true);
         timeTableListView.setHasFixedSize(true);
-        homeWorkSummaryView.setHasFixedSize(true);
+        homeSummaryView3.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -88,8 +93,8 @@ public class HomeFragment extends Fragment {
         summary3LayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         timeTableListView.setLayoutManager(layoutManager);
-        diaryNoteSummaryView.setLayoutManager(diaryNoteLayoutManager);
-        homeWorkSummaryView.setLayoutManager(summary3LayoutManager);
+        homeSummaryView2.setLayoutManager(diaryNoteLayoutManager);
+        homeSummaryView3.setLayoutManager(summary3LayoutManager);
 
         setHasOptionsMenu(true);
 
@@ -114,9 +119,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onProfileDownload(List<RoleProfile> profiles) {
 
-                    if(profiles!=null && profiles.size() >0 )
+                    if(profiles!=null && profiles.size() >0 ) {
                         HttpConnectionUtil.setSelectedProfileId(profiles.get(0).getId());
-                    HttpConnectionUtil.setProfiles(profiles);
+                        HttpConnectionUtil.setProfiles(profiles);
+                    }
                 }
             });
             //Download the profile
@@ -125,11 +131,12 @@ public class HomeFragment extends Fragment {
         else
         {
             allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
+            HttpConnectionUtil.setProfiles(allProfiles);
         }
 
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
-        selectedProfile = RoleProfile.getProfile(db, selectedProfileId);
+        selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(), selectedProfileId);
 
 
 
@@ -153,10 +160,69 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
+            if(sharedPreferences.getBoolean(QuickstartPreferences.CALENDAR_DOWNLOADED+ "_" + selectedProfile.getId(), false)==false){
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupUI= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                    @Override
+                    public void onFinished(List<Event> currentEvents) {
+                        setupEventsView(selectedProfileId, selectedProfile.getProfileRole(),currentEvents);
+                    }
+                };
+                List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
+                listeners.add(setupUI);
+                new FetchSchoolCalendarAsyncTask(listeners).execute();
+            }
+
+            updateNavigationViewBasedOnProfileRole(allProfiles,fragmentView);
+            new UpdateNavigationViewHeader(allProfiles,navigationView,getContext()).onSelectionChanged(selectedProfileId);
             setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
+            setupDiaryNotesView(selectedProfile.getProfileRole());
         }
-        setupDiaryNotesView();
+
         return view;
+    }
+
+    private void setupEventsView(String selectedProfileId, RoleProfile.ProfileRole role, List<Event> currentEvents) {
+
+        if(role.equals(RoleProfile.ProfileRole.TEACHER)){
+            if(currentEvents!=null && currentEvents.size()>0){
+                RecycleViewClickListener launchEventsPage = new RecycleViewClickListener() {
+                    @Override
+                    public void recyclerViewClicked(View v, int position) {
+                        Intent intent = new Intent(getContext(), CalendarEventsActivity.class);
+                        getContext().startActivity(intent);
+                    }
+                };
+
+                SchoolCalendarAdapter adapter = new SchoolCalendarAdapter(getContext(),currentEvents, HttpConnectionUtil.ViewType.SUMMARY,launchEventsPage);
+                homeSummaryView3.setAdapter(adapter);
+            }
+        }
+    }
+
+
+    private void updateNavigationViewBasedOnProfileRole(List<RoleProfile> allProfiles, View fragmentView) {
+        NavigationView navigationView= (NavigationView) getActivity().findViewById(R.id.navigation_view);
+        Menu menuNav=navigationView.getMenu();
+
+        /*MenuItem parentNote = menuNav.findItem(R.id.feedback);
+        MenuItem itemTeacherNote = menuNav.findItem(R.id.teacherNote);
+        if(parentNote!=null && checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.STUDENT))
+        {
+            parentNote.setVisible(false);
+        }
+        if(itemTeacherNote!=null && checkRoleNotPresent(allProfiles, RoleProfile.ProfileRole.TEACHER))
+        {
+            itemTeacherNote.setVisible(false);
+        }*/
+    }
+
+    private boolean checkRoleNotPresent(List<RoleProfile> allProfiles, RoleProfile.ProfileRole role) {
+        for (RoleProfile profile:allProfiles
+             ) {
+            if(profile.getProfileRole().equals(role))
+                return false;
+        }
+        return true;
     }
 
     private void customizeScreenBasedOnProfile(RoleProfile.ProfileRole role, View view) {
@@ -176,17 +242,24 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void setupDiaryNotesView() {
-
+    private void setupDiaryNotesView(RoleProfile.ProfileRole role) {
         List<DiaryNote> latestDiaryNotes = new ArrayList<>();
         List<DiaryNote> latestHomeWork = new ArrayList<>();
-        latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.DIARY_NOTE_TYPE,selectedProfileId,3);
-        latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.HOMEWORK_TYPE,selectedProfileId,3);
-        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(), latestDiaryNotes);
-        diaryNoteSummaryView.setAdapter(diaryNoteSummaryAdapter);
-        homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getContext(),latestHomeWork);
-        homeWorkSummaryView.setAdapter(homeWorkSummaryAdapter);
 
+        if(role.equals(RoleProfile.ProfileRole.STUDENT)) {
+
+            latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.DIARY_NOTE_TYPE, selectedProfileId, 5);
+            latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.HOMEWORK_TYPE, selectedProfileId, 5);
+
+            homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestHomeWork);
+            homeSummaryView3.setAdapter(homeWorkSummaryAdapter);
+        }
+        if(role.equals(RoleProfile.ProfileRole.TEACHER)){
+            latestDiaryNotes =HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.PARENT_NOTE_TYPE,selectedProfileId,3);
+
+        }
+        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestDiaryNotes);
+        homeSummaryView2.setAdapter(diaryNoteSummaryAdapter);
     }
 
 
@@ -201,7 +274,7 @@ public class HomeFragment extends Fragment {
             if(dayOfWeek > -1) {
 
                 todaysTimeSlot = weekly.get(dayOfWeek).getTimeSlotsList();
-                timetableAdapter = new TimeTableRecylerViewAdapter(getContext(), todaysTimeSlot,role);
+                timetableAdapter = new TimeTableSummaryAdapter(getContext(), todaysTimeSlot,role);
                 timeTableListView.setAdapter(timetableAdapter);
                 timetableAdapter.notifyDataSetChanged();
 

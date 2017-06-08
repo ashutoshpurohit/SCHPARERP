@@ -22,9 +22,11 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "StudentSearch";
     String teacherId;
+    String std;
     ArrayList<RoleProfile> allStudentsProfile= new ArrayList<>();
     ArrayList<RoleProfile> selectedStudents = new ArrayList<>();
     MultiSelectionAdapter<RoleProfile> multiSelectAdapter;
+
     ListView studentList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,22 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_student_search);
 
         studentList = (ListView)findViewById(R.id.studentList);
+
         Button ok =(Button) findViewById(R.id.doneButton);
         ok.setOnClickListener(this);
+
+        Button select =(Button) findViewById(R.id.selectallButton);
+        select.setOnClickListener(this);
+
+        Button clear =(Button) findViewById(R.id.clearallButton);
+        clear.setOnClickListener(this);
+
+
                 //Get the teacher Id
         Intent intent = getIntent();
         teacherId = intent.getStringExtra("Teacher_ID");
+        std= intent.getStringExtra("Std");
+        selectedStudents =intent.getParcelableArrayListExtra("lastSelectedStudents");
         new FetchStudentProfileAsyncTask().execute();
         SetupView();
 
@@ -44,7 +57,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
 
     private void SetupView() {
 
-        multiSelectAdapter = new MultiSelectionAdapter<RoleProfile>(this,allStudentsProfile);
+        multiSelectAdapter = new MultiSelectionAdapter<RoleProfile>(this,allStudentsProfile,selectedStudents);
         studentList.setAdapter(multiSelectAdapter);
 
     }
@@ -57,11 +70,23 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        selectedStudents = multiSelectAdapter.getCheckedItems();
-        Intent result = new Intent();
-        result.putParcelableArrayListExtra("selectedStudent",selectedStudents);
-        setResult(RESULT_OK,result);
-        finish();
+        switch (v.getId()) {
+
+            case R.id.doneButton:
+                selectedStudents = multiSelectAdapter.getCheckedItems();
+                Intent result = new Intent();
+                result.putParcelableArrayListExtra("selectedStudent", selectedStudents);
+                setResult(RESULT_OK, result);
+                finish();
+                break;
+            case R.id.selectallButton:
+                multiSelectAdapter.changeAllItemCheckedState(true);
+                break;
+            case R.id.clearallButton:
+                multiSelectAdapter.changeAllItemCheckedState(false);
+                break;
+
+        }
     }
 
 
@@ -71,7 +96,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
             HttpConnectionUtil util = new HttpConnectionUtil();
             ArrayList<RoleProfile> profiles=null;
 
-            String url =HttpConnectionUtil.URL_ENPOINT + "/GetAllStudentDetailsForTeacher/"+ teacherId;
+            String url =HttpConnectionUtil.URL_ENPOINT + "/GetStudentDetailsForTeacherForClassStandard"+ "?TeacherId="+teacherId+"&ClassStandard="+std;
             String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.GET, null);
             Log.i(TAG, "Received JSON :" + result);
             try {

@@ -35,6 +35,7 @@ public class Notifications {
         int note_id = Integer.parseInt(data.getString("notification_id"));
         int priority = Integer.parseInt(data.getString("priority"));
         String toIds = data.getString("ToIds");
+        String from = data.getString("FromType");
         type= HttpConnectionUtil.getMessageType(msgType);
 
         //if(toIds.)
@@ -43,7 +44,7 @@ public class Notifications {
             if (sb.length() > 0) sb.append(',');
             sb.append("'").append(n).append("'");
         }*/
-        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,"",note_id,image,type,toIds);
+        HandBookDbHelper.insertNotification(handbookDB,title,message,date,priority,from,note_id,image,type,toIds);
 
     }
 
