@@ -333,6 +333,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     private JSONObject prepareMessage() {
         JSONArray numbers = new JSONArray();
         JSONArray ids = new JSONArray();
+        JSONArray studentNames = new JSONArray();
         JSONObject msgToSend = new JSONObject();
         int i=0;
         for (RoleProfile student:selectedStudents
@@ -340,6 +341,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             try {
                 numbers.put(i,student.getMobileNumber());
                 ids.put(student.getId());
+                studentNames.put(student.getFirstName());
                 i++;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -356,8 +358,9 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             msgToSend.put("MobileNumbers",numbers);
             msgToSend.put("type",msgType.toString());
             msgToSend.put("ToIds",ids);
-            msgToSend.put("FromType","Teacher:"+ teacherProfile.get(0).getFirstName()+ " "+ teacherProfile.get(0).getLastName());
+            msgToSend.put("FromType","Teacher");
             msgToSend.put("FromId",selectedTeacherId);
+            msgToSend.put("FromName",teacherProfile.get(0).getFirstName());
 
         } catch (JSONException e) {
             e.printStackTrace();

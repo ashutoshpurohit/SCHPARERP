@@ -51,6 +51,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     //List<RoleProfile> studentProfiles;
     RoleProfile selectedStudentProfile;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
+    TeacherProfile teacherProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,7 +92,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         //Post message for notification
         EditText et=((EditText)fragmentView.findViewById(R.id.feeback_message));
         String messageBody= et.getText().toString();
-        TeacherProfile teacherProfile =allTeacherProfiles.get(selectedTeacherIndex);
+        teacherProfile =allTeacherProfiles.get(selectedTeacherIndex);
         String[] mobileNo= {teacherProfile.mobileNumber};
         String [] toIds = {teacherProfile.id};
         String from = selectedStudentProfile.getFirstName()+" " + selectedStudentProfile.getLastName();
@@ -127,7 +128,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private JSONObject prepareMessage(String[] toMobileNumbers,String[] toIds, String from, String  fromId, String message) {
         JSONArray numbers = new JSONArray();
         JSONArray idList = new JSONArray();
-
+        JSONArray toNameList= new JSONArray();
+        toNameList.put(teacherProfile.firstName);
         JSONObject msgToSend = new JSONObject();
         int i=0;
         for (String number:toMobileNumbers
@@ -154,8 +156,10 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             msgToSend.put("MessageTitle","Note from "+from);
             msgToSend.put("MobileNumbers",numbers);
             msgToSend.put("FromId",fromId);
+            msgToSend.put("FroName",selectedStudentProfile.getFirstName());
             msgToSend.put("ToIds",idList );
-            msgToSend.put("FromType", "Parent for " + selectedStudentProfile.getFirstName()+" "+ selectedStudentProfile.getLastName());
+            msgToSend.put("ToNames",toNameList);
+            msgToSend.put("FromType", "Parent");
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -162,6 +162,7 @@ public class HttpConnectionUtil {
                     os.write(buffer, 0, bytesRead);
                 }
                 response = os.toString("UTF-8");
+                os.close();
             }
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
