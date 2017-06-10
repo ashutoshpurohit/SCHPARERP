@@ -1,12 +1,16 @@
 package com.myapp.handbook;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -148,8 +152,12 @@ public class SchoolContactFragment extends Fragment {
             TextView schoolSecondaryPhoneNumber = (TextView)contactView.findViewById(R.id.school_secondary_contact_number);
             TextView schoolEmail = (TextView)contactView.findViewById(R.id.school_contact_email);
             ImageView schoolLogo = (ImageView)contactView.findViewById(R.id.school_contact_logo);
-            ImageView schoolSecondaryContactNumberImg = (ImageView)contactView.findViewById(R.id.img_secondary_contact_number) ;
-            ImageView schoolEmailIdImg = (ImageView)contactView.findViewById(R.id.img_email_id) ;
+            ImageView schoolAddress2Img = (ImageView)contactView.findViewById(R.id.ic_contact_address2) ;
+            ImageView schoolAddress3Img = (ImageView)contactView.findViewById(R.id.ic_contact_address3) ;
+            ImageView schoolPrimaryContactNumberImg = (ImageView)contactView.findViewById(R.id.ic_phone_contact1) ;
+            ImageView schoolSecondaryContactNumberImg = (ImageView)contactView.findViewById(R.id.ic_phone_contact2) ;
+            ImageView schoolEmailIdImg = (ImageView)contactView.findViewById(R.id.ic_email_contact) ;
+            ImageView schoolEmaImg = (ImageView)contactView.findViewById(R.id.ic_email_contact) ;
 
             Glide.with(getContext())
                     .load(schoolProfile.getSchoolLogoImageURL())
@@ -173,7 +181,9 @@ public class SchoolContactFragment extends Fragment {
             }else
             {
                 schoolAddress2.setVisibility(contactView.GONE);
+                schoolAddress2Img.setVisibility(contactView.GONE);
                 schoolAddress3.setVisibility(contactView.GONE);
+                schoolAddress3Img.setVisibility(contactView.GONE);
                 schoolSecondaryPhoneNumber.setVisibility(contactView.GONE);
                 schoolSecondaryContactNumberImg.setVisibility(contactView.GONE);
                 schoolEmail.setVisibility(contactView.GONE);
@@ -183,8 +193,27 @@ public class SchoolContactFragment extends Fragment {
 
 
             schoolPrimaryPhoneNumber.setText(schoolProfile.getSchoolMainTelephoneNumber());
+            final String schoolPrimaryContact = schoolProfile.getSchoolMainTelephoneNumber();
+
+            schoolPrimaryContactNumberImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:"+schoolPrimaryContact));
+                    startActivity(intent);
+
+                }
+            });
+
             schoolSecondaryPhoneNumber.setText(schoolProfile.getSchoolSecondaryTelephoneNumber());
-            schoolWebsite.setText(schoolProfile.getSchoolWebSite());
+
+            //Code to make Website Clickable
+            schoolWebsite.setClickable(true);
+            String websiteText = schoolProfile.getSchoolWebSite();
+            schoolWebsite.setMovementMethod(LinkMovementMethod.getInstance());
+            String schoolUrl = "<a href ='"+websiteText+"'>"+websiteText+"</a>";
+            schoolWebsite.setText(Html.fromHtml(schoolUrl));
+           // schoolWebsite.setText(schoolProfile.getSchoolWebSite());
         }
     }
 }

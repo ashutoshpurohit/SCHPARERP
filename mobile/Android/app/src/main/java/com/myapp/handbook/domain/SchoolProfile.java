@@ -164,12 +164,12 @@ public class SchoolProfile {
             schoolProfile.setSchoolLogoImageURL(jsonObj.getString(LOGO_IMAGE_URL));
             schoolProfile.setSchoolName(jsonObj.getString(SCHOOL_NAME));
             schoolProfile.setSchoolFullAddress(jsonObj.getString(SCHOOL_ADDRESS_1));
-            schoolProfile.setSchoolAddress_2(jsonObj.getString(SCHOOL_ADDRESS_2));
-            schoolProfile.setSchoolAddress_3(jsonObj.getString(SCHOOL_ADDRESS_3));
+            //schoolProfile.setSchoolAddress_2(jsonObj.getString(SCHOOL_ADDRESS_2));
+            //schoolProfile.setSchoolAddress_3(jsonObj.getString(SCHOOL_ADDRESS_3));
             schoolProfile.setSchoolMainTelephoneNumber(jsonObj.getString(SCHOOL_PHONE_1));
-            schoolProfile.setSchoolSecondaryTelephoneNumber(jsonObj.getString(SCHOOL_PHONE_2));
+//            schoolProfile.setSchoolSecondaryTelephoneNumber(jsonObj.getString(SCHOOL_PHONE_2));
             schoolProfile.setSchoolWebSite(jsonObj.getString(SCHOOL_WEBSITE));
-            schoolProfile.setSchoolEmailId(jsonObj.getString(SCHOOL_EMAIL_ID));
+ //           schoolProfile.setSchoolEmailId(jsonObj.getString(SCHOOL_EMAIL_ID));
 
         }
         return schoolProfile;

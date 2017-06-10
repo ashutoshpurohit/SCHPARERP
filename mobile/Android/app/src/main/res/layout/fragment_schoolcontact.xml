@@ -1,136 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="200dp"
-        android:id="@+id/school_contact_logo"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/school_contact_logo"
-        android:adjustViewBounds="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp">
 
-        <TextView
-            android:id="@+id/contact_school_name"
-            android:text= "Delhi Public School "
-            android:inputType="textCapWords"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/school_contact_logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/school_contact_logo"
             />
-        <TextView
-            android:id="@+id/contact_school_Address_1"
-            android:layout_width="match_parent"
-            android:inputType="textCapWords"
-            android:text="Outer Ring Road Bomasandra"
-            android:layout_height="wrap_content"
-            />
-        <TextView
-            android:id="@+id/contact_school_Address_2"
-            android:text= " Near Varthur Hobli Kadubeesanhalli"
-            android:layout_width="match_parent"
-            android:inputType="textCapWords"
-            android:layout_height="wrap_content"
-            />
-        <TextView
-            android:id="@+id/contact_school_Address_3"
-            android:text= "Bellandur Taluk Bangalore 5610018"
-            android:inputType="textCapWords"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/school_primary_contact_number"
-                android:text="Contact Number : 986754"
+                android:id="@+id/contact_school_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:inputType="textCapWords"
+                android:gravity="center"
                 android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 />
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/img_phone_icon"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/school_secondary_contact_number"
-                android:text="Contact Number : 986754"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                />
-            <ImageView
-                android:id="@+id/img_secondary_contact_number"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/img_phone_icon"
-                />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/school_contact_email"
-                android:text="admin@school.com"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-            <ImageView
-                android:id="@+id/img_email_id"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/img_email_icon"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/school_website"
-                android:text="admin@school.com"
-                android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/ic_contact_address1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_business"
+                    />
+
+                <TextView
+                    android:id="@+id/contact_school_Address_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:inputType="textCapWords"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_contact_address2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_business"
+                    />
+
+                <TextView
+                    android:id="@+id/contact_school_Address_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:inputType="textCapWords"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_contact_address3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_business"
+                    />
+
+                <TextView
+                    android:id="@+id/contact_school_Address_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:inputType="textCapWords"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+
+            <View style="@style/Divider"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                />
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/img_website_icon"
-                />
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ic_phone_contact1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_phone"
+                    />
+
+                <TextView
+                    android:id="@+id/school_primary_contact_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:autoLink="phone"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_content_copy"
+                    />
+                <ImageView
+                    android:id="@+id/ic_phone_contact2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_phone"
+                    />
+
+                <TextView
+                    android:id="@+id/school_secondary_contact_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ic_email_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_contact_mail"
+                    />
+
+                <TextView
+                    android:id="@+id/school_contact_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    />
+
+            </LinearLayout>
+
+            <View style="@style/Divider"></View>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ic_website_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_contact_mail"
+                    />
+
+                <TextView
+                    android:id="@+id/school_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_content_copy"
+                    />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
-    </ScrollView>
+</ScrollView>
