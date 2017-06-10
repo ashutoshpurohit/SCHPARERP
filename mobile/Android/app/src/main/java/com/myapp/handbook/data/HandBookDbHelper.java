@@ -17,7 +17,11 @@ import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -272,6 +276,90 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
         return diaryNotes;
     }
+
+    public static Calendar getDatePart(Date date){
+        Calendar cal = Calendar.getInstance();       // get calendar instance
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);            // set hour to midnight
+        cal.set(Calendar.MINUTE, 0);                 // set minute in hour
+        cal.set(Calendar.SECOND, 0);                 // set second in minute
+        cal.set(Calendar.MILLISECOND, 0);            // set millisecond in second
+
+        return cal;                                  // return the date part
+    }
+
+    public static long daysBetween(Date startDate, Date endDate) {
+        Calendar sDate = getDatePart(startDate);
+        Calendar eDate = getDatePart(endDate);
+
+        long daysBetween = 0;
+        while (sDate.before(eDate)) {
+            sDate.add(Calendar.DAY_OF_MONTH, 1);
+            daysBetween++;
+        }
+        return daysBetween;
+    }
+
+    public static boolean isInDateRange(int days, String messageDate)
+    {
+        boolean inDateRange=true;
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+        try {
+            Date hwDate = df.parse(messageDate);
+            Date currentDate = new Date();
+            return daysBetween(hwDate,currentDate) < days;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return inDateRange;
+    }
+
+    public static List<DiaryNote> loadLatestHomework(SQLiteDatabase sqliteDatabase, int type, String profileId, int count) {
+
+        List<DiaryNote> diaryNotes = new ArrayList<>();
+        String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+
+                NotificationEntry.COLUMN_MSG_TYPE+ " = '"+ type+ "' and "+ NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+profileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+        int fetchedCount=0;
+
+        Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
+        try {
+            while (cursor.moveToNext() && fetchedCount < count){
+
+                String messageDate= cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DATE));
+                if(isInDateRange(3,messageDate)) {
+                    DiaryNote currentNote = new DiaryNote();
+                    currentNote.setDate(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DATE)));
+                    currentNote.setTitle(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_TITLE)));
+                    currentNote.setDetail(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DETAIL)));
+                    diaryNotes.add(currentNote);
+                    fetchedCount++;
+                }
+
+            }
+        }
+        finally {
+            cursor.close();
+        }
+        if(diaryNotes.size()==0)
+        {
+            //Insert no homework message
+
+            SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+            DiaryNote currentNote = new DiaryNote();
+            currentNote.setDate(df.format(new Date()));
+            currentNote.setTitle("No homework");
+
+            currentNote.setDetail("");
+            diaryNotes.add(currentNote);
+
+        }
+        return diaryNotes;
+    }
+
+
 
     public static BaseTimeTable loadTimeTable(SQLiteDatabase sqliteDatabase, String id, RoleProfile.ProfileRole role)
     {

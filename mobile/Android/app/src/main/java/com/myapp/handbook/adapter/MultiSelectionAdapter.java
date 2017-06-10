@@ -115,10 +115,10 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
         RoleProfile studentProfile = (RoleProfile) mList.get(position);
         String studentFullName = studentProfile.getFirstName();
         studentName.setText(studentFullName);
-        String studentId = studentProfile.getId();
-
-        TextView id = (TextView) convertView.findViewById(R.id.search_studentId);
-        id.setText(studentId);
+//        String studentId = studentProfile.getId();
+//
+//        TextView id = (TextView) convertView.findViewById(R.id.search_studentId);
+//        id.setText(studentId);
 
         CheckBox mCheckBox = (CheckBox) convertView.findViewById(R.id.chkEnable);
         mCheckBox.setTag(position);
