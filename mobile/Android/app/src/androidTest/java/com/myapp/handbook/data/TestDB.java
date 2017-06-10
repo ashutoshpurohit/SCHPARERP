@@ -92,7 +92,7 @@ public class TestDB extends AndroidTestCase {
                 this.mContext).getWritableDatabase();
 
         String title="Holiday tomorrow";
-        HandBookDbHelper.insertSchoolContactEntry("100","Test School Name","Test Address1","Test Address2",
+        HandBookDbHelper.insertSchoolContactEntry(db,"100","Test School Name","Test Address1","Test Address2",
                 "Test Address3","13445555","5555555","website.com","email@email.com",null );
 
         Cursor cursor = db.query(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, null, null, null, null, null);

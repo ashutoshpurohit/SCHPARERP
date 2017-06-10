@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
         if(role.equals(RoleProfile.ProfileRole.STUDENT)) {
 
             latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.DIARY_NOTE_TYPE, selectedProfileId, 5);
-            latestHomeWork = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.HOMEWORK_TYPE, selectedProfileId, 5);
+            latestHomeWork = HandBookDbHelper.loadLatestHomework(db, HttpConnectionUtil.HOMEWORK_TYPE, selectedProfileId, 5);
 
             homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestHomeWork);
             homeSummaryView3.setAdapter(homeWorkSummaryAdapter);
