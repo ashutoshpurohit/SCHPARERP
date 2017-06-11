@@ -34,7 +34,7 @@
         <item>Home</item>
         <item>Notifications</item>
         <item>Assignments</item>
-        <item>Feedback</item>
+        <item>Send Note</item>
         <item>Teacher Note</item>
         <item>Contact School</item>
         <item>Spam</item>
@@ -55,7 +55,7 @@
     <string name="profiles">Profiles</string>
     <string name="Notifications">Diary Notes</string>
     <string name="Events">School Calendar</string>
-    <string name="Feedback">Feedback</string>
+    <string name="Feedback">Send Note</string>
     <string name="ParentNote">Send Note</string>
     <string name="Teacher_Note">Teacher Note</string>
     <string name="ContactSchool">Contact School</string>
