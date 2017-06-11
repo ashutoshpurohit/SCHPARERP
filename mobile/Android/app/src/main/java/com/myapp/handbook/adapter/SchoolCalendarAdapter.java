@@ -19,6 +19,9 @@ import com.myapp.handbook.R;
 import com.myapp.handbook.TimeTableActivity;
 import com.myapp.handbook.domain.Event;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,9 +99,22 @@ public class SchoolCalendarAdapter extends RecyclerView.Adapter<SchoolCalendarAd
     @Override
     public void onBindViewHolder(SchoolCalendarViewHolder holder, int position) {
 
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        SimpleDateFormat ddmmyyFormat = new SimpleDateFormat("dd/MM/yy");
+        Date eventDate=new Date();
         Event currentEvent = calendarEvents.get(position);
+
+        try {
+            String cureventDate= currentEvent.getEventDate();
+            if(cureventDate!=null) {
+                eventDate = df.parse(cureventDate);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         holder.eventName.setText(currentEvent.getEventName());
-        holder.eventDate.setText(currentEvent.getEventDate());
+
+        holder.eventDate.setText(ddmmyyFormat.format(eventDate));
         holder.eventLocation.setText(currentEvent.getEventPlace());
         holder.eventTimings.setText(currentEvent.getEventStartTime()+"-"+currentEvent.getEventEndTime());
         /*if(this.viewType.equals(HttpConnectionUtil.ViewType.DETAIL)){

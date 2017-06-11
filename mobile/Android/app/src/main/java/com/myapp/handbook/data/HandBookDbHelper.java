@@ -10,6 +10,7 @@ import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
+import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
@@ -160,6 +161,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         long retVal= sqliteDatabase.insert(HandbookContract.TimetableEntry.TABLE_NAME, null, note);
         return retVal;
     }
+
     public static long insertSchoolContactEntry(SQLiteDatabase sqliteDatabase,String school_id, String schoolName, String address_1,
                                                 String address_2, String address_3, String contact_number_1, String contact_number_2,
                                                 String school_email_id, String school_website, String school_logo) {
@@ -180,9 +182,10 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return retVal;
     }
 
-    public static SchoolProfile loadSchoolContactsFromDb(SQLiteDatabase sqliteDatabase){
+    public static long saveSchoolCalendarToDB(List<Event> schoolCalendar){
+        long retVal=0;
 
-        return null;
+        return retVal;
     }
 
     public static List<RoleProfile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
@@ -253,6 +256,27 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return profile;
     }
 
+    //Load School calendar from DB if already exists..
+    public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase) {
+        List<Event> schooolEvents = new ArrayList<>();
+
+        //L
+        Cursor cursor= sqliteDatabase.query(HandbookContract.ContactSchoolEntry.TABLE_NAME,
+                null,
+                null, null, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return schooolEvents;
+    }
+
+
 
     public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int type, String profileId, int count){
         List<DiaryNote> diaryNotes = new ArrayList<>();
@@ -304,7 +328,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     {
         boolean inDateRange=true;
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
             Date hwDate = df.parse(messageDate);
             Date currentDate = new Date();
@@ -346,12 +370,11 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         if(diaryNotes.size()==0)
         {
             //Insert no homework message
-
-            SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+            Date currentDate = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             DiaryNote currentNote = new DiaryNote();
-            currentNote.setDate(df.format(new Date()));
+            currentNote.setDate(df.format(currentDate));
             currentNote.setTitle("No homework");
-
             currentNote.setDetail("");
             diaryNotes.add(currentNote);
 

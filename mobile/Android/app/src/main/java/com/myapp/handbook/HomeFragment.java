@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         homeSummaryView2.setLayoutManager(diaryNoteLayoutManager);
         homeSummaryView3.setLayoutManager(summary3LayoutManager);
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
@@ -137,8 +137,6 @@ public class HomeFragment extends Fragment {
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
         selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(), selectedProfileId);
-
-
 
         if(selectedProfile!=null)
         {

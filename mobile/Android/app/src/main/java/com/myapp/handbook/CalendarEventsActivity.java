@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
 import com.myapp.handbook.adapter.SchoolCalendarAdapter;
+import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.Event;
 
 import java.util.ArrayList;
@@ -48,6 +49,14 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
                 events=currentEvents;
             }
         };
+
+        FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+            @Override
+            public void onFinished(List<Event> currentEvents) {
+                HandBookDbHelper.saveSchoolCalendarToDB(currentEvents);
+            }
+        };
+
 
         FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
             @Override

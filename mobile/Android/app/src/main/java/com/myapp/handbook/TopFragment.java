@@ -70,7 +70,7 @@ public class TopFragment extends Fragment {
         listView= (ListView) view.findViewById(R.id.profileListView1);
         //listView.addHeaderView(header);
 
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
@@ -149,9 +149,9 @@ public class TopFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
         //Hide search menu icon
-        menu.getItem(0).setVisible(false);
+        //menu.getItem(0).setVisible(false);
     }
 
 
