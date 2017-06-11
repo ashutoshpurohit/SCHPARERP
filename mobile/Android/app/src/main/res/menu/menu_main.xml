@@ -39,4 +39,10 @@
         android:title="Refresh"
         app:showAsAction="never"
         ></item>
+    <item
+        android:id="@+id/datepickerImg"
+        android:icon="@drawable/ic_today"
+        app:showAsAction="ifRoom"
+        android:title="Todays Date">
+    </item>
 </menu>

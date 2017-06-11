@@ -6,5 +6,9 @@
     android:background="@color/primary"
     android:elevation="4dp"
     >
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtDateView"
+         />
 </android.support.v7.widget.Toolbar>

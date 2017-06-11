@@ -4,13 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,14 +32,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class TimeTableActivity extends AppCompatActivity implements View.OnClickListener {
+public class TimeTableActivity extends AppCompatActivity  {
 
     BaseTimeTable profileTimeTable;
     String selectedProfileId;
     RoleProfile selectedProfile;
     ListView timeTableListView;
-    View headerView;
-    Button datePickerButton;
     Date selectedDate;
     private SharedPreferences sharedPreferences;
     List<RoleProfile> profiles;
@@ -71,10 +70,6 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         timeTableListView = (ListView) findViewById(R.id.timeTableListView);
         //timeTableListView.addHeaderView(headerView);
         timeTableListView.setEmptyView(findViewById(R.id.empty_list_view));
-
-        datePickerButton =(Button)findViewById(R.id.datepickerButton);
-
-        datePickerButton.setOnClickListener(this);
 
         selectedDate = new Date();
 
@@ -110,21 +105,37 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         SetupView(profileTimeTable);
 
     }
-
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
+    // Menu icons are inflated just as they were with actionbar
     @Override
-    public void onClick(View v) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Hide all menu icon
+        for (int i = 0; i < menu.size() - 1; i++)
+            menu.getItem(i).setVisible(false);
 
+        MenuItem openCalenderMenuItem = menu.findItem(R.id.datepickerImg);
+        openCalenderMenuItem.setVisible(true);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.datepickerImg:
+                openCalender();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openCalender() {
+        final Calendar myCalendar = Calendar.getInstance();
         DatePickerFragment dialog = new DatePickerFragment();
         dialog.setDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 selectedDate = new Date(year,monthOfYear,dayOfMonth);
-                setButtonText();
                 SetupView(profileTimeTable);
             }
         });
@@ -176,19 +187,6 @@ public class TimeTableActivity extends AppCompatActivity implements View.OnClick
         return slots;
     }
 
-    private void setButtonText() {
-
-        Date todaysDate= new Date();
-        if(compareDate(todaysDate,selectedDate))
-            datePickerButton.setText(R.string.today);
-        else
-        {
-            //Make Date String
-            String dateString = getDateAsString(selectedDate);
-            datePickerButton.setText(dateString);
-        }
-
-    }
 
     private String getDateAsString(Date selectedDate) {
         String dateString = (String) android.text.format.DateFormat.format("dd", selectedDate) + "/" + (String) android.text.format.DateFormat.format("MMM", selectedDate)+"/"+selectedDate.getYear();
