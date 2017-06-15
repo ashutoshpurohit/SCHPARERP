@@ -1,5 +1,9 @@
 package com.myapp.handbook.domain;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class TimeSlots {
     String StartTime;
     String EndTime;
@@ -17,7 +21,16 @@ public class TimeSlots {
         this.ClassStandard = teacherClassStd;
     }
 
-    public String getStartTime() {
+    public String getStartTime() throws ParseException {
+        String tempStartTime = StartTime;
+        DateFormat inputFormat = new SimpleDateFormat("KK:mm a");
+        DateFormat outputFormat = new SimpleDateFormat("KK:mm a");
+        try {
+            StartTime = outputFormat.format(inputFormat.parse(tempStartTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return StartTime;
     }
 
@@ -42,6 +55,14 @@ public class TimeSlots {
     }
 
     public String getEndTime() {
+        String tempEndTime = EndTime;
+        DateFormat inputFormat = new SimpleDateFormat("KK:mm a");
+        DateFormat outputFormat = new SimpleDateFormat("KK:mm a");
+        try {
+            EndTime= outputFormat.format(inputFormat.parse(tempEndTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return EndTime;
     }
 
@@ -77,6 +98,11 @@ public class TimeSlots {
     }
 
     public String getCurrentTimeSlot(){
-        return getStartTime() + " - " + getEndTime();
+        try {
+            return getStartTime() + " - " + getEndTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.myapp.handbook.data.HandBookDbHelper;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -55,7 +56,12 @@ public class TeacherTimeTable implements BaseTimeTable {
         for(WeeklyTimeTable day: profileTimeTable.getWeeklyTimeTableList()){
             String dayOfWeek = day.getDayOfWeek();
             for(TimeSlots timeSlot: day.getTimeSlotsList()){
-                long row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,timeSlot.getTeacherClassStd(),timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+                long row_id = 0;
+                try {
+                    row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,timeSlot.getTeacherClassStd(),timeSlot.getTeacherId(),timeSlot.getTeacherName(),timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 if(row_id<0)
                     success =false;
             }

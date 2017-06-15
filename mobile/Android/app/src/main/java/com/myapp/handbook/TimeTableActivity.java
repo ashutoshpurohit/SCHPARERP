@@ -39,6 +39,7 @@ public class TimeTableActivity extends AppCompatActivity  {
     RoleProfile selectedProfile;
     ListView timeTableListView;
     Date selectedDate;
+    TextView viewSelectedDate;
     private SharedPreferences sharedPreferences;
     List<RoleProfile> profiles;
     private SQLiteDatabase db;
@@ -70,6 +71,8 @@ public class TimeTableActivity extends AppCompatActivity  {
         timeTableListView = (ListView) findViewById(R.id.timeTableListView);
         //timeTableListView.addHeaderView(headerView);
         timeTableListView.setEmptyView(findViewById(R.id.empty_list_view));
+
+        viewSelectedDate = (TextView)findViewById(R.id.txtDateView);
 
         selectedDate = new Date();
 
@@ -146,6 +149,7 @@ public class TimeTableActivity extends AppCompatActivity  {
     private void SetupView(BaseTimeTable table) {
 
         profileTimeTable =table;
+        viewSelectedDate.setText(getDateAsString(selectedDate));
 
         TextView view =(TextView) findViewById(R.id.empty_list_view);
         if(profileTimeTable!=null){
@@ -189,7 +193,9 @@ public class TimeTableActivity extends AppCompatActivity  {
 
 
     private String getDateAsString(Date selectedDate) {
-        String dateString = (String) android.text.format.DateFormat.format("dd", selectedDate) + "/" + (String) android.text.format.DateFormat.format("MMM", selectedDate)+"/"+selectedDate.getYear();
+        String dateString = (String) android.text.format.DateFormat.format("dd", selectedDate) + "-"
+                + (String) android.text.format.DateFormat.format("MMM", selectedDate)+"-"+
+        (String) android.text.format.DateFormat.format("yy", selectedDate);
         return dateString;
     }
 

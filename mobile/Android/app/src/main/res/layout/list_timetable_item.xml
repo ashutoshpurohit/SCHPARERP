@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
+              android:layout_weight="1"
     android:layout_height="wrap_content">
 
     <TextView
@@ -9,17 +10,20 @@
         android:layout_weight="0.6"
         android:layout_height="wrap_content"
         android:id="@+id/timetable_duration"
-        android:layout_marginLeft="5dp"
-        android:textSize="18sp"
-        android:text="9:15 - 10:00"/>
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="left|center_vertical"
+        android:textSize="14sp"
+        android:text="9:15 AM- 10:00 AM"/>
 
     <TextView
         android:layout_width="0dp"
         android:layout_weight="0.4"
         android:layout_height="wrap_content"
         android:id="@+id/timetable_subject"
-        android:layout_marginLeft="10dp"
-        android:textSize="18sp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textSize="14sp"
         android:text="Maths"/>
 
 </LinearLayout>

@@ -46,4 +46,6 @@
         app:showAsAction="ifRoom"
         android:title="Todays Date">
     </item>
+
+
 </menu>

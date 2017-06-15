@@ -15,6 +15,7 @@ import com.myapp.handbook.TimeTableActivity;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -104,7 +105,11 @@ public class TimeTableSummaryAdapter extends RecyclerView.Adapter<TimeTableSumma
     public void onBindViewHolder(TimeTableViewHolder holder, int position) {
         TimeSlots currentSlot = timeslots.get(position);
         holder.subject.setText(getSubjectInitials(currentSlot.getSubject()));
-        holder.timeSlot.setText(currentSlot.getStartTime());
+        try {
+            holder.timeSlot.setText(currentSlot.getStartTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if(profileRole.equals(RoleProfile.ProfileRole.TEACHER)){
             holder.std.setVisibility(View.VISIBLE);
             holder.std.setText(currentSlot.getTeacherClassStd());
