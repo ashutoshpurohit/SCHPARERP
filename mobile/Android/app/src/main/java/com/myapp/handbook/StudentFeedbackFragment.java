@@ -1,13 +1,12 @@
 package com.myapp.handbook;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -184,7 +182,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             //Set up the timetableAdapter for stdSpinner
             Spinner spinner = (Spinner)fragmentView.findViewById(R.id.teachers_spinner);
             // Create an ArrayAdapter using the string array and a default stdSpinner layout
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,teacherNames);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.custom_spinner_item,teacherNames);
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Apply the timetableAdapter to the stdSpinner

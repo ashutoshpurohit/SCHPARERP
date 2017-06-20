@@ -1,9 +1,5 @@
 package com.myapp.handbook;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -12,17 +8,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,14 +28,10 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import com.digits.sdk.android.Digits;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
-import com.myapp.handbook.domain.*;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterCore;
-import io.fabric.sdk.android.Fabric;
+import com.myapp.handbook.domain.RoleProfile;
 
 import static android.support.v7.app.AppCompatDelegate.FEATURE_ACTION_MODE_OVERLAY;
 
@@ -172,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.feedback:
 
-                        if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
+                        if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),
+                                HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
                             fragment = new StudentFeedbackFragment();
                             currentPosition=3;
                         }

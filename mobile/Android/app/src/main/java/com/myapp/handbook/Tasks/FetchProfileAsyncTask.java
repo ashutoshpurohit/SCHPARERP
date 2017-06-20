@@ -1,11 +1,11 @@
 package com.myapp.handbook.Tasks;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.myapp.handbook.HttpConnectionUtil;
-import com.myapp.handbook.QuickstartPreferences;
-import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 
@@ -21,6 +21,7 @@ import java.util.List;
  */
 
 public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfile>> {
+    private DownloadCallback mCallback;
 
     public interface ProfileDownloadListener {
         public void onProfileDownload(List<RoleProfile> profiles);
@@ -81,6 +82,23 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
 
 
     }
+    /**
+     * Cancel background network operation if we do not have network connectivity.
+     */
+    @Override
+    protected void onPreExecute() {
+        if (mCallback != null) {
+            NetworkInfo networkInfo = mCallback.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnected() ||
+                    (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
+                            && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
+                // If no connectivity, cancel task and update Callback with null data.
+                mCallback.updateFromDownload(null);
+                cancel(true);
+            }
+        }
+    }
+
 
     @Override
     protected void onPostExecute(List<RoleProfile> profiles) {

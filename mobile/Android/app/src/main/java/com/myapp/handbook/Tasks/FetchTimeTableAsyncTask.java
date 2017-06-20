@@ -1,10 +1,11 @@
 package com.myapp.handbook.Tasks;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.myapp.handbook.HttpConnectionUtil;
-import com.myapp.handbook.QuickstartPreferences;
 import com.myapp.handbook.ServiceGenerator;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.RoleProfile;
@@ -21,6 +22,7 @@ import retrofit2.Call;
  */
 
 public class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, BaseTimeTable> {
+    private DownloadCallback mCallback;
 
     public interface TaskListener {
         public void onFinished(BaseTimeTable table);
@@ -33,6 +35,24 @@ public class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, BaseTimeTable
         this.currentProfile =profile;
         this.timeTableListeners =listeners;
     }
+
+    /**
+     * Cancel background network operation if we do not have network connectivity.
+     */
+    @Override
+    protected void onPreExecute() {
+        if (mCallback != null) {
+            NetworkInfo networkInfo = mCallback.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnected() ||
+                    (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
+                            && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
+                // If no connectivity, cancel task and update Callback with null data.
+                mCallback.updateFromDownload(null);
+                cancel(true);
+            }
+        }
+    }
+
 
     @Override
     protected BaseTimeTable doInBackground(Void... params)
