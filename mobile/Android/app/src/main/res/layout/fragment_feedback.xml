@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/feedback_from"
-        android:textSize="20sp"
+        android:textSize="15sp"
+        android:textStyle="bold"
         android:text="From:"
      />
     <LinearLayout
@@ -21,8 +22,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
+            android:textStyle="bold"
             android:id="@+id/Teacher_To"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:text="Teacher"
             />
         <Spinner
@@ -41,6 +43,7 @@
         android:id="@+id/feeback_message"
         android:layout_weight="0.2"
         android:gravity="top|left"
+        android:textSize="14sp"
         android:hint="Message">
         <requestFocus/>
     </EditText>
