@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             currentPosition = savedInstanceState.getInt("position",0);
             //setActionBarTitle(currentPosition);
             myToolbar.setTitle("Handbook");
+            myToolbar.setTitleTextColor(Color.WHITE);
             //selectItem(currentPosition);
 
         } else {

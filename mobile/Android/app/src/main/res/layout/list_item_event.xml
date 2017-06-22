@@ -23,23 +23,26 @@
             android:id="@+id/event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@color/primary_light"
             android:text="Color week - Pink color day"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_date"
+            android:textSize="14sp"
             android:text="16-Jan-2016"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
             android:id="@+id/event_location"
             android:text="School Campus"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_timing"
+            android:textSize="14sp"
             android:text="8.30 - 12.30"/>
     </LinearLayout>
         <View style="@style/Divider"></View>

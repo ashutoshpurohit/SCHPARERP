@@ -20,7 +20,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:id="@+id/event_date"
                 android:layout_marginRight="5dp"
                 android:text="16-Jan-2016"/>
@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/event_timing"
                     android:layout_marginRight="5dp"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_weight="0.3"
                     android:text="8.30 - 12.30"/>
 
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:id="@+id/event_location"
                 android:text="School Campus"/>
 
