@@ -7,17 +7,59 @@ import java.util.List;
  */
 
 public class Event {
+    String EventId;
     String EventName;
     String EventDate;
     String EventPlace;
     String EventStartTime;
     String EventEndTime;
     String SchoolId;
+    String EventLikeButtonClicked;
+
+    String AddToCalender;
     List<String> StudentIDS;
     List<String> TeacherIdS;
 
+    /*public Event(String eventId, String eventName, String eventDate, String eventPlace,
+                 String eventStartTime, String eventEndTime, String schoolId, String eventLikeButtonClicked,
+                 String addToCalender, List<String> studentIDS, List<String> teacherIdS) {
+        EventId = eventId;
+        EventName = eventName;
+        EventDate = eventDate;
+        EventPlace = eventPlace;
+        EventStartTime = eventStartTime;
+        EventEndTime = eventEndTime;
+        SchoolId = schoolId;
+        EventLikeButtonClicked = eventLikeButtonClicked;
+        AddToCalender = addToCalender;
+        StudentIDS = studentIDS;
+        TeacherIdS = teacherIdS;
+    }
+*/
 
+    public String getAddToCalender() {
+        return AddToCalender;
+    }
 
+    public void setAddToCalender(String addToCalender) {
+        AddToCalender = addToCalender;
+    }
+
+    public String getEventId() {
+        return EventId;
+    }
+
+    public void setEventId(String eventId) {
+        EventId = eventId;
+    }
+
+    public String getEventLikeButtonClicked() {
+        return EventLikeButtonClicked;
+    }
+
+    public void setEventLikeButtonClicked(String eventLikeButtonClicked) {
+        EventLikeButtonClicked = eventLikeButtonClicked;
+    }
 
     public String getEventName() {
         return EventName;

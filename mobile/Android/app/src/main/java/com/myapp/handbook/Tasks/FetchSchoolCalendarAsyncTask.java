@@ -51,7 +51,8 @@ public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Eve
 
     @Override
     protected List<Event> doInBackground(Void... params) {
-        HttpConnectionUtil.SchoolCalendarService schoolCalendarService= ServiceGenerator.createService(HttpConnectionUtil.SchoolCalendarService.class);
+        HttpConnectionUtil.SchoolCalendarService schoolCalendarService= ServiceGenerator.
+                createService(HttpConnectionUtil.SchoolCalendarService.class);
         Call<List<Event>> call= schoolCalendarService.getSchoolCalendar();
         try {
             List<Event> schoolCalendar = call.execute().body();

@@ -2,12 +2,17 @@ package com.myapp.handbook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -22,11 +27,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.myapp.handbook.domain.CalendarEvents.saveSchoolCalendarEventsToDB;
+
 public class CalendarEventsActivity extends AppCompatActivity implements RecycleViewClickListener{
 
     List<Event> events;
     RecyclerView calendarView;
     private ProgressDialog progressDialog;
+    SQLiteDatabase db;
+    SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,60 +49,73 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         LinearLayoutManager calendarLayoutManager = new LinearLayoutManager(this);
         calendarLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(this);
+
+        db = handbookDbHelper.getReadableDatabase();
+
         calendarView.setLayoutManager(calendarLayoutManager);
         setSupportActionBar(toolbar);
 
-        progressDialog = ProgressDialog.show(this, "Downloading calendar", "Please wait", false);
-        FetchSchoolCalendarAsyncTask.CalendarDownloadedListener getEvents= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-            @Override
-            public void onFinished(List<Event> currentEvents) {
-                events=currentEvents;
-            }
-        };
+        if (sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false) == false) {
 
-        FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-            @Override
-            public void onFinished(List<Event> currentEvents) {
-                HandBookDbHelper.saveSchoolCalendarToDB(currentEvents);
-            }
-        };
+            progressDialog = ProgressDialog.show(this, "Downloading calendar", "Please wait", false);
+            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener getEvents = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                @Override
+                public void onFinished(List<Event> currentEvents) {
+                    events = currentEvents;
+                }
+            };
+
+            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB =
+                    new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                        @Override
+                        public void onFinished(List<Event> currentEvents) {
+                            saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
+                            Log.v("CalenderEventsDBAct", "Saved to DB");
+                        }
+                    };
 
 
-        FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-            @Override
-            public void onFinished(List<Event> currentEvents) {
-                setupSchoolCalendarView(currentEvents);
-            }
-        };
+            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                @Override
+                public void onFinished(List<Event> currentEvents) {
+                    setupSchoolCalendarView(currentEvents);
+                }
+            };
 
-        FetchSchoolCalendarAsyncTask.CalendarDownloadedListener clearBusyDialog= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-            @Override
-            public void onFinished(List<Event> events) {
-                progressDialog.dismiss();
-            }
-        };
+            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener clearBusyDialog = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                @Override
+                public void onFinished(List<Event> events) {
+                    progressDialog.dismiss();
+                }
+            };
 
-        List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners= new ArrayList<>();
-        listeners.add(getEvents);
-        listeners.add(setupView);
-        listeners.add(clearBusyDialog);
+            List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
+            listeners.add(getEvents);
+            listeners.add(saveEventsToDB);
+            listeners.add(setupView);
 
-        FetchSchoolCalendarAsyncTask task = new FetchSchoolCalendarAsyncTask(listeners);
-        task.execute();
+            listeners.add(clearBusyDialog);
 
-        //setupSchoolCalendarView(currentEvents);
+            FetchSchoolCalendarAsyncTask task = new FetchSchoolCalendarAsyncTask(listeners);
+            task.execute();
+        }
+        else{
+            //Time table has been downloaded just fetch from DB render it
+            List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);
+            Log.v("CalenderEventsDBAct", "loading from DB");
+            events=currentEvents;
+            setupSchoolCalendarView(events);
+        }
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-        toolbar.setTitle("School Calendar");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle("School Calendar");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
+
 
     private void setupSchoolCalendarView(List<Event> currentEvents) {
 

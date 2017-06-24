@@ -112,5 +112,27 @@ public class HandbookContract {
 
     }
 
+    //Table for Calender events entries
+    public static final class CalenderEventsEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "calenderevents";
+
+        public static final String COLUMN_SCHOOL_ID = "school_id";
+        public static final String COLUMN_EVENT_ID = "event_id";
+        public static final String COLUMN_EVENT_NAME = "event_name";
+        public static final String COLUMN_EVENT_LOCATION = "event_location";
+        public static final String COLUMN_EVENT_DATE = "event_date";
+        public static final String COLUMN_EVENT_START_TIME= "event_start_time";
+        public static final String COLUMN_EVENT_END_TIME= "event_end_time";
+        public static final String COLUMN_EVENT_LIKE_BUTTON_CLICKED = "like_button_clicked";
+        public static final String COLUMN_EVENT_ADD_TO_CALENDER = "add_to_calender";
+
+        //below 2 columns are lists and they need to be assoicated with single event id in seperate table
+        //temperory its stored in this table for assuming single student and single teacher
+        public static final String COLUMN_STUDENT_ID = "student_id";
+        public static final String COLUMN_TEACHER_ID = "teacher_id";
+
+    }
+
 
 }

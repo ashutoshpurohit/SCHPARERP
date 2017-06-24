@@ -18,7 +18,6 @@ import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,12 +98,26 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE +" TEXT,"+
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO + " BLOB);";
 
+        final String SQL_CREATE_CALENDER_EVENTS = "CREATE TABLE " + HandbookContract.CalenderEventsEntry.TABLE_NAME + " (" +
+
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID +" TEXT , "+
+                HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LIKE_BUTTON_CLICKED + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ADD_TO_CALENDER + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_STUDENT_ID+ " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT "+" );";
 
 
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
         HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"",101,"110,105");
 
     }
@@ -182,8 +195,30 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return retVal;
     }
 
-    public static long saveSchoolCalendarToDB(List<Event> schoolCalendar){
-        long retVal=0;
+    public static long insertSchoolCalendarEventsToDB(SQLiteDatabase sqliteDatabase,List<Event> schoolCalendar){
+        long retVal = 0;
+        ContentValues events = new ContentValues();
+        for (int i=0;i<schoolCalendar.size();i++) {
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID ,schoolCalendar.get(i).getSchoolId());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID ,schoolCalendar.get(i).getEventId());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME, schoolCalendar.get(i).getEventName());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION, schoolCalendar.get(i).getEventPlace());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE, schoolCalendar.get(i).getEventDate());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME, schoolCalendar.get(i).getEventStartTime());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME, schoolCalendar.get(i).getEventEndTime());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LIKE_BUTTON_CLICKED,
+                    schoolCalendar.get(i).getEventLikeButtonClicked());
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ADD_TO_CALENDER,
+                    schoolCalendar.get(i).getAddToCalender());
+
+            //Hardcoding student id and teacher id,this needs to be list of student and teacher id
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_STUDENT_ID,
+                    "1");
+            events.put(HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID,
+                    "2");
+
+            retVal = sqliteDatabase.insert(HandbookContract.CalenderEventsEntry.TABLE_NAME, null, events);
+        }
 
         return retVal;
     }
@@ -260,15 +295,28 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase) {
         List<Event> schooolEvents = new ArrayList<>();
 
+        String query_to_fetch_earliest="select *  from "+HandbookContract.CalenderEventsEntry.TABLE_NAME+"" +
+                " order  by datetime("+HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE+") DESC ";
+
         //L
-        Cursor cursor= sqliteDatabase.query(HandbookContract.ContactSchoolEntry.TABLE_NAME,
-                null,
-                null, null, null, null, null, null);
+        Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
 
         try {
             while (cursor.moveToNext()) {
-
-            }
+                Event newEvent = new Event();
+                newEvent.setSchoolId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID)));
+                newEvent.setEventId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID)));
+                newEvent.setEventName(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME)));
+                newEvent.setEventPlace(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION)));
+                newEvent.setEventDate(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE)));
+                newEvent.setEventStartTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME)));
+                newEvent.setEventEndTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME)));
+                newEvent.setEventLikeButtonClicked(cursor.getString(cursor.getColumnIndex
+                        (HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LIKE_BUTTON_CLICKED)));
+                newEvent.setAddToCalender(cursor.getString(cursor.getColumnIndex
+                        (HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ADD_TO_CALENDER)));
+                schooolEvents.add(newEvent);
+               }
         } finally {
             cursor.close();
         }

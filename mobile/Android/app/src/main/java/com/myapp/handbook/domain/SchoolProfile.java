@@ -142,6 +142,7 @@ public class SchoolProfile {
     public void setSchoolWebSite(String schoolWebSite) {
         this.SchoolWebSite = schoolWebSite;
     }
+
     public static void saveSchooProfiletoDB(SchoolProfile schoolProfile, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
         HandBookDbHelper.insertSchoolContactEntry(db,schoolProfile.getSchoolId(),schoolProfile.getSchoolName(),
                 schoolProfile.getSchoolFullAddress(),schoolProfile.getSchoolAddress2(),schoolProfile.getSchoolAddress3(),
