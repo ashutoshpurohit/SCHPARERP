@@ -123,12 +123,12 @@
                     android:autoLink="phone"
                     />
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_content_copy"
-                    />
+                    />-->
                 <ImageView
                     android:id="@+id/ic_phone_contact2"
                     android:layout_width="wrap_content"
@@ -186,11 +186,11 @@
                     android:textSize="16sp"
                     />
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_content_copy"
+                    android:src="@drawable/ic_content_copy"-->
                     />
             </LinearLayout>
         </LinearLayout>
