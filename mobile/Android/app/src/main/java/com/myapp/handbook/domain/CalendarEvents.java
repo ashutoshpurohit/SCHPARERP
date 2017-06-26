@@ -27,9 +27,14 @@ public class CalendarEvents {
 
     public static void saveSchoolCalendarEventsToDB(SQLiteDatabase sqliteDatabase, List<Event> schoolCalendar,
                                                     SharedPreferences sharedPreferences) {
-        HandBookDbHelper.insertSchoolCalendarEventsToDB(sqliteDatabase, schoolCalendar);
+        try {
+            HandBookDbHelper.insertSchoolCalendarEventsToDB(sqliteDatabase, schoolCalendar);
+            sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, true).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, true).commit();
+
 
 
     }
