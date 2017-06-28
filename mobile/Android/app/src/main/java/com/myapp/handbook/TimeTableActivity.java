@@ -26,9 +26,11 @@ import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.TimeSlots;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -137,8 +139,12 @@ public class TimeTableActivity extends AppCompatActivity  {
         DatePickerFragment dialog = new DatePickerFragment();
         dialog.setDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                selectedDate = new Date(year,monthOfYear,dayOfMonth);
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+
+                //selectedDate = new Date(year,monthOfYear+1,dayOfMonth);
+                GregorianCalendar calendarBeg=new GregorianCalendar(datePicker.getYear(),
+                        datePicker.getMonth(),datePicker.getDayOfMonth());
+                selectedDate=calendarBeg.getTime();
                 SetupView(profileTimeTable);
             }
         });
@@ -192,10 +198,10 @@ public class TimeTableActivity extends AppCompatActivity  {
     }
 
 
-    private String getDateAsString(Date selectedDate) {
-        String dateString = (String) android.text.format.DateFormat.format("dd", selectedDate) + "-"
-                + (String) android.text.format.DateFormat.format("MMM", selectedDate)+"-"+
-        (String) android.text.format.DateFormat.format("yy", selectedDate);
+    private String getDateAsString(Date curDate) {
+        String dateString = (String) android.text.format.DateFormat.format("dd", curDate) + "-"
+                + (String) android.text.format.DateFormat.format("MMM", curDate)+"-"+
+        (String) android.text.format.DateFormat.format("yy", curDate);
         return dateString;
     }
 
@@ -209,6 +215,7 @@ public class TimeTableActivity extends AppCompatActivity  {
         Calendar calendar = Calendar.getInstance();
         calendar.set(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
         //calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(selectedDate.getTime());
         String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
 
 
