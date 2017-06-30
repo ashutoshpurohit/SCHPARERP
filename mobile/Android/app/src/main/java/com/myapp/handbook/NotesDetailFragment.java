@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 
 /**
@@ -88,24 +85,24 @@ public class NotesDetailFragment extends Fragment {
                 null,
                 "_id= ?", new String[] {Long.toString(message_id)}, null, null, null, null);
         if(cursor.moveToFirst()){
-            int id = cursor.getInt(0);
-            int notificationId = cursor.getInt(1);
-            int priority = cursor.getInt(2);
-            int date = cursor.getInt(3);
-            String detail = cursor.getString(4);
+            //int id = cursor.getInt(0);
+           // int notificationId = cursor.getInt(0);
             String title = cursor.getString(5);
+            String detail = cursor.getString(4);
+            String date = cursor.getString(3);
             String from = cursor.getString(6);
+            int priority = cursor.getInt(2);
             String imageUrl = cursor.getString(7);
             TextView titleTextView = (TextView)view.findViewById(R.id.detail_header);
             TextView detailTextView = (TextView)view.findViewById(R.id.detail_message);
-            TextView priorityTextView = (TextView)view.findViewById(R.id.detail_priority);
+            //TextView priorityTextView = (TextView)view.findViewById(R.id.detail_priority);
             TextView dateTextView = (TextView)view.findViewById(R.id.detail_date);
             TextView fromTextView = (TextView)view.findViewById(R.id.detail_from);
             ImageView imageDetailView = (ImageView) view.findViewById(R.id.detail_image);
             titleTextView.setText(title);
             detailTextView.setText(detail);
-            priorityTextView.setText(Integer.toString(priority));
-            dateTextView.setText(Integer.toString(date));
+            //priorityTextView.setText(Integer.toString(priority));
+            dateTextView.setText(date);
             fromTextView.setText(from);
             if(imageUrl!=null && !imageUrl.isEmpty()){
                 Glide.with(getContext())
