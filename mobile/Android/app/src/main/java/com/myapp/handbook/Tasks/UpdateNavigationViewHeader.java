@@ -2,6 +2,7 @@ package com.myapp.handbook.Tasks;
 
 import android.content.Context;
 import android.support.design.widget.NavigationView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,10 +46,21 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
             RoleProfile selectedProfile = findProfileById(roles,selectedProfileId);
 
             if(selectedProfile!=null) {
-                Picasso.with(context)
-                        .load(selectedProfile.getImageUrl())
-                        .placeholder(R.drawable.contact_picture_placeholder)
-                        .into(profileImage);
+                String imagePath=selectedProfile.getImageUrl();
+                if(TextUtils.isEmpty(imagePath.trim())) {
+                    Picasso.with(context)
+                            .load(R.drawable.contact_picture_placeholder)
+                            .placeholder(R.drawable.contact_picture_placeholder)
+                            //.networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(profileImage);
+                }
+                else {
+
+                    Picasso.with(context)
+                            .load(selectedProfile.getImageUrl())
+                            .placeholder(R.drawable.contact_picture_placeholder)
+                            .into(profileImage);
+                }
                 schoolName.setText(selectedProfile.getFirstName() + " " + selectedProfile.getLastName());
                 email.setText(selectedProfile.getStd());
             }

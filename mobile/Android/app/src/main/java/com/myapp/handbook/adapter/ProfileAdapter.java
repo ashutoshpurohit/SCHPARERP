@@ -3,7 +3,7 @@ package com.myapp.handbook.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.design.widget.NavigationView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,12 +73,21 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
         profileRole.setText(profile.getRole());
         profileId.setText(profile.getId());
-        Picasso.with(getContext())
-                .load(profile.getImageUrl())
-                .placeholder(R.drawable.contact_picture_placeholder)
-                //.networkPolicy(NetworkPolicy.OFFLINE)
-                .into(imageView);
-
+        String imagePath = profile.getImageUrl();
+        if(TextUtils.isEmpty(imagePath.trim())) {
+            Picasso.with(getContext())
+                    .load(R.drawable.contact_picture_placeholder)
+                    .placeholder(R.drawable.contact_picture_placeholder)
+                    //.networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(imageView);
+        }
+        else {
+            Picasso.with(getContext())
+                    .load(profile.getImageUrl())
+                    .placeholder(R.drawable.contact_picture_placeholder)
+                    //.networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(imageView);
+        }
         if(profile.getId().equals(selectedProfileId)){
             currentRow.setBackgroundColor(Color.GRAY);
         }
