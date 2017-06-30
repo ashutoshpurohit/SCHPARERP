@@ -60,24 +60,24 @@
     </LinearLayout>
     <View style="@style/Divider"></View>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height= "wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:id="@+id/subject"
-            android:text= "@string/subject"
-            />
-        <Spinner
-            android:id="@+id/subject_spinner"
-            android:layout_width="wrap_content"
-            android:layout_gravity="right"
-            android:layout_height="wrap_content" />
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height= "wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="0.25"-->
+            <!--android:id="@+id/subject"-->
+            <!--android:text= "@string/subject"-->
+            <!--/>-->
+        <!--&lt;!&ndash;<Spinner-->
+            <!--android:id="@+id/subject_spinner"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:layout_height="wrap_content" />-->
 
-    </LinearLayout>
+    <!--&ndash;&gt;</LinearLayout>-->
 
     <View style="@style/Divider"></View>
 
