@@ -172,14 +172,14 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             // Apply the timetableAdapter to the stdSpinner
             stdSpinner.setAdapter(adapter);
 
-            Spinner subjectSpinner = (Spinner)fragmentView.findViewById(R.id.subject_spinner);
+            /*Spinner subjectSpinner = (Spinner)fragmentView.findViewById(R.id.subject_spinner);
             // Create an ArrayAdapter using the string array and a default stdSpinner layout
             ArrayAdapter<String> subjectAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,subjects);
             // Specify the layout to use when the list of choices appears
             subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Apply the timetableAdapter to the stdSpinner
             subjectSpinner.setAdapter(subjectAdapter);
-
+*/
         }
         else {
             fromText.setText("Loading details. Please wait..");
