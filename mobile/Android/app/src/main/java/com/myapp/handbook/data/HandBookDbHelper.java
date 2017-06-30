@@ -138,7 +138,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         sqliteDatabase.insert(NotificationEntry.TABLE_NAME, null, note);
     }
 
-    public static void insertProfile(SQLiteDatabase sqliteDatabase, String id,String firstname, String lastname, String middlename, String role, String gender,
+    public static void insertProfile(SQLiteDatabase sqliteDatabase, String id,String firstname, String lastname,
+                                     String middlename, String role, String gender,
                                      String std, String address, String dob, String image) {
 
         ContentValues note = new ContentValues();
@@ -217,7 +218,11 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
             events.put(HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID,
                     "2");
 
-            retVal = sqliteDatabase.insert(HandbookContract.CalenderEventsEntry.TABLE_NAME, null, events);
+            try {
+                retVal = sqliteDatabase.insert(HandbookContract.CalenderEventsEntry.TABLE_NAME, null, events);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return retVal;
