@@ -118,7 +118,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
-        HandBookDbHelper.insertNotification(sqLiteDatabase, "Holiday tomorrow", "Holiday on 23 March 2016 on occasion of Holi", new Date().toString(), 1, "Admin", 10001,"",101,"110,105");
+        //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
 
     }
 

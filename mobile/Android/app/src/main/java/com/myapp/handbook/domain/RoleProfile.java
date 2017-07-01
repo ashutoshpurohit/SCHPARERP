@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.QuickstartPreferences;
 import com.myapp.handbook.data.HandBookDbHelper;
 
@@ -13,7 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -337,6 +340,21 @@ public class RoleProfile implements Parcelable {
         sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
 
     }
+
+    public static void AddWelcomeMessage(List<RoleProfile> profiles, SQLiteDatabase db) {
+
+        for(RoleProfile profile:profiles) {
+
+            //HandBookDbHelper.insertProfile(db,profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getMiddleName(),profile.getRole(),profile.getGender(),profile.getStd(),profile.getAddress(),profile.getBirth_date(),profile.getImageUrl());
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String curentDate= df.format(new Date());
+            HandBookDbHelper.insertNotification(db, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", curentDate, 1, "SchoolLink", 10001,"", HttpConnectionUtil.DIARY_NOTE_TYPE,profile.getId());
+        }
+
+        //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
+
+    }
+
 
 
     public static boolean storeProfile(List<RoleProfile> profiles){

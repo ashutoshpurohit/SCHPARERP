@@ -39,6 +39,7 @@ import com.myapp.handbook.domain.WeeklyTimeTable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.myapp.handbook.domain.RoleProfile.AddWelcomeMessage;
 import static com.myapp.handbook.domain.RoleProfile.savetoDB;
 
 public class HomeFragment extends Fragment {
@@ -112,6 +113,14 @@ public class HomeFragment extends Fragment {
                 public void onProfileDownload(List<RoleProfile> profiles) {
 
                     savetoDB(profiles,db,sharedPreferences);
+                }
+            });
+
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles) {
+
+                    AddWelcomeMessage(profiles,db);
                 }
             });
 
