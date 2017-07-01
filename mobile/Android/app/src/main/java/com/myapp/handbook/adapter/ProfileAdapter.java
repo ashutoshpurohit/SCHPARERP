@@ -74,7 +74,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         profileRole.setText(profile.getRole());
         profileId.setText(profile.getId());
         String imagePath = profile.getImageUrl();
-        if(TextUtils.isEmpty(imagePath.trim())) {
+        if(imagePath==null || TextUtils.isEmpty(imagePath.trim())) {
             Picasso.with(getContext())
                     .load(R.drawable.contact_picture_placeholder)
                     .placeholder(R.drawable.contact_picture_placeholder)

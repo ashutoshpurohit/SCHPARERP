@@ -167,12 +167,13 @@ public class TimeTableActivity extends AppCompatActivity  {
 
             if(todaysTimeSlot!=null) {
 
+                timeTableListView.setVisibility(View.VISIBLE);
                 TimeTableAdapter adapter = new TimeTableAdapter(this, R.layout.list_timetable_item, todaysTimeSlot);
                 timeTableListView.setAdapter(adapter);
                 view.setVisibility(View.INVISIBLE);
             }
             else {
-
+                timeTableListView.setVisibility(View.INVISIBLE);
                 view.setVisibility(View.VISIBLE);
                 view.setText(R.string.timetable_not_found);
 
@@ -216,9 +217,9 @@ public class TimeTableActivity extends AppCompatActivity  {
         calendar.set(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
         //calendar.setFirstDayOfWeek(Calendar.MONDAY);
         String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(selectedDate.getTime());
-        String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        //String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
 
 
-        return dayLongName;
+        return dayOfWeek;
     }
 }

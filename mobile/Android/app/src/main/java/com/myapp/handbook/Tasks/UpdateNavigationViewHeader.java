@@ -47,7 +47,7 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
 
             if(selectedProfile!=null) {
                 String imagePath=selectedProfile.getImageUrl();
-                if(TextUtils.isEmpty(imagePath.trim())) {
+                if(imagePath==null|| TextUtils.isEmpty(imagePath.trim())) {
                     Picasso.with(context)
                             .load(R.drawable.contact_picture_placeholder)
                             .placeholder(R.drawable.contact_picture_placeholder)
