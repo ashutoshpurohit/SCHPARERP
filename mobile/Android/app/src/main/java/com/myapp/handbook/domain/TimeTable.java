@@ -70,6 +70,19 @@ public class TimeTable implements BaseTimeTable {
         return success;
     }
 
+    public static List<TimeSlots> getTimeSlot(BaseTimeTable profileTimeTable, String dayOfWeek) {
+        List<TimeSlots> slots=null;
+        for (WeeklyTimeTable table: profileTimeTable.getWeeklyTimeTableList()
+                ) {
+            if(table.getDayOfWeek().equalsIgnoreCase(dayOfWeek)) {
+                slots = table.getTimeSlotsList();
+                break;
+            }
+
+        }
+        return slots;
+    }
+
 
 }
 

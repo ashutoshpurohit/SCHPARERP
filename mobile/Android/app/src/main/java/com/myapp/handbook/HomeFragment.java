@@ -34,10 +34,15 @@ import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TimeSlots;
+import com.myapp.handbook.domain.TimeTable;
 import com.myapp.handbook.domain.WeeklyTimeTable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.myapp.handbook.domain.RoleProfile.AddWelcomeMessage;
 import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
@@ -60,6 +65,7 @@ public class HomeFragment extends Fragment {
     String selectedProfileId;
     SharedPreferences sharedPreferences;
     RecyclerView timeTableListView;
+    TextView emptyTimeTableView;
     RoleProfile selectedProfile;
     RecyclerView homeSummaryView2;
     RecyclerView homeSummaryView3;
@@ -78,6 +84,7 @@ public class HomeFragment extends Fragment {
         fragmentView = view;
 
         timeTableListView = (RecyclerView) view.findViewById(R.id.summaryTimetableListView1);
+        emptyTimeTableView =(TextView)view.findViewById(R.id.empty_summary_timetable_view);
         homeSummaryView2 =(RecyclerView)view.findViewById(R.id.summaryDiaryNotetView1);
         homeSummaryView3 = (RecyclerView)view.findViewById(R.id.summaryRecyclerView3);
 
@@ -284,17 +291,25 @@ public class HomeFragment extends Fragment {
 
         if(table!=null){
 
-            int dayOfWeek = 1;//getDayOfTheWeek();
+            //int dayOfWeek = 1;//getDayOfTheWeek();
+            Calendar calendar = Calendar.getInstance();
+            //int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date().getTime());
             List<WeeklyTimeTable> weekly= table.getWeeklyTimeTableList();
-            List<TimeSlots> todaysTimeSlot=null;
+            List<TimeSlots> todaysTimeSlot= TimeTable.getTimeSlot(table,dayOfWeek);
 
-            if(dayOfWeek > -1) {
-
-                todaysTimeSlot = weekly.get(dayOfWeek).getTimeSlotsList();
+            //if(dayOfWeek > -1)
+            if(todaysTimeSlot!=null && todaysTimeSlot.size()>0)
+            {
                 timetableAdapter = new TimeTableSummaryAdapter(getContext(), todaysTimeSlot,role);
                 timeTableListView.setAdapter(timetableAdapter);
                 timetableAdapter.notifyDataSetChanged();
+                emptyTimeTableView.setVisibility(View.INVISIBLE);
 
+            }
+            else{
+                emptyTimeTableView.setVisibility(View.VISIBLE);
+                timeTableListView.setVisibility(View.INVISIBLE);
             }
 
         }
