@@ -41,7 +41,11 @@ public class TimeTableSummaryAdapter extends RecyclerView.Adapter<TimeTableSumma
 
 
     private String getSubjectInitials(String subject) {
-        return subject.substring(0,3);
+        if(subject.length() >  3) {
+            return subject.substring(0, 3);
+        }
+        else
+            return subject;
     }
 
     @Override

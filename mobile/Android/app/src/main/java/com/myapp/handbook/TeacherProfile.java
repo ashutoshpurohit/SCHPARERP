@@ -38,13 +38,22 @@ public class TeacherProfile
     public static TeacherProfile parseTeacherObject(JSONObject teacherObject){
 
         TeacherProfile profile=null;
+        String lastName="";
+        String email="";
+        String std="";
         try {
             String firstName = teacherObject.getString(TEACHER_FIRST_NAME);
             String id = teacherObject.getString(TEACHER_ID);
-            String lastName = teacherObject.getString(TEACHER_LAST_NAME);
+            if(teacherObject.has(TEACHER_LAST_NAME)) {
+                lastName = teacherObject.getString(TEACHER_LAST_NAME);
+            }
             String mobile = teacherObject.getString(TEACHER_MOBILE);
-            String email = teacherObject.getString(TEACHER_EMAIL);
-            String std = teacherObject.getString(TEACHER_ROLE_STD);
+            if(teacherObject.has(TEACHER_EMAIL)) {
+                 email = teacherObject.getString(TEACHER_EMAIL);
+            }
+            if(teacherObject.has(TEACHER_ROLE_STD)) {
+             std=teacherObject.getString(TEACHER_ROLE_STD);
+            }
             String subject = teacherObject.getString(TEACHER_SUBJECT);
 
              profile= new TeacherProfile(id,firstName,lastName,mobile,email,std,subject);
