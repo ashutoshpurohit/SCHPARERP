@@ -68,11 +68,25 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         TextView profileName = (TextView)currentRow.findViewById(R.id.profile_name);
         TextView profileRole = (TextView)currentRow.findViewById(R.id.profile_role);
         TextView profileId = (TextView)currentRow.findViewById(R.id.profileId);
+        TextView profileStd = (TextView)currentRow.findViewById(R.id.profile_standard);
+        TextView profileContactNumber = (TextView)currentRow.findViewById(R.id.profile_contact_number);
         RoleProfile profile= roles[position];
 
         profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
         profileRole.setText(profile.getRole());
         profileId.setText(profile.getId());
+
+        profileContactNumber.setText(HttpConnectionUtil.getMobileNumber());
+        String tempProfile = profile.getRole();
+        if(tempProfile.equals("TEACHER"))
+        {
+            profileStd.setVisibility(View.GONE);
+
+        }else {
+            profileStd.setVisibility(View.VISIBLE);
+            profileStd.setText(profile.getStd());
+        }
+
         String imagePath = profile.getImageUrl();
         if(imagePath==null || TextUtils.isEmpty(imagePath.trim())) {
             Picasso.with(getContext())
