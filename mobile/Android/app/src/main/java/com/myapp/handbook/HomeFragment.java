@@ -40,7 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.myapp.handbook.domain.RoleProfile.AddWelcomeMessage;
-import static com.myapp.handbook.domain.RoleProfile.savetoDB;
+import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
+import static com.myapp.handbook.domain.RoleProfile.saveSchoolProfiletoDB;
 
 public class HomeFragment extends Fragment {
 
@@ -110,15 +111,24 @@ public class HomeFragment extends Fragment {
             List<FetchProfileAsyncTask.ProfileDownloadListener> profileDownloadListeners = new ArrayList<>();
             profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
                 @Override
-                public void onProfileDownload(List<RoleProfile> profiles) {
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
-                    savetoDB(profiles,db,sharedPreferences);
+                    saveProfilestoDB(profiles,db,sharedPreferences);
                 }
             });
 
             profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
                 @Override
-                public void onProfileDownload(List<RoleProfile> profiles) {
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
+
+                    saveSchoolProfiletoDB(schoolProfile,db,sharedPreferences);
+                }
+            });
+
+
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
                     AddWelcomeMessage(profiles,db);
                 }
@@ -126,7 +136,7 @@ public class HomeFragment extends Fragment {
 
             profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
                 @Override
-                public void onProfileDownload(List<RoleProfile> profiles) {
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
                     if(profiles!=null && profiles.size() >0 ) {
                         HttpConnectionUtil.setSelectedProfileId(profiles.get(0).getId());

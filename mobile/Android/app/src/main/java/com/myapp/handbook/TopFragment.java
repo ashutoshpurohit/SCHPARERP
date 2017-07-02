@@ -4,21 +4,17 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.Tasks.FetchProfileAsyncTask;
@@ -27,16 +23,11 @@ import com.myapp.handbook.adapter.ProfileAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.myapp.handbook.domain.RoleProfile.savetoDB;
+import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
 
 public class TopFragment extends Fragment {
 
@@ -81,16 +72,16 @@ public class TopFragment extends Fragment {
         List<FetchProfileAsyncTask.ProfileDownloadListener> listeners = new ArrayList<>();
         listeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
             @Override
-            public void onProfileDownload(List<RoleProfile> profiles) {
+            public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
-                savetoDB(profiles,db,sharedPreferences);
+                saveProfilestoDB(profiles,db,sharedPreferences);
             }
         });
 
         listeners.add(new FetchProfileAsyncTask.ProfileDownloadListener(){
 
             @Override
-            public void onProfileDownload(List<RoleProfile> profiles) {
+            public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
                 SetUpView(profiles,fragmentView);
             }

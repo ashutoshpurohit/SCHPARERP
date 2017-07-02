@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
@@ -154,8 +155,12 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         note.put(ProfileEntry.COLUMN_MIDDLE_NAME,middlename);
         note.put(ProfileEntry.COLUMN_DOB, dob);
         note.put(ProfileEntry.COLUMN_IMAGE,image);
-
-        long retVal= sqliteDatabase.insert(ProfileEntry.TABLE_NAME, null, note);
+        try {
+            long retVal = sqliteDatabase.insert(ProfileEntry.TABLE_NAME, null, note);
+        }
+        catch (Exception e){
+            Log.d("DB_INSERT",e.getMessage());
+        }
     }
 
     public static long insertTimeTableEntry(SQLiteDatabase sqliteDatabase, String id,String dayOfWeek, String school_id, String std, String teacher_id, String teacher_name, String start_time,

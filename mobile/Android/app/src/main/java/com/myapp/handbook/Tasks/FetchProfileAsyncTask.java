@@ -24,17 +24,37 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
     private DownloadCallback mCallback;
 
     public interface ProfileDownloadListener {
-        public void onProfileDownload(List<RoleProfile> profiles);
+        public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile);
     }
 
     SchoolProfile schoolProfile;
     List<RoleProfile> allProfiles;
     final List<ProfileDownloadListener> profileDownloadListeners;
 
+
     public FetchProfileAsyncTask(List<ProfileDownloadListener> listeners){
 
         this.profileDownloadListeners = listeners;
     }
+    /**
+     * Cancel background network operation if we do not have network connectivity.
+     */
+
+    @Override
+    protected void onPreExecute() {
+        if (mCallback != null) {
+            NetworkInfo networkInfo = mCallback.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnected() ||
+                    (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
+                            && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
+                // If no connectivity, cancel task and update Callback with null data.
+                mCallback.updateFromDownload(null);
+                cancel(true);
+            }
+        }
+    }
+
+
 
     String TAG ="FetchProfileAsyncTask";
     @Override
@@ -57,6 +77,7 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
 
                 if(school!=null)
                     schoolProfile = SchoolProfile.parseJSonObject(school);
+
             }
 
             if (jsonBody.has("Students"))
@@ -82,37 +103,14 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
 
 
     }
-    /**
-     * Cancel background network operation if we do not have network connectivity.
-     */
-    @Override
-    protected void onPreExecute() {
-        if (mCallback != null) {
-            NetworkInfo networkInfo = mCallback.getActiveNetworkInfo();
-            if (networkInfo == null || !networkInfo.isConnected() ||
-                    (networkInfo.getType() != ConnectivityManager.TYPE_WIFI
-                            && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
-                // If no connectivity, cancel task and update Callback with null data.
-                mCallback.updateFromDownload(null);
-                cancel(true);
-            }
-        }
-    }
-
 
     @Override
     protected void onPostExecute(List<RoleProfile> profiles) {
         if(profiles!=null && profiles.size()>0) {
             allProfiles = profiles;
-    /*        sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
-            // Toast.makeText(getActivity().getApplicationContext(), "Successfully downloaded the profiles from server)",
-            //       Toast.LENGTH_LONG).show();
-            SetUpView();
-            UpdateSchoolDetails(schoolProfile);
-            SavetoDB();*/
             for (ProfileDownloadListener listener:profileDownloadListeners
                  ) {
-                listener.onProfileDownload(allProfiles);
+                listener.onProfileDownload(allProfiles, schoolProfile);
             }
 
         }

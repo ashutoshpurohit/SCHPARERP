@@ -301,11 +301,17 @@ public class RoleProfile implements Parcelable {
             teacherProfile.setRole(ProfileRole.TEACHER.toString());
             teacherProfile.setId(teacherObj.getString(TEACHER_ID));
             teacherProfile.setFirstName(teacherObj.getString(TEACHER_FIRST_NAME));
-            teacherProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
-            teacherProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
-            teacherProfile.setGender(teacherObj.getString(TEACHER_GENDER));
+            if(teacherObj.has(TEACHER_MIDDLE_NAME))
+                teacherProfile.setMiddleName(teacherObj.getString(TEACHER_MIDDLE_NAME));
+            if(teacherObj.has(TEACHER_LAST_NAME))
+                teacherProfile.setLastName(teacherObj.getString(TEACHER_LAST_NAME));
+            else
+                teacherProfile.setLastName("");
+            if(teacherObj.has(TEACHER_GENDER))
+                teacherProfile.setGender(teacherObj.getString(TEACHER_GENDER));
             teacherProfile.setStd("");
-            teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
+            if(teacherObj.has(TEACHER_DOB))
+                teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
 
 
         }
@@ -330,7 +336,7 @@ public class RoleProfile implements Parcelable {
 
     }
 
-    public static void savetoDB(List<RoleProfile> profiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
+    public static void saveProfilestoDB(List<RoleProfile> profiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
 
         for(RoleProfile profile:profiles) {
 
@@ -340,6 +346,12 @@ public class RoleProfile implements Parcelable {
         sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();
 
     }
+
+    public static void saveSchoolProfiletoDB(SchoolProfile schoolProfiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
+
+        SchoolProfile.saveSchooProfiletoDB(schoolProfiles,db,sharedPreferences);
+    }
+
 
     public static void AddWelcomeMessage(List<RoleProfile> profiles, SQLiteDatabase db) {
 
