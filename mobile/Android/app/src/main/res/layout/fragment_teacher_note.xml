@@ -13,11 +13,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/feedback_from"
         android:text="From:"
+        android:layout_marginBottom="10dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height= "wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="15dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,17 +48,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height= "wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:id="@+id/Teacher_To"
             android:text= "@string/std"
             />
         <Spinner
             android:id="@+id/std_spinner"
             android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_gravity="right"
             android:layout_height="wrap_content" />
 
