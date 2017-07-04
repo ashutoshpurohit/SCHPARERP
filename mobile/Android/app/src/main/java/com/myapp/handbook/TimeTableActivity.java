@@ -167,6 +167,14 @@ public class TimeTableActivity extends AppCompatActivity  {
             String dayOfWeek = getDayOfTheWeek();
             List<WeeklyTimeTable> weekly= profileTimeTable.getWeeklyTimeTableList();
             List<TimeSlots> todaysTimeSlot=getTimeSlot(profileTimeTable,dayOfWeek);
+            String profileRole = selectedProfile.getRole();
+            TextView standard_header = (TextView) findViewById(R.id.header_timetable_std);
+            if (profileRole.equals("TEACHER"))
+            {
+                standard_header.setVisibility(View.VISIBLE);
+            }else {
+                standard_header.setVisibility(View.GONE);
+            }
 
             if(todaysTimeSlot!=null) {
 
@@ -207,7 +215,8 @@ public class TimeTableActivity extends AppCompatActivity  {
 
 
                 timeTableListView.setVisibility(View.VISIBLE);
-                TimeTableAdapter adapter = new TimeTableAdapter(this, R.layout.list_timetable_item, todaysTimeSlot);
+
+                TimeTableAdapter adapter = new TimeTableAdapter(this, R.layout.list_timetable_item, todaysTimeSlot, selectedProfile.getRole());
                 timeTableListView.setAdapter(adapter);
                 view.setVisibility(View.INVISIBLE);
             }

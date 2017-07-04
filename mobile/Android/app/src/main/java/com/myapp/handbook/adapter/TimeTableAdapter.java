@@ -21,6 +21,7 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
     private final Context context;
     private final int layoutResourceId;
     private final List<TimeSlots> timeslots;
+    private final String profileRole;
     private TimeTableViewType viewType;
 
     /**
@@ -31,13 +32,15 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
      *                  instantiating views.
      * @param timeSlots The objects to represent in the ListView.
      */
-    public TimeTableAdapter(Context context, int resource, List<TimeSlots> timeSlots) {
+    public TimeTableAdapter(Context context, int resource, List<TimeSlots> timeSlots, String profileRole) {
         super(context, resource, timeSlots);
 
         this.context = context;
         this.layoutResourceId = resource;
         this.timeslots = timeSlots;
+
         viewType=TimeTableViewType.DETAIL;
+        this.profileRole = profileRole;
     }
 
     public void setType(TimeTableViewType type)
@@ -57,21 +60,31 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
 
         TimeSlots currentTimeSlot = timeslots.get(position);
 
+
         if(viewType==TimeTableViewType.DETAIL) {
             TextView timeSlot = (TextView) currentRow.findViewById(R.id.timetable_duration);
             TextView subject = (TextView) currentRow.findViewById(R.id.timetable_subject);
+            TextView standard = (TextView) currentRow.findViewById(R.id.timetable_teacher_std);
 
-            timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
-            subject.setText(currentTimeSlot.getSubject());
+               if (profileRole.equals("TEACHER")) {
+
+                   timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
+                   subject.setText(currentTimeSlot.getSubject());
+                   standard.setVisibility(View.VISIBLE);
+                   standard.setText(currentTimeSlot.getTeacherClassStd());
+               }else {
+                   standard.setVisibility(View.GONE);
+                   timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
+                   subject.setText(currentTimeSlot.getSubject());
+               }
 
         }
         else {
             TextView timeSlot = (TextView) currentRow.findViewById(R.id.timetable_summary_duration);
             TextView subject = (TextView) currentRow.findViewById(R.id.timetable_summary_subject);
-
             timeSlot.setText(getStartTime(currentTimeSlot.getCurrentTimeSlot()));
             subject.setText(getSubjectInitials(currentTimeSlot.getSubject()));
-        }
+            }
         return currentRow;
 
     }
