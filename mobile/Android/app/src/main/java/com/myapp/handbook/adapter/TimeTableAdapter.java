@@ -74,7 +74,8 @@ public class TimeTableAdapter extends ArrayAdapter<TimeSlots> {
                    standard.setText(currentTimeSlot.getTeacherClassStd());
                }else {
                    standard.setVisibility(View.GONE);
-
+                   timeSlot.setText(currentTimeSlot.getCurrentTimeSlot());
+                   subject.setText(currentTimeSlot.getSubject());
                }
 
         }
