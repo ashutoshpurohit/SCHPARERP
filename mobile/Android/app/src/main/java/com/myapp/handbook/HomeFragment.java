@@ -40,6 +40,8 @@ import com.myapp.handbook.domain.WeeklyTimeTable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -297,11 +299,11 @@ public class HomeFragment extends Fragment {
             String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date().getTime());
             List<WeeklyTimeTable> weekly= table.getWeeklyTimeTableList();
             List<TimeSlots> todaysTimeSlot= TimeTable.getTimeSlot(table,dayOfWeek);
-
             //if(dayOfWeek > -1)
             if(todaysTimeSlot!=null && todaysTimeSlot.size()>0)
             {
-                timetableAdapter = new TimeTableSummaryAdapter(getContext(), todaysTimeSlot,role);
+                List<TimeSlots> sortedTimeSlots = sortTimeSlots(todaysTimeSlot);//todaysTimeSlot;// ;
+                timetableAdapter = new TimeTableSummaryAdapter(getContext(), sortedTimeSlots,role);
                 timeTableListView.setAdapter(timetableAdapter);
                 timetableAdapter.notifyDataSetChanged();
                 emptyTimeTableView.setVisibility(View.INVISIBLE);
@@ -314,6 +316,44 @@ public class HomeFragment extends Fragment {
 
         }
 
+    }
+
+    List<TimeSlots> sortTimeSlots(List<TimeSlots> timeSlotsToSort){
+        Collections.sort(timeSlotsToSort, new Comparator<TimeSlots>() {
+            @Override
+            public int compare(TimeSlots t1, TimeSlots t2) {
+                try {
+                    String t1StartTime = t1.getStartTime();
+                    String t2StartTime = t2.getStartTime();
+                    int t1StartTimeHour=Integer.parseInt(t1StartTime.split(":")[0]);
+                    int t1StartTimeMin=Integer.parseInt(t1StartTime.split(":")[1]);
+
+                    int t2StartTimeHour=Integer.parseInt(t2StartTime.split(":")[0]);
+                    int t2StartTimeMin=Integer.parseInt(t2StartTime.split(":")[1]);
+
+                    if(t1StartTimeHour < t2StartTimeHour)
+                        return  -1;
+                    else if(t1StartTimeHour > t2StartTimeHour)
+                        return 1;
+                    else if(t1StartTimeHour==t2StartTimeHour){
+                        if(t1StartTimeMin < t2StartTimeMin)
+                            return -1;
+                        else if(t1StartTimeMin > t2StartTimeMin)
+                            return 1;
+                        else
+                            return 0;
+                    }
+                    else
+                        return 0;
+
+
+                }
+                catch (Exception e){
+                    return 0;
+                }
+            }
+        });
+        return timeSlotsToSort;
     }
 
 

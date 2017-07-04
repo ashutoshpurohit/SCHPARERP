@@ -21,7 +21,7 @@ public class TimeSlots {
         this.ClassStandard = teacherClassStd;
     }
 
-    public String getStartTime() throws ParseException {
+    public String getStartTime()  {
         String tempStartTime = StartTime;
         DateFormat inputFormat = new SimpleDateFormat("KK:mm a");
         DateFormat outputFormat = new SimpleDateFormat("KK:mm a");
@@ -98,11 +98,8 @@ public class TimeSlots {
     }
 
     public String getCurrentTimeSlot(){
-        try {
-            return getStartTime() + " - " + getEndTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+        return getStartTime() + " - " + getEndTime();
+
     }
 }
