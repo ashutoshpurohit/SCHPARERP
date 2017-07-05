@@ -56,13 +56,10 @@ public class TimeTable implements BaseTimeTable {
             String dayOfWeek = day.getDayOfWeek();
             for(TimeSlots timeSlot: day.getTimeSlotsList()){
                 long row_id = 0;
-                try {
-                    row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,
-                            timeSlot.getTeacherId(),timeSlot.getTeacherName(),
-                            timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                row_id = HandBookDbHelper.insertTimeTableEntry(db,id,dayOfWeek,school_id,std,
+                timeSlot.getTeacherId(),timeSlot.getTeacherName(),
+                timeSlot.getStartTime(),timeSlot.getEndTime(),timeSlot.getSubject());
+
                 if(row_id<0)
                     success =false;
             }

@@ -29,10 +29,13 @@ import com.myapp.handbook.domain.WeeklyTimeTable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class TimeTableActivity extends AppCompatActivity  {
 
@@ -174,6 +177,42 @@ public class TimeTableActivity extends AppCompatActivity  {
             }
 
             if(todaysTimeSlot!=null) {
+
+                Collections.sort(todaysTimeSlot, new Comparator<TimeSlots>() {
+                    @Override
+                    public int compare(TimeSlots t1, TimeSlots t2) {
+                        try {
+                            String t1StartTime = t1.getStartTime();
+                            String t2StartTime = t2.getStartTime();
+                            int t1StartTimeHour=Integer.parseInt(t1StartTime.split(":")[0]);
+                            int t1StartTimeMin=Integer.parseInt(t1StartTime.split(":")[1]);
+
+                            int t2StartTimeHour=Integer.parseInt(t2StartTime.split(":")[0]);
+                            int t2StartTimeMin=Integer.parseInt(t2StartTime.split(":")[1]);
+
+                            if(t1StartTimeHour < t2StartTimeHour)
+                                return  -1;
+                            else if(t1StartTimeHour > t2StartTimeHour)
+                                return 1;
+                            else if(t1StartTimeHour==t2StartTimeHour){
+                                if(t1StartTimeMin < t2StartTimeMin)
+                                    return -1;
+                                else if(t1StartTimeMin > t2StartTimeMin)
+                                    return 1;
+                                else
+                                    return 0;
+                            }
+                            else
+                                return 0;
+
+
+                        }
+                        catch (Exception e){
+                            return 0;
+                        }
+                    }
+                });
+
 
                 timeTableListView.setVisibility(View.VISIBLE);
 
