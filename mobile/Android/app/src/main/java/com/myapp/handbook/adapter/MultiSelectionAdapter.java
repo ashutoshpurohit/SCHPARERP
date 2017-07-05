@@ -5,8 +5,6 @@ package com.myapp.handbook.adapter;
  */
 
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -18,8 +16,10 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.R;
+import com.myapp.handbook.domain.RoleProfile;
+
+import java.util.ArrayList;
 
 
 public class MultiSelectionAdapter<T> extends BaseAdapter {
@@ -114,6 +114,13 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
         TextView studentName = (TextView) convertView.findViewById(R.id.search_studentName);
         RoleProfile studentProfile = (RoleProfile) mList.get(position);
         String studentFullName = studentProfile.getFirstName();
+
+        //This code is specific to this client as undefined in student name is coming from
+        //school only,hence this check can be removed for other client
+        if(studentFullName.contains(" undefined")){
+            studentFullName = studentFullName.replace(" undefined","");
+        }
+
         studentName.setText(studentFullName);
 //        String studentId = studentProfile.getId();
 //
