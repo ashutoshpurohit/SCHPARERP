@@ -121,6 +121,7 @@ public class HttpConnectionUtil {
     }
 
     public static String URL_ENPOINT = "http://schoollink.co.in";
+    //public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
     public static int GCM_NOTIFICATION = 1000;
 
     /**

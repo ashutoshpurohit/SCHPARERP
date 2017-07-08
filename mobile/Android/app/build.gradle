@@ -23,8 +23,8 @@ android {
         applicationId "com.myapp.handbook"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 8
+        versionName "0.3"
         multiDexEnabled true
         testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
     }
@@ -56,6 +56,9 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile('com.digits.sdk.android:digits:1.11.2@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
 }

@@ -29,10 +29,13 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
+
+import io.fabric.sdk.android.Fabric;
 
 import static android.support.v7.app.AppCompatDelegate.FEATURE_ACTION_MODE_OVERLAY;
 
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Notifications.setDb(notificationHelper.getWritableDatabase());
         //notificationHelper.onCreate(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         this.requestWindowFeature(FEATURE_ACTION_MODE_OVERLAY);
         setContentView(R.layout.activity_main);
 
