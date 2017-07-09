@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsAuthButton;
@@ -36,7 +37,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new TwitterCore(authConfig), new Digits());
+        //Fabric.with(this, new TwitterCore(authConfig), new Digits());
+        Fabric.with(this, new Crashlytics(), new TwitterCore(authConfig), new Digits());
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
