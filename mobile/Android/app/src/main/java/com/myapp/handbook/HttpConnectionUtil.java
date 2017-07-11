@@ -4,23 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.myapp.handbook.data.HandbookContract;
-import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
 import com.myapp.handbook.domain.TimeTable;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -295,6 +290,19 @@ public class HttpConnectionUtil {
 
         return response;
     }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager conMgr = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+
+            return false;
+        }
+        return true;
+    }
+
 
     public static void launchHomePage(Context context) {
 
