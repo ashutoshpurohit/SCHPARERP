@@ -73,8 +73,12 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         selectedStudentProfile= RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
         selectedStudentId = selectedStudentProfile.getId();
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
         SetupView();
-        new FetchProfileAsyncTask().execute();
+        new FetchProfileAsyncTask().execute();}
+        else {
+            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        }
         return fragmentView;
     }
 
@@ -100,7 +104,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         String from = selectedStudentProfile.getFirstName()+" " + selectedStudentProfile.getLastName();
         String fromId =selectedStudentId;
         JSONObject messageObject = prepareMessage(mobileNo,toIds,from,fromId,messageBody);
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
         new PostTeacherMessageAsyncTask().execute(messageObject);
+        }else {
+            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
 
