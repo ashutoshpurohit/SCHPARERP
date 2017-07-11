@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -50,6 +51,9 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     RoleProfile selectedStudentProfile;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
     TeacherProfile teacherProfile;
+
+    private ProgressDialog progressDialog ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -255,8 +259,18 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
         @Override
         protected void onPostExecute(List<TeacherProfile> profiles) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             allTeacherProfiles = profiles;
             SetupView();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Downloading Teachers Profile...");
+            progressDialog.show();
         }
     }
 
