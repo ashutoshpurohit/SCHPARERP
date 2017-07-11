@@ -73,6 +73,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -112,12 +113,23 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
         }
 
-        new FetchTeacherAssignmentAsyncTask().execute();
-        SetupView();
+        //Check if there is a internet connection
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
+            new FetchTeacherAssignmentAsyncTask().execute();
+            SetupView();
+        }else {
+            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
 
         updatePhotoView();
         return fragmentView;
     }
+
+
 
     private boolean checkMessageForValidity() {
         boolean status=true;
@@ -182,6 +194,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 */
         }
         else {
+
             fromText.setText("Loading details. Please wait..");
         }
     }
