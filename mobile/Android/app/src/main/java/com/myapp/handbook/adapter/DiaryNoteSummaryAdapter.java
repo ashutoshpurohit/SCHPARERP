@@ -1,15 +1,13 @@
 package com.myapp.handbook.adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,11 +15,8 @@ import com.myapp.handbook.MainActivity;
 import com.myapp.handbook.NotesFragment;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.DiaryNote;
-import com.myapp.handbook.domain.TimeSlots;
 
 import java.util.List;
-
-import static android.R.attr.fragment;
 
 /**
  * Created by SAshutosh on 10/16/2016.
@@ -93,6 +88,11 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
         holder.title.setText(currentNote.getTitle());
         holder.msg_detail.setText(getSummaryNote(currentNote.getDetail()));
         holder.date.setText(currentNote.getDate());
+        String chkImage = currentNote.getImage_url();
+        if( chkImage == null || chkImage.isEmpty()){
+            holder.msg_img.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private String getSummaryNote(String detail) {
@@ -139,6 +139,7 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
 
     public class DiaryNoteSummaryViewHolder extends RecyclerView.ViewHolder{
         TextView title, date, msg_detail;
+        ImageView msg_img;
 
 
         public DiaryNoteSummaryViewHolder(View itemView) {
@@ -146,6 +147,7 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
             title= (TextView)itemView.findViewById(R.id.diaryNote_summary_title);
             date= (TextView)itemView.findViewById(R.id.diaryNote_summary_date);
             msg_detail=(TextView)itemView.findViewById(R.id.diaryNote_summary_msg);
+            msg_img = (ImageView)itemView.findViewById(R.id.diaryNote_msg_image);
         }
     }
 }
