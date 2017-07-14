@@ -10,7 +10,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
     <TextView
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -21,26 +21,33 @@
         android:text="School holiday tomorrow"/>
 
     <TextView
-        android:layout_marginTop="10dp"
-
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="center"
         android:layout_weight="1"
         android:id="@+id/diaryNote_summary_date"
         android:textSize="14sp"
         android:text="27-Nov-2017"/>
+    <ImageView
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:id="@+id/diaryNote_msg_image"
+        android:src="@drawable/ic_image_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
     <TextView
-
         android:layout_marginTop="5dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/diaryNote_summary_msg"
         android:textSize="14sp"
-        android:text="School will remain closed tomorrow on account of.."/>
+        android:text="School will remain closed tomorrow on account of.."
+        />
 
     <View style="@style/Divider"></View>
 

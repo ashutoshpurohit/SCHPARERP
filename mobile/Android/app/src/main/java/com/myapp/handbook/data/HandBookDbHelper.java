@@ -348,6 +348,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 currentNote.setDate(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DATE)));
                 currentNote.setTitle(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_TITLE)));
                 currentNote.setDetail(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DETAIL)));
+                currentNote.setImage_url(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_IMAGE)));
                 diaryNotes.add(currentNote);
                 fetchedCount++;
 

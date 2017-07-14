@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -51,6 +52,9 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
     TeacherProfile teacherProfile;
 
+    private ProgressDialog progressDialog ;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,8 +73,12 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         selectedStudentProfile= RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
         selectedStudentId = selectedStudentProfile.getId();
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
         SetupView();
-        new FetchProfileAsyncTask().execute();
+        new FetchProfileAsyncTask().execute();}
+        else {
+            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        }
         return fragmentView;
     }
 
@@ -96,7 +104,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         String from = selectedStudentProfile.getFirstName()+" " + selectedStudentProfile.getLastName();
         String fromId =selectedStudentId;
         JSONObject messageObject = prepareMessage(mobileNo,toIds,from,fromId,messageBody);
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
         new PostTeacherMessageAsyncTask().execute(messageObject);
+        }else {
+            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
 
@@ -255,8 +269,18 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
         @Override
         protected void onPostExecute(List<TeacherProfile> profiles) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             allTeacherProfiles = profiles;
             SetupView();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Downloading Teachers Profile...");
+            progressDialog.show();
         }
     }
 
