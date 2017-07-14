@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Notifications.setDb(notificationHelper.getWritableDatabase());
         //notificationHelper.onCreate(notificationHelper.getWritableDatabase());
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         this.requestWindowFeature(FEATURE_ACTION_MODE_OVERLAY);
         setContentView(R.layout.activity_main);
 
