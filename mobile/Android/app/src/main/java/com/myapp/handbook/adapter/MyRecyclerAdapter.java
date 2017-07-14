@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
 
+import static android.content.ContentValues.TAG;
 import static com.myapp.handbook.HttpConnectionUtil.DIARY_NOTE_TYPE;
 import static com.myapp.handbook.HttpConnectionUtil.HOMEWORK_TYPE;
 
@@ -100,10 +105,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
                 viewHolder.position=cursor.getPosition();
                 String imageUrl = cursor.getString(7);
+
                 if(imageUrl!=null && !imageUrl.isEmpty()){
+                    imageUrl = checkImageUrl(imageUrl);
+
                     Glide.with(context)
                             .load(imageUrl)
                             .placeholder(R.drawable.contact_picture_placeholder)
+                            .listener( requestListener )
                             .error(R.drawable.contact_picture_error)
                             .override(120,120)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -119,6 +128,32 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
 
     }
+
+     private RequestListener<String, GlideDrawable> requestListener = new RequestListener<String, GlideDrawable>() {
+         @Override
+         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+             // todo log exception
+             Log.e(TAG, "onException:Glide exception ",e);
+
+             // important to return false so the error placeholder can be placed
+             return false;
+         }
+
+         @Override
+         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+             return false;
+         }
+     };
+
+     //Remove and add to image url for progressive loading of images
+     public String checkImageUrl(String str){
+
+         String updatedStr;
+         String str1 = str.substring(0,50);
+         String str2 = str.substring(61);
+         updatedStr = str1 + "w_0.5,h_0.5,c_fit" +str2;
+         return updatedStr;
+     }
 
     /**
      * Called when a view has been clicked.
