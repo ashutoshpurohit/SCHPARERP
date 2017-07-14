@@ -162,7 +162,7 @@ public class SchoolContactFragment extends Fragment {
             Glide.with(getContext())
                     .load(schoolProfile.getSchoolLogoImageURL())
                     .placeholder(R.drawable.contact_picture_placeholder)
-                    .error(R.drawable.contact_picture_error)
+                    //.error(R.drawable.contact_picture_error)
                     //.override(120,120)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(schoolLogo);
