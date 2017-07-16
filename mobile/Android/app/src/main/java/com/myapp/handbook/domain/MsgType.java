@@ -7,5 +7,7 @@ package com.myapp.handbook.domain;
 public enum MsgType{
     DIARY_NOTE,
     HOMEWORK,
-    PARENT_NOTE
+    PARENT_NOTE,
+    TIMETABLE,
+    EVENTUPDATE
 }

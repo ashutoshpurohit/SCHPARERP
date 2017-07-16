@@ -118,6 +118,9 @@ public class HttpConnectionUtil {
     public static String URL_ENPOINT = "http://schoollink.co.in";
     //public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
     public static int GCM_NOTIFICATION = 1000;
+    public static int EVENT_NOTIFICATION = 2000;
+    public static int TIMETABLE_NOTIFICATION = 3000;
+
 
     /**
      * Given a string representation of a URL, sets up a connection and gets
@@ -166,6 +169,7 @@ public class HttpConnectionUtil {
         return response;
     }
 
+    //static String mobileNumber = "9343603060";
     static String mobileNumber = "9611696804";
 
     public static String getMobileNumber() {

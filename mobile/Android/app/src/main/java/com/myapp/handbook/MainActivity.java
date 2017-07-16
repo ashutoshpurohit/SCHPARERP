@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             //Launch the digits app
             Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
             startActivity(intent);
+            return;
         }
         else{
             String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                         currentPosition=1;
                         break;
                     case R.id.schoolCalendar:
-                        Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
                         intent = new Intent(getApplicationContext() , CalendarEventsActivity.class);
                         //Can pass student/teacherid from here
                         //intent.putExtra("ID",rowId);
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.timetable:
-                        Toast.makeText(getApplicationContext(),"Timetable Selected",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Timetable Selected",Toast.LENGTH_SHORT).show();
                         intent = new Intent(getApplicationContext() ,TimeTableActivity.class);
                         //Can pass student/teacherid from here
                         //intent.putExtra("ID",rowId);
@@ -318,11 +319,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent){
         Bundle b = intent.getExtras();
         int type = b.getInt("requestType");
-        if(type==HttpConnectionUtil.GCM_NOTIFICATION)
-            currentPosition=1;
-        else
-            currentPosition=0;
-        selectItem(currentPosition);
+        if(type==HttpConnectionUtil.GCM_NOTIFICATION) {
+            currentPosition = 1;
+            selectItem(currentPosition);
+        }
+        else if(type==HttpConnectionUtil.EVENT_NOTIFICATION){
+            //Launch event activity
+            Intent newIntent = new Intent(getApplicationContext() , CalendarEventsActivity.class);
+            //Can pass student/teacherid from here
+            //intent.putExtra("ID",rowId);
+            startActivity(newIntent);
+
+        }
+        else if(type==HttpConnectionUtil.TIMETABLE_NOTIFICATION){
+            //Launch timetable activity
+            Intent newIntent = new Intent(getApplicationContext() ,TimeTableActivity.class);
+            //Can pass student/teacherid from here
+            //intent.putExtra("ID",rowId);
+            startActivity(newIntent);
+
+        }
+        else {
+            currentPosition = 0;
+            selectItem(currentPosition);
+        }
+
 
     }
 
@@ -411,7 +432,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-       actionBarDrawerToggle.syncState();
+        if(actionBarDrawerToggle!=null)
+            actionBarDrawerToggle.syncState();
     }
 
     @Override

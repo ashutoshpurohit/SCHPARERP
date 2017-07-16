@@ -233,6 +233,10 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return retVal;
     }
 
+    public static void clearAllSchoolEvents(SQLiteDatabase sqLiteDatabase){
+        sqLiteDatabase.delete(HandbookContract.CalenderEventsEntry.TABLE_NAME,null,null);
+    }
+
     public static List<RoleProfile> LoadProfilefromDb(SQLiteDatabase sqliteDatabase) {
         ArrayList<RoleProfile> profiles = new ArrayList<>();
 

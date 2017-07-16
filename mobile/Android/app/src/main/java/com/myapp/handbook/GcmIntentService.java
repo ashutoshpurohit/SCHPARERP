@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +15,14 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.MsgType;
+
+import java.util.List;
+
+import static com.myapp.handbook.HttpConnectionUtil.sharedPreferences;
 
 /**
  * Created by sashutosh on 6/27/2016.
@@ -22,8 +30,16 @@ import com.myapp.handbook.data.HandBookDbHelper;
 public class GcmIntentService extends IntentService {
 
     public static int id=0;
+    SQLiteOpenHelper notificationHelper;// = new HandBookDbHelper(this);
+    SQLiteDatabase db;
     public GcmIntentService() {
         super("GcmIntentService");
+    }
+    enum msgCategory{
+        DIARY_NOTE,
+        HOMEWORK,
+        EVENT,
+        TIMETABLE
     }
 
     @Override
@@ -35,33 +51,54 @@ public class GcmIntentService extends IntentService {
         if (!extras.isEmpty() && GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
             processMessage(extras);
-            sendNotification(extras.getString("title"), extras.getString("body"));
+
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
     private void processMessage(Bundle data) {
 
-        SQLiteOpenHelper notificationHelper = new HandBookDbHelper(this);
-        Notifications.setDb(notificationHelper.getWritableDatabase());
+
+        notificationHelper = new HandBookDbHelper(this);
+        db = notificationHelper.getWritableDatabase();
+        Notifications.setDb(db);
         String msgType =data.getString("type");
         String title = data.getString("title");
         String message = data.getString("body");
         String ToIds = data.getString("ToIds");
 
-        //if ((msgType.equalsIgnoreCase(getResources().getString(R.string.app_notice))))
-        Notifications.notify(data);
-        /*else if( (msgType.equalsIgnoreCase(getResources().getString(R.string.app_assignment)))){
+        if ((msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString())|| msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString()))) {
+            Notifications.notify(data);
+            sendNotification(title, message,HttpConnectionUtil.GCM_NOTIFICATION);
 
-            Assignment asgmt = new Assignment();
-            asgmt.assignment= message;
-            Assignments.addAssignment(asgmt);
-        }*/
+        }
+        else if((msgType.equalsIgnoreCase(MsgType.TIMETABLE.toString()))){
+            processTimetableChange();
 
+        }
+        else if(msgType.equalsIgnoreCase(MsgType.EVENTUPDATE.toString())){
+            processEventChange();
+            sendNotification("School calendar updated", "School calendar has been modified. Please check the school calendar page", HttpConnectionUtil.EVENT_NOTIFICATION);
+        }
 
     }
 
-    private void sendNotification(String title,String msg) {
+    List<Event> newEvents;
+    private void processEventChange() {
+        //Reset the flag that events have been downloaded
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false).commit();
+
+        //Clear the current events
+        HandBookDbHelper.clearAllSchoolEvents(db);
+
+    }
+
+    private void processTimetableChange(){
+
+    }
+
+
+    private void sendNotification(String title,String msg, int type) {
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
                 R.mipmap.ic_launcher);
 
@@ -69,7 +106,7 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("requestType",HttpConnectionUtil.GCM_NOTIFICATION);
+        intent.putExtra("requestType",type);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
