@@ -35,12 +35,6 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
-    enum msgCategory{
-        DIARY_NOTE,
-        HOMEWORK,
-        EVENT,
-        TIMETABLE
-    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
