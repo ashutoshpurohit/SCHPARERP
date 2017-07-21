@@ -367,7 +367,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         message = messageText.getText().toString();
         try {
             msgToSend.put("MessageBody",message);
-            msgToSend.put("MessageTitle","Teacher Note ");
+            msgToSend.put("MessageTitle","Teacher Note from "+ teacherProfile.get(0).getFirstName());
             msgToSend.put("MobileNumbers",numbers);
             msgToSend.put("type",msgType.toString());
             msgToSend.put("ToIds",ids);

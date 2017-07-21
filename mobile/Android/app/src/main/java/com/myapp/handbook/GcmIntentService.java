@@ -61,7 +61,7 @@ public class GcmIntentService extends IntentService {
         String message = data.getString("body");
         String ToIds = data.getString("ToIds");
 
-        if ((msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString())|| msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString()))) {
+        if ((msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString())|| msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString())||msgType.equalsIgnoreCase(MsgType.PARENT_NOTE.toString()))) {
             Notifications.notify(data);
             sendNotification(title, message,HttpConnectionUtil.GCM_NOTIFICATION);
 
