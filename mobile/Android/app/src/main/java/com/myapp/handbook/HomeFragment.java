@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import com.myapp.handbook.adapter.SchoolCalendarAdapter;
 import com.myapp.handbook.adapter.TimeTableSummaryAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
+import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.RoleProfile;
@@ -46,6 +48,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.myapp.handbook.domain.CalendarEvents.saveSchoolCalendarEventsToDB;
 import static com.myapp.handbook.domain.RoleProfile.AddWelcomeMessage;
 import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
 import static com.myapp.handbook.domain.RoleProfile.saveSchoolProfiletoDB;
@@ -186,16 +189,32 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
-            if(sharedPreferences.getBoolean(QuickstartPreferences.CALENDAR_DOWNLOADED+ "_" + selectedProfile.getId(), false)==false){
+            if(sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)==false){
+
                 FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupUI= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
                     @Override
                     public void onFinished(List<Event> currentEvents) {
                         setupEventsView(selectedProfileId, selectedProfile.getProfileRole(),currentEvents);
                     }
                 };
+
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB =
+                        new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                            @Override
+                            public void onFinished(List<Event> currentEvents) {
+                                CalendarEvents.saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
+                                Log.v("CalenderEventsDBAct", "Saved to DB");
+                            }
+                        };
+
                 List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
                 listeners.add(setupUI);
+                listeners.add(saveEventsToDB);
                 new FetchSchoolCalendarAsyncTask(listeners).execute();
+            }
+            else{
+                List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);
+                setupEventsView(selectedProfileId,selectedProfile.getProfileRole(),currentEvents);
             }
 
             updateNavigationViewBasedOnProfileRole(allProfiles,fragmentView);

@@ -21,6 +21,7 @@ import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
 import com.myapp.handbook.adapter.SchoolCalendarAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.Event;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
                     new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
                         @Override
                         public void onFinished(List<Event> currentEvents) {
-                            saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
+                            CalendarEvents.saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
                             Log.v("CalenderEventsDBAct", "Saved to DB");
                         }
                     };
