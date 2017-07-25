@@ -22,16 +22,16 @@ public class TimeSlots {
     }
 
     public String getStartTime()  {
-        /*String tempStartTime = StartTime;
-        DateFormat inputFormat = new SimpleDateFormat("KK:mm a");
-        DateFormat outputFormat = new SimpleDateFormat("KK:mm a");
+        String tempStartTime = StartTime;
+        DateFormat inputFormat = new SimpleDateFormat("kk:mm");
+        DateFormat outputFormat = new SimpleDateFormat("kk:mm");
         try {
             StartTime = outputFormat.format(inputFormat.parse(tempStartTime));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-*/        return StartTime;
+        return StartTime;
     }
 
     public TimeSlots(String startTime, String endTime, String subjectName, String teacherId, String teacherName) {
@@ -55,14 +55,14 @@ public class TimeSlots {
     }
 
     public String getEndTime() {
-        /*String tempEndTime = EndTime;
-        DateFormat inputFormat = new SimpleDateFormat("KK:mm a");
-        DateFormat outputFormat = new SimpleDateFormat("KK:mm a");
+        String tempEndTime = EndTime;
+        DateFormat inputFormat = new SimpleDateFormat("kk:mm");
+        DateFormat outputFormat = new SimpleDateFormat("kk:mm");
         try {
             EndTime= outputFormat.format(inputFormat.parse(tempEndTime));
         } catch (ParseException e) {
             e.printStackTrace();
-        }*/
+        }
         return EndTime;
     }
 
