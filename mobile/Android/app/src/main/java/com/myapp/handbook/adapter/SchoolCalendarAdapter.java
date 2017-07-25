@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by SAshutosh on 1/17/2017.
@@ -99,28 +100,30 @@ public class SchoolCalendarAdapter extends RecyclerView.Adapter<SchoolCalendarAd
     @Override
     public void onBindViewHolder(SchoolCalendarViewHolder holder, int position) {
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        SimpleDateFormat ddmmyyFormat = new SimpleDateFormat("dd/MM/yy");
-        Date eventDate=new Date();
-        Event currentEvent = calendarEvents.get(position);
-
         try {
-            String cureventDate= currentEvent.getEventDate();
-            if(cureventDate!=null) {
-                eventDate = df.parse(cureventDate);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        holder.eventName.setText(currentEvent.getEventName());
 
-        holder.eventDate.setText(ddmmyyFormat.format(eventDate));
-        holder.eventLocation.setText(currentEvent.getEventPlace());
-        holder.eventTimings.setText(currentEvent.getEventStartTime()+"-"+currentEvent.getEventEndTime());
-        /*if(this.viewType.equals(HttpConnectionUtil.ViewType.DETAIL)){
-            holder.addToCalendarButton.setOnClickListener(this);
-            holder.likeButton.setOnClickListener(this);
-        }*/
+            Date eventDate = new Date();
+            Event currentEvent = calendarEvents.get(position);
+            String currentEventDate = currentEvent.getEventDate();
+            try {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
+                SimpleDateFormat ddmmyyFormat = new SimpleDateFormat("dd/MM/yy");
+
+                if (currentEventDate != null) {
+                    eventDate = df.parse(currentEventDate);
+                }
+                holder.eventDate.setText(ddmmyyFormat.format(eventDate));
+            } catch (ParseException|RuntimeException e) {
+                e.printStackTrace();
+                holder.eventDate.setText(currentEventDate);
+            }
+            holder.eventName.setText(currentEvent.getEventName());
+            holder.eventLocation.setText(currentEvent.getEventPlace());
+            holder.eventTimings.setText(currentEvent.getEventStartTime() + "-" + currentEvent.getEventEndTime());
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     /**
