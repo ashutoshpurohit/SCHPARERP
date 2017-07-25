@@ -41,8 +41,10 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
 
     public void changeAllItemCheckedState(boolean state){
 
-        for (int i = 0; i < mList.size(); i++) {
-            mSparseBooleanArray.put(i,state);
+        if(mSparseBooleanArray.size() !=0) {
+            for (int i = 0; i < mList.size(); i++) {
+                mSparseBooleanArray.put(i, state);
+            }
         }
         notifyDataSetChanged();
     }
@@ -80,19 +82,26 @@ public class MultiSelectionAdapter<T> extends BaseAdapter {
 
     public ArrayList<T> getCheckedItems() {
         ArrayList<T> mTempArry = new ArrayList<T>();
-        for (int i = 0; i < mList.size(); i++) {
-            if (mSparseBooleanArray.get(i)) {
-                mTempArry.add(mList.get(i));
+        if(mSparseBooleanArray.size()!= 0) {
+
+            for (int i = 0; i < mList.size(); i++) {
+                if (mSparseBooleanArray.get(i)) {
+                    mTempArry.add(mList.get(i));
+                }
             }
         }
-        return mTempArry;
+            return mTempArry;
+
     }
 
     @Override
 
 
     public int getCount() {
-        return mList.size();
+        if(mList!=null) {
+            return mList.size();
+        }
+        return 0;
     }
 
     @Override
