@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.feedback:
 
                         if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),
-                                HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
+                            HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
                             fragment = new StudentFeedbackFragment();
                             currentPosition=3;
                         }

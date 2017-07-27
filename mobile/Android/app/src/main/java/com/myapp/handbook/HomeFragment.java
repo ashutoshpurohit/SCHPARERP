@@ -156,6 +156,13 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
+
+                    updateOtherViewBasedOnSelectedProfile();
+                }
+            });
             //Download the profile
             new FetchProfileAsyncTask(profileDownloadListeners).execute();
         }
@@ -163,8 +170,15 @@ public class HomeFragment extends Fragment {
         {
             allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
             HttpConnectionUtil.setProfiles(allProfiles);
+            updateOtherViewBasedOnSelectedProfile();
         }
 
+
+
+        return view;
+    }
+
+    private void updateOtherViewBasedOnSelectedProfile() {
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
         selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(), selectedProfileId);
@@ -222,8 +236,6 @@ public class HomeFragment extends Fragment {
             setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
             setupDiaryNotesView(selectedProfile.getProfileRole());
         }
-
-        return view;
     }
 
     private void setupEventsView(String selectedProfileId, RoleProfile.ProfileRole role, List<Event> currentEvents) {
