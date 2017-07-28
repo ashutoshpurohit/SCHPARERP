@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.myapp.handbook.Tasks.FetchSchoolCalendarAsyncTask;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.MsgType;
@@ -32,6 +31,8 @@ public class GcmIntentService extends IntentService {
     public static int id=0;
     SQLiteOpenHelper notificationHelper;// = new HandBookDbHelper(this);
     SQLiteDatabase db;
+    List<Event> newEvents;
+
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -61,7 +62,7 @@ public class GcmIntentService extends IntentService {
         String message = data.getString("body");
         String ToIds = data.getString("ToIds");
 
-        if ((msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString())|| msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString())||msgType.equalsIgnoreCase(MsgType.PARENT_NOTE.toString()))) {
+        if (((msgType != null ? msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString()) : false) || msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString()) || msgType.equalsIgnoreCase(MsgType.PARENT_NOTE.toString()))) {
             Notifications.notify(data);
             sendNotification(title, message,HttpConnectionUtil.GCM_NOTIFICATION);
 
@@ -77,7 +78,6 @@ public class GcmIntentService extends IntentService {
 
     }
 
-    List<Event> newEvents;
     private void processEventChange() {
         //Reset the flag that events have been downloaded
         sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false).commit();

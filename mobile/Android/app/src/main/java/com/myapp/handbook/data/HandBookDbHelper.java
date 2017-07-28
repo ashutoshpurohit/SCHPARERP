@@ -32,95 +32,11 @@ import java.util.List;
  */
 public class HandBookDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
-
     static final String DATABASE_NAME = "handbook.db";
+    private static final int DATABASE_VERSION = 1;
 
     public HandBookDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + NotificationEntry.TABLE_NAME + " (" +
-                // Why AutoIncrement here, and not above?
-                // Unique keys will be auto-generated in either case.  But for weather
-                // forecasting, it's reasonable to assume the user will want information
-                // for a certain date and all dates *following*, so the forecast data
-                // should be sorted accordingly.
-                NotificationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-
-                // the ID of the location entry associated with this weather data
-                NotificationEntry.COLUMN_NOTIFICATION_ID + " INTEGER NOT NULL, " +
-                NotificationEntry.COLUMN_PRIORITY+ " INTEGER NOT NULL, " +
-                NotificationEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
-                NotificationEntry.COLUMN_DETAIL + " TEXT NOT NULL, " +
-                NotificationEntry.COLUMN_TITLE + " TEXT NOT NULL," +
-
-                NotificationEntry.COLUMN_FROM + " TEXT NOT NULL," +
-                NotificationEntry.COLUMN_IMAGE+ " TEXT," +
-                NotificationEntry.COLUMN_MSG_TYPE+ " INTEGER, "+
-                NotificationEntry.COLUMN_TO_IDS+ " TEXT, "+
-                NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" +" );";
-
-        final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
-                ProfileEntry.COLUMN_ID +" TEXT NOT NULL,"+
-                ProfileEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
-                ProfileEntry.COLUMN_MIDDLE_NAME + " TEXT, " +
-                ProfileEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
-                HandbookContract.ProfileEntry.COLUMN_ROLE + " TEXT NOT NULL, " +
-                ProfileEntry.COLUMN_GENDER + " TEXT NOT NULL, " +
-                ProfileEntry.COLUMN_STD + " TEXT , " +
-                HandbookContract.ProfileEntry.COLUMN_DOB + " INTEGER NOT NULL, " +
-                NotificationEntry.COLUMN_IMAGE+ " TEXT," +
-                ProfileEntry.COLUMN_ADDRESS + " TEXT" + " );";
-
-
-        final String SQL_CREATE_TIMETABLE_TABLE = "CREATE TABLE " + HandbookContract.TimetableEntry.TABLE_NAME + " (" +
-                HandbookContract.TimetableEntry.COLUMN_ID +" TEXT NOT NULL,"+
-                HandbookContract.TimetableEntry.COLUMN_STD + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID + " TEXT, " +
-                HandbookContract.TimetableEntry.COLUMN_DAY + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_START_TIME + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_END_TIME + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_SUBJECT + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
-                HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
-
-        final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME + " TEXT NOT NULL, " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1 + " TEXT , " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_2 + " TEXT , " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_3 + " TEXT , " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_1 + " TEXT , " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_2 + " TEXT , " +
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_EMAIL_ID + " TEXT,"+
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE +" TEXT,"+
-                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO + " BLOB);";
-
-        final String SQL_CREATE_CALENDER_EVENTS = "CREATE TABLE " + HandbookContract.CalenderEventsEntry.TABLE_NAME + " (" +
-
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID +" TEXT , "+
-                HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID + " TEXT , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME + " TEXT NOT NULL , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION + " TEXT NOT NULL , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " TEXT NOT NULL , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME + " TEXT NOT NULL , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME + " TEXT NOT NULL , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LIKE_BUTTON_CLICKED + " TEXT , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ADD_TO_CALENDER + " TEXT , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_STUDENT_ID+ " TEXT , " +
-                HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT "+" );";
-
-
-        sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
-        //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
-
     }
 
     public static void insertNotification(SQLiteDatabase sqliteDatabase, String title, String detail, String date, int priority, String from, int note_id, String image, int msg_type, String toIds ){
@@ -177,8 +93,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         note.put(HandbookContract.TimetableEntry.COLUMN_SUBJECT,subject);
         note.put(HandbookContract.TimetableEntry.COLUMN_STD,std);
 
-        long retVal= sqliteDatabase.insert(HandbookContract.TimetableEntry.TABLE_NAME, null, note);
-        return retVal;
+        return sqliteDatabase.insert(HandbookContract.TimetableEntry.TABLE_NAME, null, note);
     }
 
     public static long insertSchoolContactEntry(SQLiteDatabase sqliteDatabase,String school_id, String schoolName, String address_1,
@@ -197,8 +112,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE,school_website);
         contacts.put(HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO,school_logo);
 
-        long retVal= sqliteDatabase.insert(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, contacts);
-        return retVal;
+        return sqliteDatabase.insert(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, contacts);
     }
 
     public static long insertSchoolCalendarEventsToDB(SQLiteDatabase sqliteDatabase,List<Event> schoolCalendar){
@@ -338,8 +252,6 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return schooolEvents;
     }
 
-
-
     public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int type, String profileId, int count){
         List<DiaryNote> diaryNotes = new ArrayList<>();
         String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+
@@ -401,7 +313,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
 
 
-        return inDateRange;
+        return true;
     }
 
     public static List<DiaryNote> loadLatestHomework(SQLiteDatabase sqliteDatabase, int type, String profileId, int count) {
@@ -444,8 +356,6 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
         return diaryNotes;
     }
-
-
 
     public static BaseTimeTable loadTimeTable(SQLiteDatabase sqliteDatabase, String id, RoleProfile.ProfileRole role)
     {
@@ -539,7 +449,88 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return  table;
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        final String SQL_CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + NotificationEntry.TABLE_NAME + " (" +
+                // Why AutoIncrement here, and not above?
+                // Unique keys will be auto-generated in either case.  But for weather
+                // forecasting, it's reasonable to assume the user will want information
+                // for a certain date and all dates *following*, so the forecast data
+                // should be sorted accordingly.
+                NotificationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
+                // the ID of the location entry associated with this weather data
+                NotificationEntry.COLUMN_NOTIFICATION_ID + " INTEGER NOT NULL, " +
+                NotificationEntry.COLUMN_PRIORITY + " INTEGER NOT NULL, " +
+                NotificationEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
+                NotificationEntry.COLUMN_DETAIL + " TEXT NOT NULL, " +
+                NotificationEntry.COLUMN_TITLE + " TEXT NOT NULL," +
+
+                NotificationEntry.COLUMN_FROM + " TEXT NOT NULL," +
+                NotificationEntry.COLUMN_IMAGE + " TEXT," +
+                NotificationEntry.COLUMN_MSG_TYPE + " INTEGER, " +
+                NotificationEntry.COLUMN_TO_IDS + " TEXT, " +
+                NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" + " );";
+
+        final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
+                ProfileEntry.COLUMN_ID + " TEXT NOT NULL," +
+                ProfileEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_MIDDLE_NAME + " TEXT, " +
+                ProfileEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
+                HandbookContract.ProfileEntry.COLUMN_ROLE + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_GENDER + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_STD + " TEXT , " +
+                HandbookContract.ProfileEntry.COLUMN_DOB + " INTEGER NOT NULL, " +
+                NotificationEntry.COLUMN_IMAGE + " TEXT," +
+                ProfileEntry.COLUMN_ADDRESS + " TEXT" + " );";
+
+
+        final String SQL_CREATE_TIMETABLE_TABLE = "CREATE TABLE " + HandbookContract.TimetableEntry.TABLE_NAME + " (" +
+                HandbookContract.TimetableEntry.COLUMN_ID + " TEXT NOT NULL," +
+                HandbookContract.TimetableEntry.COLUMN_STD + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID + " TEXT, " +
+                HandbookContract.TimetableEntry.COLUMN_DAY + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_START_TIME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_END_TIME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_SUBJECT + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
+                HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
+
+        final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME + " TEXT NOT NULL, " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_2 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_3 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_1 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_CONTACT_NUMBER_2 + " TEXT , " +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_EMAIL_ID + " TEXT," +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE + " TEXT," +
+                HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO + " BLOB);";
+
+        final String SQL_CREATE_CALENDER_EVENTS = "CREATE TABLE " + HandbookContract.CalenderEventsEntry.TABLE_NAME + " (" +
+
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME + " TEXT NOT NULL , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LIKE_BUTTON_CLICKED + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ADD_TO_CALENDER + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_STUDENT_ID + " TEXT , " +
+                HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT " + " );";
+
+
+        sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
+        //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
+
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {

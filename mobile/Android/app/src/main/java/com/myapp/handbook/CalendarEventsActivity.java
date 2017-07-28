@@ -28,16 +28,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.myapp.handbook.domain.CalendarEvents.saveSchoolCalendarEventsToDB;
-
 public class CalendarEventsActivity extends AppCompatActivity implements RecycleViewClickListener{
 
     List<Event> events;
     RecyclerView calendarView;
-    private ProgressDialog progressDialog;
     SQLiteDatabase db;
     SharedPreferences sharedPreferences;
-
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +55,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         calendarView.setLayoutManager(calendarLayoutManager);
         setSupportActionBar(toolbar);
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
 
             progressDialog = ProgressDialog.show(this, "Downloading calendar", "Please wait", false);
             FetchSchoolCalendarAsyncTask.CalendarDownloadedListener getEvents = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
@@ -111,6 +108,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         }
 
 
+        if (toolbar != null)
             toolbar.setTitle("School Calendar");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

@@ -48,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.myapp.handbook.domain.CalendarEvents.saveSchoolCalendarEventsToDB;
 import static com.myapp.handbook.domain.RoleProfile.AddWelcomeMessage;
 import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
 import static com.myapp.handbook.domain.RoleProfile.saveSchoolProfiletoDB;
@@ -56,15 +55,6 @@ import static com.myapp.handbook.domain.RoleProfile.saveSchoolProfiletoDB;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "ProfileEntry Fetch";
-    private List<RoleProfile> allProfiles = new ArrayList<>();
-    private SchoolProfile schoolProfile = null;
-
-
-
-    private NavigationView navigationView=null;
-    private View fragmentView;
-    private SQLiteDatabase db;
-    private Cursor cursor;
     View header;
     BaseTimeTable profileTimeTable;
     String selectedProfileId;
@@ -77,6 +67,12 @@ public class HomeFragment extends Fragment {
     TimeTableSummaryAdapter timetableAdapter;
     DiaryNoteSummaryAdapter diaryNoteSummaryAdapter;
     DiaryNoteSummaryAdapter homeWorkSummaryAdapter;
+    private List<RoleProfile> allProfiles = new ArrayList<>();
+    private SchoolProfile schoolProfile = null;
+    private NavigationView navigationView = null;
+    private View fragmentView;
+    private SQLiteDatabase db;
+    private Cursor cursor;
 
     public void setNavigationView(NavigationView navigationView) {
         this.navigationView = navigationView;
@@ -118,7 +114,7 @@ public class HomeFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false)) {
 
             List<FetchProfileAsyncTask.ProfileDownloadListener> profileDownloadListeners = new ArrayList<>();
             profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
@@ -187,7 +183,7 @@ public class HomeFragment extends Fragment {
         {
             customizeScreenBasedOnProfile(selectedProfile.getProfileRole(), fragmentView);
 
-            if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false) == false) {
+            if (!sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false)) {
 
                 List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
                 listeners.add(new TimeTableDbUpdateListener(db, selectedProfile, sharedPreferences));
@@ -203,7 +199,7 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
-            if(sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)==false){
+            if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
 
                 FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupUI= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
                     @Override

@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.myapp.handbook.com.myapp.handbook.login.Login"
+    tools:context="com.myapp.handbook.login.Login"
     tools:showIn="@layout/activity_login">
 
     <com.digits.sdk.android.DigitsAuthButton

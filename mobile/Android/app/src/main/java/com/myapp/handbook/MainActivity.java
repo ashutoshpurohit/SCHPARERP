@@ -29,31 +29,23 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
-
-import io.fabric.sdk.android.Fabric;
 
 import static android.support.v7.app.AppCompatDelegate.FEATURE_ACTION_MODE_OVERLAY;
 
 public class MainActivity extends AppCompatActivity {
 
 
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    };
-
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    ;
+    private static final String TAG = "MyActivity";
+    SharedPreferences sharedPreferences;
+    boolean doubleBackToExitPressedOnce = false;
     private ShareActionProvider shareActionProvider;
     private String[] titles;
-    private static final String TAG = "MyActivity";
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
     private int currentPosition = 0;
@@ -63,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SQLiteOpenHelper notificationHelper = new HandBookDbHelper(this);
@@ -86,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Check if logged in
 
-        if(sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false) == false){
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false)) {
             //Launch the digits app
             Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
             startActivity(intent);
@@ -505,7 +497,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,result);
     }
 
-    boolean doubleBackToExitPressedOnce = false;
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
 
 /*    @Override
     public void onBackPressed() {

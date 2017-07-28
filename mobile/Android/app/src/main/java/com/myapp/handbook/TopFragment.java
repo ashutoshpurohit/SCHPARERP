@@ -32,18 +32,15 @@ import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
 public class TopFragment extends Fragment {
 
     private static final String TAG = "ProfileEntry Fetch";
+    View header;
+    SharedPreferences sharedPreferences;
+    ListView listView;
     private List<RoleProfile> allProfiles = new ArrayList<>();
     private SchoolProfile schoolProfile = null;
-
-
-
     private NavigationView navigationView=null;
     private View fragmentView;
     private SQLiteDatabase db;
     private Cursor cursor;
-    View header;
-    SharedPreferences sharedPreferences;
-    ListView listView;
 
     public void setNavigationView(NavigationView navigationView) {
         this.navigationView = navigationView;
@@ -87,7 +84,7 @@ public class TopFragment extends Fragment {
             }
         });
         //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).apply();
-        if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false)) {
             //Download the profile
             new FetchProfileAsyncTask(listeners).execute();
 
@@ -112,8 +109,6 @@ public class TopFragment extends Fragment {
     }
 
     public void SetUpView(List<RoleProfile> allProfiles, View fragmentView) {
-
-        View view = fragmentView;
 
         //TextView headerText = (TextView) header.findViewById(R.id.profileHeader);
         if (!allProfiles.isEmpty()) {

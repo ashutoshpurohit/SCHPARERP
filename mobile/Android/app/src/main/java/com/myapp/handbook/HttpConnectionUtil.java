@@ -47,27 +47,35 @@ import retrofit2.http.Path;
  */
 public class HttpConnectionUtil {
 
-    private static final String TAG = "HttConnectionUtil";
     public static final int HOMEWORK_TYPE = 1;
     public static final int DIARY_NOTE_TYPE = 2;
     public static final int PARENT_NOTE_TYPE = 3;
     public  static final int OTHER_NOTE_TYPE=0;
-
+    private static final String TAG = "HttConnectionUtil";
     public static boolean imageUploaded =false;
     public static boolean imageUploadStatus =false;
     public static String imageUrl="";
+    public static String URL_ENPOINT = "http://schoollink.co.in";
+    //public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
+    public static int GCM_NOTIFICATION = 1000;
+    public static int EVENT_NOTIFICATION = 2000;
+    public static int TIMETABLE_NOTIFICATION = 3000;
     static List<RoleProfile> profiles;
+    static SharedPreferences sharedPreferences;
+    //static String mobileNumber = "9343603060";
+    static String mobileNumber = "9611696804";
+    static String selectedProfileId;
 
     public static List<RoleProfile> getProfiles() {
         return profiles;
     }
 
+    ;
+
     public static void setProfiles(List<RoleProfile> profiles) {
         HttpConnectionUtil.profiles = profiles;
 
     }
-
-
 
     public static SharedPreferences getSharedPreferences() {
         return sharedPreferences;
@@ -76,8 +84,6 @@ public class HttpConnectionUtil {
     public static void setSharedPreferences(SharedPreferences sharedPreferences) {
         HttpConnectionUtil.sharedPreferences = sharedPreferences;
     }
-
-    static SharedPreferences sharedPreferences;
 
     public static void clearAllPreferences(SQLiteDatabase db, SharedPreferences sharedPreferences) {
 
@@ -91,8 +97,6 @@ public class HttpConnectionUtil {
 
     }
 
-
-
     public static int getMessageType(String msgType) {
         if(msgType.equals(MsgType.DIARY_NOTE.toString()))
             return DIARY_NOTE_TYPE;
@@ -103,85 +107,14 @@ public class HttpConnectionUtil {
         else
 
             return OTHER_NOTE_TYPE;
-            
+
     }
-
-    public enum RESTMethod {
-        GET,
-        POST,
-        PUT,
-        DELETE
-    };
-
-    public enum ViewType{
-        SUMMARY,
-        DETAIL
-    }
-
-    public static String URL_ENPOINT = "http://schoollink.co.in";
-    //public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
-    public static int GCM_NOTIFICATION = 1000;
-    public static int EVENT_NOTIFICATION = 2000;
-    public static int TIMETABLE_NOTIFICATION = 3000;
-
-
-    /**
-     * Given a string representation of a URL, sets up a connection and gets
-     * an input stream.
-     *
-     * @param urlString A string representation of a URL.
-     * @return An String containing the received response.
-     */
-    public String downloadUrl(String urlString, RESTMethod method, JSONObject inputJson) {
-        // BEGIN_INCLUDE(get_inputstream)
-        String response = "";
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod(method.toString());
-            if (inputJson != null) {
-
-                conn.setDoOutput(true);
-                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write(inputJson.toString());
-                wr.flush();
-                wr.close();
-            } else {
-                //conn.setDoInput(true);
-                //InputStream in = conn.getInputStream();
-
-            }
-            InputStream stream = conn.getInputStream();
-            int result = conn.getResponseCode();
-            if (result == HttpURLConnection.HTTP_OK) {
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead = 0;
-                while ((bytesRead = stream.read(buffer)) > 0) {
-                    os.write(buffer, 0, bytesRead);
-                }
-                response = os.toString("UTF-8");
-                os.close();
-            }
-        } catch (Exception ex) {
-            System.out.print(ex.getMessage());
-        }
-        return response;
-    }
-
-    //static String mobileNumber = "9343603060";
-    static String mobileNumber = "9611696804";
 
     public static String getMobileNumber() {
         //String number ="9611696804";
         //return number;
         return mobileNumber;
     }
-
-    static String selectedProfileId;
 
     public static String getSelectedProfileId()
     {
@@ -194,34 +127,6 @@ public class HttpConnectionUtil {
     {
         selectedProfileId = profileId;
         sharedPreferences.edit().putString(QuickstartPreferences.SELECTED_PROFILE_ID,selectedProfileId).commit();
-
-    }
-
-    public interface FileUploadService {
-        @Multipart
-        @POST("uploadTeacherOrStudentImage")
-        Call<ImageUploadResponse> uploadTeacherOrStudentImage(@Part("description") RequestBody description,
-                                  @Part MultipartBody.Part file);
-    }
-
-    public interface SchoolService{
-        @GET("school/{id}")
-        Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
-
-    }
-
-    public interface SchoolCalendarService{
-        @GET("Events")
-        Call<List<Event>> getSchoolCalendar();
-
-    }
-
-    public interface TimeTableService {
-        @GET("StudentTimeTable/{id}")
-        Call<TimeTable> getStudentTimeTable(@Path("id") String id);
-
-        @GET("TeacherTimeTable/{id}")
-        Call<TeacherTimeTable> getTeacherTimeTable(@Path("id") String id);
 
     }
 
@@ -295,7 +200,7 @@ public class HttpConnectionUtil {
             }
         });
 
-        return response;
+        return null;
     }
 
     public static boolean isOnline(Context context) {
@@ -303,13 +208,8 @@ public class HttpConnectionUtil {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
 
-        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
-
-            return false;
-        }
-        return true;
+        return !(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable());
     }
-
 
     public static void launchHomePage(Context context) {
 
@@ -338,6 +238,94 @@ public class HttpConnectionUtil {
         }
         return new File(externalFilesDir, name);
 
+
+    }
+
+    /**
+     * Given a string representation of a URL, sets up a connection and gets
+     * an input stream.
+     *
+     * @param urlString A string representation of a URL.
+     * @return An String containing the received response.
+     */
+    public String downloadUrl(String urlString, RESTMethod method, JSONObject inputJson) {
+        // BEGIN_INCLUDE(get_inputstream)
+        String response = "";
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(10000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod(method.toString());
+            if (inputJson != null) {
+
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(inputJson.toString());
+                wr.flush();
+                wr.close();
+            } else {
+                //conn.setDoInput(true);
+                //InputStream in = conn.getInputStream();
+
+            }
+            InputStream stream = conn.getInputStream();
+            int result = conn.getResponseCode();
+            if (result == HttpURLConnection.HTTP_OK) {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead = 0;
+                while ((bytesRead = stream.read(buffer)) > 0) {
+                    os.write(buffer, 0, bytesRead);
+                }
+                response = os.toString("UTF-8");
+                os.close();
+            }
+        } catch (Exception ex) {
+            System.out.print(ex.getMessage());
+        }
+        return response;
+    }
+
+    public enum RESTMethod {
+        GET,
+        POST,
+        PUT,
+        DELETE
+    }
+
+    public enum ViewType {
+        SUMMARY,
+        DETAIL
+    }
+
+
+    public interface FileUploadService {
+        @Multipart
+        @POST("uploadTeacherOrStudentImage")
+        Call<ImageUploadResponse> uploadTeacherOrStudentImage(@Part("description") RequestBody description,
+                                                              @Part MultipartBody.Part file);
+    }
+
+    public interface SchoolService {
+        @GET("school/{id}")
+        Call<SchoolProfile> getSchoolProfile(@Path("id") String id);
+
+    }
+
+    public interface SchoolCalendarService {
+        @GET("Events")
+        Call<List<Event>> getSchoolCalendar();
+
+    }
+
+    public interface TimeTableService {
+        @GET("StudentTimeTable/{id}")
+        Call<TimeTable> getStudentTimeTable(@Path("id") String id);
+
+        @GET("TeacherTimeTable/{id}")
+        Call<TeacherTimeTable> getTeacherTimeTable(@Path("id") String id);
 
     }
 }

@@ -43,14 +43,8 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
 
 
-    private class Assignment{
-        public String std;
-        public String subject;
-    }
-
-    private static final int REQUEST_PHOTO = 2;
-    private OnFragmentInteractionListener mListener;
     public static final String TAG = "Teacher Note Fragment";
+    private static final int REQUEST_PHOTO = 2;
     View fragmentView =null;
     SQLiteDatabase db;
     String selectedTeacherId;
@@ -58,19 +52,21 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
     List<String> subjects =new ArrayList<>();
-    //private ImageButton photoButton;
-    private ImageView photoView;
-    private TextView studentCountTextView;
     TextView messageText;
     RadioButton homeworkButton;
     RadioButton diaryNoteButton;
     ProgressDialog progressDialog;
-    private File photoFile;
     MsgType msgType;
     Intent captureImage;
     boolean canTakePhoto;
     Spinner stdSpinner;
     ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
+    private OnFragmentInteractionListener mListener;
+    //private ImageButton photoButton;
+    private ImageView photoView;
+    private TextView studentCountTextView;
+    private File photoFile;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -95,6 +91,8 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         homeworkButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_homework);
         diaryNoteButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_diarynote);
+        //Set up the timetableAdapter for stdSpinner
+        stdSpinner = (Spinner) fragmentView.findViewById(R.id.std_spinner);
         diaryNoteButton.setChecked(true);
         msgType = MsgType.DIARY_NOTE;
 
@@ -129,8 +127,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         return fragmentView;
     }
 
-
-
     private boolean checkMessageForValidity() {
         boolean status=true;
         if(selectedStudents ==null ||selectedStudents.size() <= 0){
@@ -142,11 +138,11 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             Toast.makeText(getContext(), "Failure Sending! Message is empty. Please input some message.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        return status;
+        return true;
     }
 
     public void updatePhotoView(){
-        if(photoFile==null|| photoFile.exists()==false ){
+        if (photoFile == null || !photoFile.exists()) {
             photoView.setImageDrawable(null);
             photoView.setVisibility(View.GONE);
         }
@@ -156,8 +152,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             photoView.setVisibility(View.VISIBLE);
         }
     }
-
-
 
     public void SetupView() {
         View view = fragmentView;
@@ -175,8 +169,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
                 if(!subjects.contains(subject))
                     subjects.add(subject);
             }
-            //Set up the timetableAdapter for stdSpinner
-            stdSpinner = (Spinner)fragmentView.findViewById(R.id.std_spinner);
+
             // Create an ArrayAdapter using the string array and a default stdSpinner layout
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,stds);
             // Specify the layout to use when the list of choices appears
@@ -199,45 +192,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private class FetchTeacherAssignmentAsyncTask extends AsyncTask<Void, Void, List<Assignment>> {
-        @Override
-        protected List<Assignment> doInBackground(Void... params) {
-            HttpConnectionUtil util = new HttpConnectionUtil();
-            String mobileNumber=HttpConnectionUtil.getMobileNumber();
-            List<Assignment> teacherAssignment = new ArrayList<>();
-            String url = HttpConnectionUtil.URL_ENPOINT + "/GetTeacherOrParentRole/"+ mobileNumber;
-            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.GET, null);
-            Log.i(TAG, "Received JSON for teacher's list:" + result);
-            try {
-                JSONObject objectList = new JSONObject(result);
-                JSONArray teacherRoles = objectList.getJSONObject("Teacher").getJSONArray("TeacherRoleList");
-                for(int i=0;i<teacherRoles.length();i++){
-
-                    Assignment assgn = new Assignment();
-                    JSONObject role = (JSONObject) teacherRoles.get(i);
-                    assgn.std= role.getString("TeacherRoleforStd");
-                    assgn.subject = role.getString("TeacherRoleforSubject");
-                    teacherAssignment.add(assgn);
-
-
-                }
-                return teacherAssignment;
-            } catch (JSONException e) {
-                Log.i(TAG, "Failed to parse JSON :" + result);
-                e.printStackTrace();
-                return null;
-            }
-
-
-        }
-
-        @Override
-        protected void onPostExecute(List<Assignment> curteacherAssignment) {
-            teacherAssignments= curteacherAssignment;
-            SetupView();
-        }
-    }
-
     /**
      * Called when a view has been clicked.
      *
@@ -250,10 +204,12 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             case R.id.studentSelect:
                 Intent intent = new Intent(getActivity(), StudentSearch.class);
                 String selectedClass = (String)stdSpinner.getSelectedItem();
-                intent.putExtra("Teacher_ID", selectedTeacherId);
-                intent.putExtra("Std",selectedClass);
-                intent.putParcelableArrayListExtra("lastSelectedStudents",selectedStudents);
-                startActivityForResult(intent, 111);
+                if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
+                    intent.putExtra("Teacher_ID", selectedTeacherId);
+                    intent.putExtra("Std", selectedClass);
+                    intent.putParcelableArrayListExtra("lastSelectedStudents", selectedStudents);
+                    startActivityForResult(intent, 111);
+                }
                 break;
             case R.id.msg_type_homework:
                 homeworkButton.setChecked(true);
@@ -268,26 +224,10 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     @Override
@@ -295,7 +235,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
         if(requestCode==REQUEST_PHOTO) {
             updatePhotoView();
-            return;
 
         }
         else if(result!=null) {
@@ -307,42 +246,6 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private class PostTeacherMessageAsyncTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-
-            HttpConnectionUtil util = new HttpConnectionUtil();
-
-            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
-            JSONObject messageJson = prepareMessage();
-            util.UploadImage(photoFile);
-            while (HttpConnectionUtil.imageUploaded==false){
-
-            }
-            try {
-                if(HttpConnectionUtil.imageUploadStatus) {
-                    messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
-            return result;
-
-        }
-        @Override
-        protected void onPostExecute(String result){
-            progressDialog.dismiss();
-            if(result!=null && result.length()> 0 ){
-                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
-                //Go to home page
-                HttpConnectionUtil.launchHomePage(getContext());
-            }
-
-        }
-
-    }
     private JSONObject prepareMessage() {
         JSONArray numbers = new JSONArray();
         JSONArray ids = new JSONArray();
@@ -389,10 +292,14 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
                 startActivityForResult(captureImage,REQUEST_PHOTO);
                 break;
             case R.id.action_send:
-                boolean canSend = checkMessageForValidity();
-                if(canSend) {
-                    progressDialog = ProgressDialog.show(getContext(), "Sending message", "Please wait", false);
-                    new PostTeacherMessageAsyncTask().execute();
+                if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
+                    boolean canSend = checkMessageForValidity();
+                    if (canSend) {
+                        progressDialog = ProgressDialog.show(getContext(), "Sending message", "Please wait", false);
+                        new PostTeacherMessageAsyncTask().execute();
+                    }
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -426,6 +333,102 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             }
         });*/
         //addPicture.setOnMenuItemClickListener(this);
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    private class Assignment {
+        public String std;
+        public String subject;
+    }
+
+    private class FetchTeacherAssignmentAsyncTask extends AsyncTask<Void, Void, List<Assignment>> {
+        @Override
+        protected List<Assignment> doInBackground(Void... params) {
+            HttpConnectionUtil util = new HttpConnectionUtil();
+            String mobileNumber = HttpConnectionUtil.getMobileNumber();
+            List<Assignment> teacherAssignment = new ArrayList<>();
+            String url = HttpConnectionUtil.URL_ENPOINT + "/GetTeacherOrParentRole/" + mobileNumber;
+            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.GET, null);
+            Log.i(TAG, "Received JSON for teacher's list:" + result);
+            try {
+                JSONObject objectList = new JSONObject(result);
+                JSONArray teacherRoles = objectList.getJSONObject("Teacher").getJSONArray("TeacherRoleList");
+                for (int i = 0; i < teacherRoles.length(); i++) {
+
+                    Assignment assgn = new Assignment();
+                    JSONObject role = (JSONObject) teacherRoles.get(i);
+                    assgn.std = role.getString("TeacherRoleforStd");
+                    assgn.subject = role.getString("TeacherRoleforSubject");
+                    teacherAssignment.add(assgn);
+
+
+                }
+                return teacherAssignment;
+            } catch (JSONException e) {
+                Log.i(TAG, "Failed to parse JSON :" + result);
+                e.printStackTrace();
+                return null;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(List<Assignment> curteacherAssignment) {
+            teacherAssignments = curteacherAssignment;
+            SetupView();
+        }
+    }
+
+    private class PostTeacherMessageAsyncTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+
+            HttpConnectionUtil util = new HttpConnectionUtil();
+
+            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
+            JSONObject messageJson = prepareMessage();
+            util.UploadImage(photoFile);
+            while (!HttpConnectionUtil.imageUploaded) {
+
+            }
+            try {
+                if (HttpConnectionUtil.imageUploadStatus) {
+                    messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            if (result != null && result.length() > 0) {
+                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+                //Go to home page
+                HttpConnectionUtil.launchHomePage(getContext());
+            }
+
+        }
+
     }
 
 }
