@@ -35,7 +35,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 public class TimeTableActivity extends AppCompatActivity  {
 
@@ -45,8 +44,8 @@ public class TimeTableActivity extends AppCompatActivity  {
     ListView timeTableListView;
     Date selectedDate;
     TextView viewSelectedDate;
-    private SharedPreferences sharedPreferences;
     List<RoleProfile> profiles;
+    private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
 
 
@@ -102,7 +101,7 @@ public class TimeTableActivity extends AppCompatActivity  {
         listeners.add(uiUpdater);
         listeners.add(dbUpdater);
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED+"_"+selectedProfile.getId(), false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false)) {
             new FetchTimeTableAsyncTask(selectedProfile,listeners).execute();
         }
         else
@@ -248,10 +247,9 @@ public class TimeTableActivity extends AppCompatActivity  {
 
 
     private String getDateAsString(Date curDate) {
-        String dateString = (String) android.text.format.DateFormat.format("dd", curDate) + "-"
+        return (String) android.text.format.DateFormat.format("dd", curDate) + "-"
                 + (String) android.text.format.DateFormat.format("MMM", curDate)+"-"+
         (String) android.text.format.DateFormat.format("yy", curDate);
-        return dateString;
     }
 
     private boolean compareDate(Date todaysDate, Date otherDate) {
@@ -264,10 +262,9 @@ public class TimeTableActivity extends AppCompatActivity  {
         Calendar calendar = Calendar.getInstance();
         calendar.set(selectedDate.getYear(),selectedDate.getMonth(),selectedDate.getDay());
         //calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        String dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(selectedDate.getTime());
         //String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
 
 
-        return dayOfWeek;
+        return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(selectedDate.getTime());
     }
 }

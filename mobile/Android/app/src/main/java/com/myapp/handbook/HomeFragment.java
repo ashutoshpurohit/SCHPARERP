@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import com.myapp.handbook.adapter.SchoolCalendarAdapter;
 import com.myapp.handbook.adapter.TimeTableSummaryAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.BaseTimeTable;
+import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.RoleProfile;
@@ -53,15 +55,6 @@ import static com.myapp.handbook.domain.RoleProfile.saveSchoolProfiletoDB;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "ProfileEntry Fetch";
-    private List<RoleProfile> allProfiles = new ArrayList<>();
-    private SchoolProfile schoolProfile = null;
-
-
-
-    private NavigationView navigationView=null;
-    private View fragmentView;
-    private SQLiteDatabase db;
-    private Cursor cursor;
     View header;
     BaseTimeTable profileTimeTable;
     String selectedProfileId;
@@ -74,6 +67,12 @@ public class HomeFragment extends Fragment {
     TimeTableSummaryAdapter timetableAdapter;
     DiaryNoteSummaryAdapter diaryNoteSummaryAdapter;
     DiaryNoteSummaryAdapter homeWorkSummaryAdapter;
+    private List<RoleProfile> allProfiles = new ArrayList<>();
+    private SchoolProfile schoolProfile = null;
+    private NavigationView navigationView = null;
+    private View fragmentView;
+    private SQLiteDatabase db;
+    private Cursor cursor;
 
     public void setNavigationView(NavigationView navigationView) {
         this.navigationView = navigationView;
@@ -115,7 +114,7 @@ public class HomeFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false)) {
 
             List<FetchProfileAsyncTask.ProfileDownloadListener> profileDownloadListeners = new ArrayList<>();
             profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
@@ -153,6 +152,13 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
+            profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
+
+                    updateOtherViewBasedOnSelectedProfile();
+                }
+            });
             //Download the profile
             new FetchProfileAsyncTask(profileDownloadListeners).execute();
         }
@@ -160,8 +166,15 @@ public class HomeFragment extends Fragment {
         {
             allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
             HttpConnectionUtil.setProfiles(allProfiles);
+            updateOtherViewBasedOnSelectedProfile();
         }
 
+
+
+        return view;
+    }
+
+    private void updateOtherViewBasedOnSelectedProfile() {
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();//allProfiles.get(0).getId();
 
         selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(), selectedProfileId);
@@ -170,7 +183,7 @@ public class HomeFragment extends Fragment {
         {
             customizeScreenBasedOnProfile(selectedProfile.getProfileRole(), fragmentView);
 
-            if (sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false) == false) {
+            if (!sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false)) {
 
                 List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
                 listeners.add(new TimeTableDbUpdateListener(db, selectedProfile, sharedPreferences));
@@ -186,16 +199,32 @@ public class HomeFragment extends Fragment {
 
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
             }
-            if(sharedPreferences.getBoolean(QuickstartPreferences.CALENDAR_DOWNLOADED+ "_" + selectedProfile.getId(), false)==false){
+            if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
+
                 FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupUI= new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
                     @Override
                     public void onFinished(List<Event> currentEvents) {
                         setupEventsView(selectedProfileId, selectedProfile.getProfileRole(),currentEvents);
                     }
                 };
+
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB =
+                        new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                            @Override
+                            public void onFinished(List<Event> currentEvents) {
+                                CalendarEvents.saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
+                                Log.v("CalenderEventsDBAct", "Saved to DB");
+                            }
+                        };
+
                 List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
                 listeners.add(setupUI);
+                listeners.add(saveEventsToDB);
                 new FetchSchoolCalendarAsyncTask(listeners).execute();
+            }
+            else{
+                List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);
+                setupEventsView(selectedProfileId,selectedProfile.getProfileRole(),currentEvents);
             }
 
             updateNavigationViewBasedOnProfileRole(allProfiles,fragmentView);
@@ -203,8 +232,6 @@ public class HomeFragment extends Fragment {
             setUpTimeTableView(profileTimeTable,selectedProfile.getProfileRole() );
             setupDiaryNotesView(selectedProfile.getProfileRole());
         }
-
-        return view;
     }
 
     private void setupEventsView(String selectedProfileId, RoleProfile.ProfileRole role, List<Event> currentEvents) {

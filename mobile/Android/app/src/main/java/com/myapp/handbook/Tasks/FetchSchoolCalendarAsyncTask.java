@@ -19,13 +19,8 @@ import retrofit2.Call;
 
 public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Event>> {
 
-    private DownloadCallback mCallback;
-    public interface CalendarDownloadedListener {
-
-        public void onFinished(List<Event> events);
-    }
-
     List<CalendarDownloadedListener> postDownloadListener;
+    private DownloadCallback mCallback;
 
     public FetchSchoolCalendarAsyncTask(List<CalendarDownloadedListener> postDownloadListener) {
         this.postDownloadListener = postDownloadListener;
@@ -48,15 +43,13 @@ public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Eve
         }
     }
 
-
     @Override
     protected List<Event> doInBackground(Void... params) {
         HttpConnectionUtil.SchoolCalendarService schoolCalendarService= ServiceGenerator.
                 createService(HttpConnectionUtil.SchoolCalendarService.class);
         Call<List<Event>> call= schoolCalendarService.getSchoolCalendar();
         try {
-            List<Event> schoolCalendar = call.execute().body();
-            return  schoolCalendar;
+            return call.execute().body();
         } catch (IOException e) {
             //To-DO add logging here
             return  null;
@@ -70,5 +63,10 @@ public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Eve
                 ) {
             listener.onFinished(events);
         }
+    }
+
+    public interface CalendarDownloadedListener {
+
+        void onFinished(List<Event> events);
     }
 }

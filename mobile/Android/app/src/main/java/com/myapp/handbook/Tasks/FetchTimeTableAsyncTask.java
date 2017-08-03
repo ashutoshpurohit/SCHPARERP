@@ -22,15 +22,9 @@ import retrofit2.Call;
  */
 
 public class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, BaseTimeTable> {
-    private DownloadCallback mCallback;
-
-    public interface TaskListener {
-        public void onFinished(BaseTimeTable table);
-    }
-
-    RoleProfile currentProfile;
     final List<TaskListener> timeTableListeners;
-
+    RoleProfile currentProfile;
+    private DownloadCallback mCallback;
     public FetchTimeTableAsyncTask(RoleProfile profile, List<TaskListener> listeners) {
         this.currentProfile =profile;
         this.timeTableListeners =listeners;
@@ -52,7 +46,6 @@ public class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, BaseTimeTable
             }
         }
     }
-
 
     @Override
     protected BaseTimeTable doInBackground(Void... params)
@@ -94,6 +87,10 @@ public class FetchTimeTableAsyncTask extends AsyncTask<Void, Void, BaseTimeTable
 
         }
 
+    }
+
+    public interface TaskListener {
+        void onFinished(BaseTimeTable table);
     }
 
 }

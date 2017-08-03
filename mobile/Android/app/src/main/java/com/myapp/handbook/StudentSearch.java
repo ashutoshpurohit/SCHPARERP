@@ -2,8 +2,8 @@ package com.myapp.handbook;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -108,7 +108,7 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
                 if (jsonBody.has("StudentList"))
                     students = jsonBody.getJSONArray("StudentList");
 
-                for (int i = 0; i < students.length(); i++) {
+                for (int i = 0; i < (students != null ? students.length() : 0); i++) {
                     RoleProfile profile = RoleProfile.parsePartialStudentJSonObject(students.getJSONObject(i));
                     if (profile != null)
                         profiles.add(profile);

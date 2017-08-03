@@ -60,7 +60,7 @@ public class RegistrationIntentService extends IntentService {
             Log.i(TAG, "GCM Registration Token: " + token);
 
             // Check if token has already been sent to server
-            if(sharedPreferences.getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER,false)==true)
+            if (sharedPreferences.getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false))
                 sendRegistrationToServer(token);
 
             // Subscribe to topic channels

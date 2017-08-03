@@ -16,27 +16,6 @@ import com.myapp.handbook.R;
 public class NotesAdapter extends CursorAdapter {
 
     /**
-     * Cache of the children views for a forecast list item.
-     */
-    public static class ViewHolder {
-
-        public final TextView titleView;
-        public final TextView detailMsgView;
-        public final TextView notificationIdView;
-        public final TextView dateView;
-
-        public ViewHolder(View view) {
-
-            dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            detailMsgView = (TextView) view.findViewById(R.id.list_item_msgdetail_textview);
-            notificationIdView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
-            titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
-        }
-    }
-
-
-
-    /**
      * Recommended constructor.
      *
      * @param context The context
@@ -52,10 +31,8 @@ public class NotesAdapter extends CursorAdapter {
     private String convertCursorRowToUXFormat(Cursor cursor) {
 
 
-        String message=cursor.getString(5) + "\t" + cursor.getString(3)+"\n" + cursor.getString(4);
-        return message;
+        return cursor.getString(5) + "\t" + cursor.getString(3) + "\n" + cursor.getString(4);
     }
-
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -79,5 +56,24 @@ public class NotesAdapter extends CursorAdapter {
         viewHolder.detailMsgView.setText(cursor.getString(4));
 
 
+    }
+
+    /**
+     * Cache of the children views for a forecast list item.
+     */
+    public static class ViewHolder {
+
+        public final TextView titleView;
+        public final TextView detailMsgView;
+        public final TextView notificationIdView;
+        public final TextView dateView;
+
+        public ViewHolder(View view) {
+
+            dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
+            detailMsgView = (TextView) view.findViewById(R.id.list_item_msgdetail_textview);
+            notificationIdView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
+            titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
+        }
     }
 }

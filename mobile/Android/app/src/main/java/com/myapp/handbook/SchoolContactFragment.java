@@ -39,12 +39,12 @@ import static com.myapp.handbook.domain.SchoolProfile.saveSchooProfiletoDB;
 
 public class SchoolContactFragment extends Fragment {
 
+    public static final String LOG_TAG = SchoolContactFragment.class.getSimpleName();
     View contactView;
     SchoolProfile schoolProfile;
     SQLiteDatabase db;
     SharedPreferences sharedPreferences;
 
-    public static final String LOG_TAG = SchoolContactFragment.class.getSimpleName();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class SchoolContactFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        if (sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_PROFILE_DOWNLOADED, false) == false) {
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_PROFILE_DOWNLOADED, false)) {
             //Download the profile
             new FetchSchoolProfileAsyncTask().execute();
             Log.v("SchoolContact","Saving in db");
@@ -80,62 +80,6 @@ public class SchoolContactFragment extends Fragment {
         MenuItem item=menu.findItem(R.id.action_search);
         item.setVisible(false);
         super.onPrepareOptionsMenu(menu);
-    }
-
-    private class FetchSchoolProfileAsyncTask extends AsyncTask<Void, Void, SchoolProfile > {
-        @Override
-        protected SchoolProfile doInBackground(Void... params) {
-            HttpConnectionUtil.SchoolService schoolService = ServiceGenerator.createService(HttpConnectionUtil.SchoolService.class);
-            //Get the id of teacher or student
-            List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
-            //TO-DO Hardcoded to 0th indexed need to be changed based on currently selected profile
-            //String id = profiles.get(0).getId();
-            String id ="100";
-            Call<SchoolProfile> call = schoolService.getSchoolProfile(id);
-            try {
-                SchoolProfile schoolProfile = call.execute().body();
-                return schoolProfile;
-            } catch (IOException e) {
-                Log.d("SchoolContact", "Error in fetching school profile");
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(SchoolProfile profile) {
-
-            schoolProfile=profile;
-            //TO-DO Store school profile to DB
-            if(schoolProfile !=null) {
-                saveSchooProfiletoDB(schoolProfile, db, sharedPreferences);
-            }
-            UpdateView();
-               /* String schoolId = schoolProfile.getSchoolId();
-                String schoolName = schoolProfile.getSchoolName();
-                String schoolAddress1 = schoolProfile.getSchoolAddress1();
-                String schoolAddress2 = schoolProfile.getSchoolAddress2();
-                String schoolAddress3 = schoolProfile.getSchoolAddress3();
-                String schoolPrimaryContactNo = schoolProfile.getSchoolMainTelephoneNumber();
-                String schoolSecondaryContactNo = schoolProfile.getSchoolSecondaryTelephoneNumber();
-                String schoolEmailId= schoolProfile.getSchoolEmailId();
-                String schoolWebsite = schoolProfile.getSchoolWebSite();
-                String schoolLogo = schoolProfile.getSchoolLogoImageURL();
-                boolean success=true;
-                // Insert the new product with the given values
-                long id = HandBookDbHelper.insertSchoolContactEntry(schoolId,schoolName,schoolAddress1,schoolAddress2,
-                        schoolAddress3,schoolPrimaryContactNo,schoolSecondaryContactNo,schoolEmailId,schoolWebsite,schoolLogo);
-                // If the ID is -1, then the insertion failed. Log an error and return null.
-                if (id <0) {
-                    success = false;
-                    Log.e(LOG_TAG,"School Contact cannot be saved");
-                }
-
-            }
-*/
-
-        }
-
     }
 
     private void UpdateView() {
@@ -215,5 +159,60 @@ public class SchoolContactFragment extends Fragment {
             schoolWebsite.setText(Html.fromHtml(schoolUrl));
            // schoolWebsite.setText(schoolProfile.getSchoolWebSite());
         }
+    }
+
+    private class FetchSchoolProfileAsyncTask extends AsyncTask<Void, Void, SchoolProfile> {
+        @Override
+        protected SchoolProfile doInBackground(Void... params) {
+            HttpConnectionUtil.SchoolService schoolService = ServiceGenerator.createService(HttpConnectionUtil.SchoolService.class);
+            //Get the id of teacher or student
+            List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
+            //TO-DO Hardcoded to 0th indexed need to be changed based on currently selected profile
+            //String id = profiles.get(0).getId();
+            String id = "100";
+            Call<SchoolProfile> call = schoolService.getSchoolProfile(id);
+            try {
+                return call.execute().body();
+            } catch (IOException e) {
+                Log.d("SchoolContact", "Error in fetching school profile");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(SchoolProfile profile) {
+
+            schoolProfile = profile;
+            //TO-DO Store school profile to DB
+            if (schoolProfile != null) {
+                saveSchooProfiletoDB(schoolProfile, db, sharedPreferences);
+            }
+            UpdateView();
+               /* String schoolId = schoolProfile.getSchoolId();
+                String schoolName = schoolProfile.getSchoolName();
+                String schoolAddress1 = schoolProfile.getSchoolAddress1();
+                String schoolAddress2 = schoolProfile.getSchoolAddress2();
+                String schoolAddress3 = schoolProfile.getSchoolAddress3();
+                String schoolPrimaryContactNo = schoolProfile.getSchoolMainTelephoneNumber();
+                String schoolSecondaryContactNo = schoolProfile.getSchoolSecondaryTelephoneNumber();
+                String schoolEmailId= schoolProfile.getSchoolEmailId();
+                String schoolWebsite = schoolProfile.getSchoolWebSite();
+                String schoolLogo = schoolProfile.getSchoolLogoImageURL();
+                boolean success=true;
+                // Insert the new product with the given values
+                long id = HandBookDbHelper.insertSchoolContactEntry(schoolId,schoolName,schoolAddress1,schoolAddress2,
+                        schoolAddress3,schoolPrimaryContactNo,schoolSecondaryContactNo,schoolEmailId,schoolWebsite,schoolLogo);
+                // If the ID is -1, then the insertion failed. Log an error and return null.
+                if (id <0) {
+                    success = false;
+                    Log.e(LOG_TAG,"School Contact cannot be saved");
+                }
+
+            }
+*/
+
+        }
+
     }
 }

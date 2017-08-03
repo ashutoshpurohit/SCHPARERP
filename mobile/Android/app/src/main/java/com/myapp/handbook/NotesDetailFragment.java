@@ -43,6 +43,10 @@ public class NotesDetailFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    public NotesDetailFragment() {
+        // Required empty public constructor
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -59,10 +63,6 @@ public class NotesDetailFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public NotesDetailFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -160,7 +160,7 @@ public class NotesDetailFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
 }

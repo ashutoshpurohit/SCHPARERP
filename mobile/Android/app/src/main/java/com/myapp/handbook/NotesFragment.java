@@ -1,17 +1,17 @@
 package com.myapp.handbook;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,106 +21,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.myapp.handbook.adapter.MyRecyclerAdapter;
-import com.myapp.handbook.adapter.NotesAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
 public class NotesFragment extends Fragment {
 
     private static final String TAG = "NotesFragment";
-    private SQLiteDatabase db;
-    private Cursor cursor;
     RecyclerView mRecyclerView;
     ShareActionProvider shareActionProvider;
     Toolbar toolbar;
     String selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
     String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+ HandbookContract.NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+selectedProfileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+    private SQLiteDatabase db;
+    private Cursor cursor;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        setHasOptionsMenu(true);
-        SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
-
-        db = handbookDbHelper.getReadableDatabase();
-
-
-        cursor = db.rawQuery(query_to_fetch_earliest, null);
-        /*cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
-                null,
-                null, null, null, null, HandbookContract.NotificationEntry.COLUMN_TIMESTAMP, null);*/
-
-        /* CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
-                android.R.layout.simple_list_item_1,
-                cursor,new String[]{HandbookContract.NotificationEntry.COLUMN_TITLE},new int[]{android.R.id.text1},0 );*/
-        //NotesAdapter listAdapter = new NotesAdapter(inflater.getContext(),cursor,0);
-
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        /*ListView timeTableListView = (ListView) rootView.findViewById(R.id.listview_notes);
-        timeTableListView.setAdapter(listAdapter);
-        timeTableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if(cursor!=null){
-                    long rowId = cursor.getLong(0);
-                    Intent intent = new Intent(getActivity(),NotesDetailActivity.class);
-                    intent.putExtra("ID",rowId);
-                    startActivity(intent);
-                }
-
-            }
-        });*/
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
-        toolbar= (Toolbar)getActivity().findViewById(R.id.my_toolbar);
-
-        //registerForContextMenu(mRecyclerView);
-
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-
-        // specify an timetableAdapter (see also next example)
-        mAdapter = new MyRecyclerAdapter(this.getContext(),cursor);
-        mRecyclerView.setAdapter(mAdapter);
-        ((MyRecyclerAdapter)mAdapter).setActivity((AppCompatActivity) getActivity());
-        ((MyRecyclerAdapter)mAdapter).setNotesContext(notesContext);
-        //mRecyclerView.set
-        return rootView;
-
-        //setListAdapter(listAdapter);
-
-
-
-        /*ArrayAdapter<String> timetableAdapter = new ArrayAdapter<String>(
-                                                                inflater.getContext(),
-                                                                android.R.layout.simple_list_item_1,
-                                                                Notifications.notes);
-        setListAdapter(timetableAdapter);*/
-        //return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     private ActionMode.Callback notesContext = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -215,9 +133,86 @@ public class NotesFragment extends Fragment {
         }
     };
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+        SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
+
+        db = handbookDbHelper.getReadableDatabase();
+
+
+        cursor = db.rawQuery(query_to_fetch_earliest, null);
+        /*cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
+                null,
+                null, null, null, null, HandbookContract.NotificationEntry.COLUMN_TIMESTAMP, null);*/
+
+        /* CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
+                android.R.layout.simple_list_item_1,
+                cursor,new String[]{HandbookContract.NotificationEntry.COLUMN_TITLE},new int[]{android.R.id.text1},0 );*/
+        //NotesAdapter listAdapter = new NotesAdapter(inflater.getContext(),cursor,0);
+
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        /*ListView timeTableListView = (ListView) rootView.findViewById(R.id.listview_notes);
+        timeTableListView.setAdapter(listAdapter);
+        timeTableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if(cursor!=null){
+                    long rowId = cursor.getLong(0);
+                    Intent intent = new Intent(getActivity(),NotesDetailActivity.class);
+                    intent.putExtra("ID",rowId);
+                    startActivity(intent);
+                }
+
+            }
+        });*/
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+
+        //registerForContextMenu(mRecyclerView);
+
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+        // specify an timetableAdapter (see also next example)
+        mAdapter = new MyRecyclerAdapter(this.getContext(), cursor);
+        mRecyclerView.setAdapter(mAdapter);
+        ((MyRecyclerAdapter) mAdapter).setActivity((AppCompatActivity) getActivity());
+        ((MyRecyclerAdapter) mAdapter).setNotesContext(notesContext);
+        //mRecyclerView.set
+        return rootView;
+
+        //setListAdapter(listAdapter);
+
+
+
+        /*ArrayAdapter<String> timetableAdapter = new ArrayAdapter<String>(
+                                                                inflater.getContext(),
+                                                                android.R.layout.simple_list_item_1,
+                                                                Notifications.notes);
+        setListAdapter(timetableAdapter);*/
+        //return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private String prepareTextMessage(String title, String detail, String from, int date) {
-        String message = "Message " + title + " date: "+date + " from: " +from + "\\n detail: " + detail;
-        return message;
+        return "Message " + title + " date: " + date + " from: " + from + "\\n detail: " + detail;
     }
 
     private void setIntent(String text) {

@@ -21,15 +21,11 @@ import java.util.List;
  */
 
 public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfile>> {
-    private DownloadCallback mCallback;
-
-    public interface ProfileDownloadListener {
-        public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile);
-    }
-
+    final List<ProfileDownloadListener> profileDownloadListeners;
     SchoolProfile schoolProfile;
     List<RoleProfile> allProfiles;
-    final List<ProfileDownloadListener> profileDownloadListeners;
+    String TAG = "FetchProfileAsyncTask";
+    private DownloadCallback mCallback;
 
 
     public FetchProfileAsyncTask(List<ProfileDownloadListener> listeners){
@@ -54,9 +50,6 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
         }
     }
 
-
-
-    String TAG ="FetchProfileAsyncTask";
     @Override
     protected List<RoleProfile> doInBackground(Void... params) {
         HttpConnectionUtil util = new HttpConnectionUtil();
@@ -84,7 +77,7 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
                 students = jsonBody.getJSONArray("Students");
             if(jsonBody.has("Teacher") && !jsonBody.isNull("Teacher"))
                 teacher=jsonBody.getJSONObject("Teacher");
-            for (int i = 0; i < students.length(); i++) {
+            for (int i = 0; i < (students != null ? students.length() : 0); i++) {
                 RoleProfile profile = RoleProfile.parseStudentJSonObject(students.getJSONObject(i));
                 if (profile != null)
                     profiles.add(profile);
@@ -114,5 +107,9 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
             }
 
         }
+    }
+
+    public interface ProfileDownloadListener {
+        void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile);
     }
 }

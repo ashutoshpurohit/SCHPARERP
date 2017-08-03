@@ -44,14 +44,13 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
     View fragmentView=null;
     List<String> teacherNames;
+    //List<RoleProfile> studentProfiles;
+    RoleProfile selectedStudentProfile;
+    TeacherProfile teacherProfile;
     private int selectedTeacherIndex=0;
     private String selectedStudentId="105";
     private SQLiteDatabase db;
-    //List<RoleProfile> studentProfiles;
-    RoleProfile selectedStudentProfile;
     private List<TeacherProfile> allTeacherProfiles = new ArrayList<>();
-    TeacherProfile teacherProfile;
-
     private ProgressDialog progressDialog ;
 
 
@@ -73,7 +72,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         selectedStudentProfile= RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
         selectedStudentId = selectedStudentProfile.getId();
-        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
         SetupView();
         new FetchProfileAsyncTask().execute();}
         else {
@@ -110,30 +109,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
         }
 
-
-    }
-
-
-    private class PostTeacherMessageAsyncTask extends AsyncTask<JSONObject, Void, String> {
-
-        @Override
-        protected String doInBackground(JSONObject... params) {
-
-            HttpConnectionUtil util = new HttpConnectionUtil();
-
-            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
-            JSONObject message = params[0];
-            //Upload the Image file if attached
-            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, message);
-            return result;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            if(result!=null && result.length()> 0 ){
-                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
-                HttpConnectionUtil.launchHomePage(getContext());
-            }
-        }
 
     }
 
@@ -178,7 +153,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         }
         return msgToSend;
     }
-
 
     private void SetupView() {
         View view = fragmentView;
@@ -240,6 +214,42 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
     }
 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+        //Hide all menu icon
+        for (int i = 0; i < menu.size() - 1; i++)
+            menu.getItem(i).setVisible(false);
+
+        MenuItem sendItem = menu.findItem(R.id.action_send);
+        sendItem.setVisible(true);
+
+    }
+
+    private class PostTeacherMessageAsyncTask extends AsyncTask<JSONObject, Void, String> {
+
+        @Override
+        protected String doInBackground(JSONObject... params) {
+
+            HttpConnectionUtil util = new HttpConnectionUtil();
+
+            String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
+            JSONObject message = params[0];
+            //Upload the Image file if attached
+            String result = util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, message);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null && result.length() > 0) {
+                Toast.makeText(getContext(), "Message Sent", Toast.LENGTH_SHORT).show();
+                HttpConnectionUtil.launchHomePage(getContext());
+            }
+        }
+
+    }
+
     private class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<TeacherProfile>> {
         @Override
         protected List<TeacherProfile> doInBackground(Void... params) {
@@ -282,18 +292,6 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             progressDialog.setMessage("Downloading Teachers Profile...");
             progressDialog.show();
         }
-    }
-
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
-        //Hide all menu icon
-        for (int i = 0; i < menu.size()-1; i++)
-            menu.getItem(i).setVisible(false);
-
-        MenuItem sendItem = menu.findItem(R.id.action_send);
-        sendItem.setVisible(true);
-
     }
 
 

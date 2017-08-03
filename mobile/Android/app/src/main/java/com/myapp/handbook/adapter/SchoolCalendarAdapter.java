@@ -106,7 +106,7 @@ public class SchoolCalendarAdapter extends RecyclerView.Adapter<SchoolCalendarAd
             Event currentEvent = calendarEvents.get(position);
             String currentEventDate = currentEvent.getEventDate();
             try {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                 SimpleDateFormat ddmmyyFormat = new SimpleDateFormat("dd/MM/yy");
 
                 if (currentEventDate != null) {
