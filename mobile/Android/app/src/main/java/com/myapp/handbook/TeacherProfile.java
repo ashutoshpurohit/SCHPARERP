@@ -1,7 +1,15 @@
 package com.myapp.handbook;
 
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.myapp.handbook.data.HandBookDbHelper;
+import com.myapp.handbook.domain.RoleProfile;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by SAshutosh on 6/15/2016.
@@ -13,10 +21,69 @@ public class TeacherProfile
     public static final String TEACHER_LAST_NAME ="TeacherLastName";
     public static final String TEACHER_MOBILE ="MobileNumber";
     public static final String TEACHER_EMAIL ="EmailId";
-    public static final String TEACHER_ROLE_TYPE ="RoleType";
     public static final String TEACHER_ROLE_STD ="RoleforStd";
     public static final String TEACHER_SUBJECT ="RoleforSubject";
 
+    public TeacherProfile() {
+
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getStd() {
+        return std;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setStd(String std) {
+        this.std = std;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
     String id;
     String firstName;
@@ -62,6 +129,17 @@ public class TeacherProfile
             e.printStackTrace();
         }
         return profile;
+
+    }
+
+    public static void saveTeacherListToDB(String studentId, List<TeacherProfile> profiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
+
+        for(TeacherProfile profile:profiles) {
+
+            HandBookDbHelper.insertTeacherForStudent(db,studentId,profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getMobileNumber(),profile.getEmail(),profile.getSubject(),profile.getStd());
+        }
+
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.STUDENT_TEACHER_DOWNLOADED + "_"+ studentId, true).commit();
 
     }
 

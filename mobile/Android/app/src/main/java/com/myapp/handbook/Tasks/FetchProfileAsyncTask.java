@@ -1,5 +1,8 @@
 package com.myapp.handbook.Tasks;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -26,12 +29,20 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
     List<RoleProfile> allProfiles;
     String TAG = "FetchProfileAsyncTask";
     private DownloadCallback mCallback;
-
+    Context context;
+    ProgressDialog progressDialog;
 
     public FetchProfileAsyncTask(List<ProfileDownloadListener> listeners){
 
         this.profileDownloadListeners = listeners;
     }
+
+    public FetchProfileAsyncTask(List<ProfileDownloadListener> profileDownloadListeners, Context currentContext) {
+        this.profileDownloadListeners=profileDownloadListeners;
+        this.context=currentContext;
+        progressDialog = new ProgressDialog(context);
+    }
+
     /**
      * Cancel background network operation if we do not have network connectivity.
      */
@@ -107,6 +118,8 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
             }
 
         }
+        if(progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 
     public interface ProfileDownloadListener {

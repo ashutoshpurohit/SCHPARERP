@@ -1,5 +1,6 @@
 package com.myapp.handbook;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
     private List<RoleProfile> allProfiles = new ArrayList<>();
     private SchoolProfile schoolProfile = null;
     private NavigationView navigationView = null;
+
     private View fragmentView;
     private SQLiteDatabase db;
     private Cursor cursor;
@@ -159,8 +161,17 @@ public class HomeFragment extends Fragment {
                     updateOtherViewBasedOnSelectedProfile();
                 }
             });
+            /*profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener(){
+
+                @Override
+                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
+
+                   progressDialog.dismiss();
+                }
+            });*/
             //Download the profile
-            new FetchProfileAsyncTask(profileDownloadListeners).execute();
+
+            new FetchProfileAsyncTask(profileDownloadListeners, getContext()).execute();
         }
         else
         {

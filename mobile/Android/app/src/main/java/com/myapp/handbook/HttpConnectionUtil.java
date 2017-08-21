@@ -93,6 +93,7 @@ public class HttpConnectionUtil {
         db.execSQL("delete from "+ HandbookContract.TimetableEntry.TABLE_NAME);
         db.execSQL("delete from "+HandbookContract.CalenderEventsEntry.TABLE_NAME);
         db.execSQL("delete from "+HandbookContract.ContactSchoolEntry.TABLE_NAME);
+        db.execSQL("delete from "+HandbookContract.TeacherForStudentEntry.TABLE_NAME);
 
 
     }

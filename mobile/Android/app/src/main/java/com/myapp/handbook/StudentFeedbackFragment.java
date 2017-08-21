@@ -33,6 +33,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.myapp.handbook.HttpConnectionUtil.sharedPreferences;
+
 public class StudentFeedbackFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "Network Connect";
@@ -72,13 +74,25 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         spinner.setOnItemSelectedListener(this);
         selectedStudentProfile= RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
         selectedStudentId = selectedStudentProfile.getId();
-        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
-        SetupView();
-        new FetchProfileAsyncTask().execute();}
-        else {
-            Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+        //Check if not already downloaded
+        if (!sharedPreferences.getBoolean(QuickstartPreferences.STUDENT_TEACHER_DOWNLOADED + "_" + selectedStudentId, false)) {
+            if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
+                setupView();
+                new FetchProfileAsyncTask().execute();
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            //Load from DB
+            allTeacherProfiles = getTeachersForStudentFromDB(selectedStudentId);
+            setupView();
         }
         return fragmentView;
+    }
+
+    private List<TeacherProfile> getTeachersForStudentFromDB(String selectedStudentId) {
+        return HandBookDbHelper.loadTeachersForStudent(db,selectedStudentId);
     }
 
     @Override
@@ -154,7 +168,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         return msgToSend;
     }
 
-    private void SetupView() {
+    private void setupView() {
         View view = fragmentView;
         TextView fromText = (TextView) view.findViewById(R.id.feedback_from);
         if (allTeacherProfiles!=null &&!allTeacherProfiles.isEmpty()) {
@@ -283,7 +297,8 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
                 progressDialog.dismiss();
             }
             allTeacherProfiles = profiles;
-            SetupView();
+            setupView();
+            TeacherProfile.saveTeacherListToDB(selectedStudentId,allTeacherProfiles,db,sharedPreferences);
         }
 
         @Override

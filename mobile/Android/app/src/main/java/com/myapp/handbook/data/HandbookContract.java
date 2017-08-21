@@ -93,6 +93,25 @@ public class HandbookContract {
 
     }
 
+    public static final class TeacherForStudentEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "teachers";
+
+        // Column with the foreign key into the location table.
+
+        public static final String COLUMN_STUDENTID = "student_id";
+        public static final String COLUMN_TEACHER_FIRST_NAME ="teacher_first_name";
+        public static final String COLUMN_TEACHER_ID ="teacherId";
+        public static final String COLUMN_TEACHER_LAST_NAME ="teacher_last_name";
+        public static final String COLUMN_TEACHER_MOBILE ="mobileNumber";
+        public static final String COLUMN_TEACHER_EMAIL ="emailId";
+        public static final String COLUMN_TEACHER_ROLE_STD ="roleforStd";
+        public static final String COLUMN_TEACHER_SUBJECT ="roleforSubject";
+
+
+    }
+
+
     //Table for School Contact Details
     public static final class ContactSchoolEntry implements BaseColumns {
 
