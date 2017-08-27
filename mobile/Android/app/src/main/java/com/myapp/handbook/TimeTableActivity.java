@@ -95,21 +95,21 @@ public class TimeTableActivity extends AppCompatActivity  {
             }
         };
 
-        FetchTimeTableAsyncTask.TaskListener dbUpdater = new TimeTableDbUpdateListener(db,selectedProfile,sharedPreferences);
+        if(selectedProfile!=null) {
+            FetchTimeTableAsyncTask.TaskListener dbUpdater = new TimeTableDbUpdateListener(db, selectedProfile, sharedPreferences);
 
-        List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
-        listeners.add(uiUpdater);
-        listeners.add(dbUpdater);
+            List<FetchTimeTableAsyncTask.TaskListener> listeners = new ArrayList<>();
+            listeners.add(uiUpdater);
+            listeners.add(dbUpdater);
 
-        if (!sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false)) {
-            new FetchTimeTableAsyncTask(selectedProfile,listeners).execute();
+            if (!sharedPreferences.getBoolean(QuickstartPreferences.TIMETABLE_DOWNLOADED + "_" + selectedProfile.getId(), false)) {
+                new FetchTimeTableAsyncTask(selectedProfile, listeners).execute();
+            } else {
+                profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
+
+            }
+            SetupView(profileTimeTable);
         }
-        else
-        {
-            profileTimeTable = HandBookDbHelper.loadTimeTable(db,selectedProfileId, selectedProfile.getProfileRole());
-
-        }
-        SetupView(profileTimeTable);
 
     }
     // Menu icons are inflated just as they were with actionbar

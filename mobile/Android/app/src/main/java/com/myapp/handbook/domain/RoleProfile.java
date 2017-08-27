@@ -112,8 +112,10 @@ public class RoleProfile implements Parcelable {
             studentProfile.setId(studentObj.getString(STUDENT_ID));
             studentProfile.setRole(ProfileRole.STUDENT.toString());
             studentProfile.setFirstName(studentObj.getString(STUDENT_FIRST_NAME));
-            studentProfile.setMiddleName(studentObj.getString(STUDENT_MIDDLE_NAME));
-            studentProfile.setLastName(studentObj.getString(STUDENT_LAST_NAME));
+            if(studentObj.has(STUDENT_MIDDLE_NAME))
+                studentProfile.setMiddleName(studentObj.getString(STUDENT_MIDDLE_NAME));
+            if(studentObj.has(STUDENT_LAST_NAME))
+                studentProfile.setLastName(studentObj.getString(STUDENT_LAST_NAME));
             studentProfile.setGender(studentObj.getString(STUDENT_GENDER));
             studentProfile.setStd(studentObj.getString(STUDENT_STD));
             studentProfile.setBirth_date(studentObj.getString(STUDENT_DOB));

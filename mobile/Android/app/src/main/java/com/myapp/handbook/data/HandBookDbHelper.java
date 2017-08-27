@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.myapp.handbook.TeacherProfile;
 import com.myapp.handbook.data.HandbookContract.NotificationEntry;
 import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 import com.myapp.handbook.domain.BaseTimeTable;
@@ -78,6 +79,30 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
             Log.d("DB_INSERT",e.getMessage());
         }
     }
+
+    public static void insertTeacherForStudent(SQLiteDatabase sqliteDatabase, String studentId,String teacherId,String teacherFirstname, String teacchetLastname,
+                                     String mobileNumber, String email, String subject,
+                                     String std) {
+
+        ContentValues note = new ContentValues();
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_STUDENTID,studentId);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ID,teacherId);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_LAST_NAME,teacchetLastname);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_FIRST_NAME,teacherFirstname);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_MOBILE,mobileNumber);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_EMAIL,email);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_SUBJECT,subject);
+        note.put(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ROLE_STD,std);
+
+        try {
+            long retVal = sqliteDatabase.insert(HandbookContract.TeacherForStudentEntry.TABLE_NAME, null, note);
+            Log.d("DB_INSERT value",Long.toString(retVal));
+        }
+        catch (Exception e){
+            Log.d("DB_INSERT",e.getMessage());
+        }
+    }
+
 
     public static long insertTimeTableEntry(SQLiteDatabase sqliteDatabase, String id,String dayOfWeek, String school_id, String std, String teacher_id, String teacher_name, String start_time,
                                      String end_time, String subject) {
@@ -217,6 +242,45 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
 
         return profile;
+    }
+
+    public static List<TeacherProfile> loadTeachersForStudent(SQLiteDatabase sqliteDatabase, String selectedStudentId) {
+
+        List<TeacherProfile> teacherProfiles = new ArrayList<>();
+        Cursor cursor=null;
+        String query_to_fetch_teachers = "select *  from " + HandbookContract.TeacherForStudentEntry.TABLE_NAME + " where "+
+        HandbookContract.TeacherForStudentEntry.COLUMN_STUDENTID + " = '"+ selectedStudentId + "'";
+        /*Cursor cursor= sqliteDatabase.query(HandbookContract.TeacherForStudentEntry.TABLE_NAME,
+                null,
+                null, null, null, null, null, null);*/
+
+
+        try {
+            cursor = sqliteDatabase.rawQuery(query_to_fetch_teachers, null);
+
+
+            while (cursor.moveToNext()) {
+                TeacherProfile profile = new TeacherProfile();
+                profile.setId(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ID)));
+                profile.setEmail(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_EMAIL)));
+                profile.setFirstName(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_FIRST_NAME)));
+                profile.setLastName(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_LAST_NAME)));
+                profile.setMobileNumber(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_MOBILE)));
+                profile.setStd(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ROLE_STD)));
+                profile.setSubject(cursor.getString(cursor.getColumnIndex(HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_SUBJECT)));
+                teacherProfiles.add(profile);
+
+            }
+        } catch (Exception ex) {
+            System.out.print("Error in fetching recorde" +ex.getMessage());
+            ex.printStackTrace();
+            Log.d("Error fetching teachers",ex.getMessage());
+        }
+        finally {
+            if(cursor!=null)
+                cursor.close();
+        }
+        return teacherProfiles;
     }
 
     //Load School calendar from DB if already exists..
@@ -476,7 +540,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 ProfileEntry.COLUMN_ID + " TEXT NOT NULL," +
                 ProfileEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 ProfileEntry.COLUMN_MIDDLE_NAME + " TEXT, " +
-                ProfileEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
+                ProfileEntry.COLUMN_LAST_NAME + " TEXT, " +
                 HandbookContract.ProfileEntry.COLUMN_ROLE + " TEXT NOT NULL, " +
                 ProfileEntry.COLUMN_GENDER + " TEXT NOT NULL, " +
                 ProfileEntry.COLUMN_STD + " TEXT , " +
@@ -495,6 +559,17 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.TimetableEntry.COLUMN_SUBJECT + " TEXT NOT NULL, " +
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
+
+        final String SQL_CREATE_TEACHER_TABLE = "CREATE TABLE " + HandbookContract.TeacherForStudentEntry.TABLE_NAME + " (" +
+                HandbookContract.TeacherForStudentEntry.COLUMN_STUDENTID + " TEXT NOT NULL, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ID+ " TEXT NOT NULL, "  +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_FIRST_NAME + " TEXT NOT NULL, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_LAST_NAME + " TEXT, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_EMAIL + " TEXT, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_MOBILE + " TEXT, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ROLE_STD + " TEXT, " +
+                HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_SUBJECT + " TEXT  " +" );";
+
 
         final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
@@ -528,6 +603,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
+        sqLiteDatabase.execSQL(SQL_CREATE_TEACHER_TABLE);
         //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
 
     }
@@ -539,6 +615,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         onCreate((sqLiteDatabase));
 
     }
+
 
 
 }

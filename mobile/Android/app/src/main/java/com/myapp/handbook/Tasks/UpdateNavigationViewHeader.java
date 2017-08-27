@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.RoleProfile;
@@ -51,7 +52,6 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
                     Picasso.with(context)
                             .load(R.drawable.contact_picture_placeholder)
                             .placeholder(R.drawable.contact_picture_placeholder)
-                            //.networkPolicy(NetworkPolicy.OFFLINE)
                             .into(profileImage);
                 }
                 else {
@@ -59,6 +59,7 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
                     Picasso.with(context)
                             .load(selectedProfile.getImageUrl())
                             .placeholder(R.drawable.contact_picture_placeholder)
+
                             .into(profileImage);
                 }
                 schoolName.setText(selectedProfile.getFirstName() + " " + selectedProfile.getLastName());

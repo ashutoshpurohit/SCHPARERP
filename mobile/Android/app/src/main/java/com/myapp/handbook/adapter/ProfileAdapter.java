@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
@@ -72,7 +73,10 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         TextView profileContactNumber = (TextView)currentRow.findViewById(R.id.profile_contact_number);
         RoleProfile profile= roles[position];
 
-        profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
+        if(profile.getLastName()!=null)
+            profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
+        else
+            profileName.setText(profile.getFirstName());
         profileRole.setText(profile.getRole());
         profileId.setText(profile.getId());
 
