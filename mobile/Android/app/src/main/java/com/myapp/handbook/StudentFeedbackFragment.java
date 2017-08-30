@@ -154,7 +154,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         try {
             msgToSend.put("MessageBody",message);
             msgToSend.put("type", MsgType.PARENT_NOTE);
-            msgToSend.put("MessageTitle","Note from "+from);
+            msgToSend.put("MessageTitle", "Note from " + from + " (Std.- " + selectedStudentProfile.getStd() + ")");
             msgToSend.put("MobileNumbers",numbers);
             msgToSend.put("FromId",fromId);
             msgToSend.put("FroName",selectedStudentProfile.getFirstName());

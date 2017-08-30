@@ -1,6 +1,5 @@
 package com.myapp.handbook.Tasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -28,9 +27,9 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
     SchoolProfile schoolProfile;
     List<RoleProfile> allProfiles;
     String TAG = "FetchProfileAsyncTask";
-    private DownloadCallback mCallback;
     Context context;
     ProgressDialog progressDialog;
+    private DownloadCallback mCallback;
 
     public FetchProfileAsyncTask(List<ProfileDownloadListener> listeners){
 
@@ -59,6 +58,8 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
                 cancel(true);
             }
         }
+        progressDialog.setMessage("Downloading information, Please wait..");
+        progressDialog.show();
     }
 
     @Override
@@ -118,7 +119,7 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
             }
 
         }
-        if(progressDialog.isShowing())
+        if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
     }
 
