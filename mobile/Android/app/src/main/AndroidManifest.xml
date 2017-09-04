@@ -11,14 +11,8 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
-    <!--
-    application
-        android:name=".PicassoClient" >
 
-    </application
-    -->
     <application
-        android:name=".PicassoClient"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"

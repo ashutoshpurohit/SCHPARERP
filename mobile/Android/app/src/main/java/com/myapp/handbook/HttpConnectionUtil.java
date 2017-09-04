@@ -55,8 +55,8 @@ public class HttpConnectionUtil {
     public static boolean imageUploaded =false;
     public static boolean imageUploadStatus =false;
     public static String imageUrl="";
-    public static String URL_ENPOINT = "http://schoollink.co.in";
-    //public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
+    //public static String URL_ENPOINT = "http://schoollink.co.in";
+    public static String URL_ENPOINT ="https://floating-bastion-86283.herokuapp.com";
     public static int GCM_NOTIFICATION = 1000;
     public static int EVENT_NOTIFICATION = 2000;
     public static int TIMETABLE_NOTIFICATION = 3000;

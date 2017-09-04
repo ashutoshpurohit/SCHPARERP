@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.RoleProfile;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 
@@ -49,17 +49,16 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
             if(selectedProfile!=null) {
                 String imagePath=selectedProfile.getImageUrl();
                 if(imagePath==null|| TextUtils.isEmpty(imagePath.trim())) {
-                    Picasso.with(context)
+                    Glide.with(context)
                             .load(R.drawable.contact_picture_placeholder)
                             .placeholder(R.drawable.contact_picture_placeholder)
                             .into(profileImage);
                 }
                 else {
 
-                    Picasso.with(context)
+                    Glide.with(context)
                             .load(selectedProfile.getImageUrl())
                             .placeholder(R.drawable.contact_picture_placeholder)
-
                             .into(profileImage);
                 }
                 schoolName.setText(selectedProfile.getFirstName() + " " + selectedProfile.getLastName());

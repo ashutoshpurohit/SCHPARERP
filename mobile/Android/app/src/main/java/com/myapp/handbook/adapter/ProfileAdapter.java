@@ -12,11 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.RoleProfile;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.List;
 
@@ -93,17 +94,17 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
 
         String imagePath = profile.getImageUrl();
         if(imagePath==null || TextUtils.isEmpty(imagePath.trim())) {
-            Picasso.with(getContext())
+            Glide.with(getContext())
                     .load(R.drawable.contact_picture_placeholder)
                     .placeholder(R.drawable.contact_picture_placeholder)
-                    //.networkPolicy(NetworkPolicy.OFFLINE)
+
                     .into(imageView);
         }
         else {
-            Picasso.with(getContext())
+            Glide.with(getContext())
                     .load(profile.getImageUrl())
                     .placeholder(R.drawable.contact_picture_placeholder)
-                    //.networkPolicy(NetworkPolicy.OFFLINE)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }
         if(profile.getId().equals(selectedProfileId)){
