@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,9 +46,10 @@ public class TimeTableActivity extends AppCompatActivity  {
     Date selectedDate;
     TextView viewSelectedDate;
     List<RoleProfile> profiles;
+    ImageView img_nxt_date;
+    ImageView img_prev_date;
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,46 @@ public class TimeTableActivity extends AppCompatActivity  {
                 profileTimeTable = HandBookDbHelper.loadTimeTable(db, selectedProfileId, selectedProfile.getProfileRole());
 
             }
+
+            //On click of prevoius or next image on time table activity
+            img_prev_date = (ImageView) findViewById(R.id.img_date_previous);
+            img_nxt_date = (ImageView) findViewById(R.id.img_date_next);
+            img_nxt_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GregorianCalendar myCal = new GregorianCalendar();
+
+                    // Get the current date representation of the calendar.
+                    Date startDate = myCal.getTime();
+                    myCal.setTime(selectedDate);
+                    // Increment the calendar's date by 1 day.
+                    myCal.add(Calendar.DAY_OF_MONTH, 1);
+                    selectedDate = myCal.getTime();
+
+
+                    SetupView(profileTimeTable);
+
+                }
+            });
+            img_prev_date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GregorianCalendar myCal = new GregorianCalendar();
+
+                    // Get the current date representation of the calendar.
+                    Date startDate = myCal.getTime();
+                    myCal.setTime(selectedDate);
+                    // Increment the calendar's date by 1 day.
+                    myCal.add(Calendar.DAY_OF_MONTH, -1);
+                    selectedDate = myCal.getTime();
+
+                    SetupView(profileTimeTable);
+
+                }
+            });
+
+
+
             SetupView(profileTimeTable);
         }
 
@@ -147,6 +189,7 @@ public class TimeTableActivity extends AppCompatActivity  {
                 GregorianCalendar calendarBeg=new GregorianCalendar(datePicker.getYear(),
                         datePicker.getMonth(),datePicker.getDayOfMonth());
                 selectedDate=calendarBeg.getTime();
+
                 SetupView(profileTimeTable);
             }
         });
@@ -247,9 +290,9 @@ public class TimeTableActivity extends AppCompatActivity  {
 
 
     private String getDateAsString(Date curDate) {
-        return (String) android.text.format.DateFormat.format("dd", curDate) + "-"
-                + (String) android.text.format.DateFormat.format("MMM", curDate)+"-"+
-        (String) android.text.format.DateFormat.format("yy", curDate);
+        return android.text.format.DateFormat.format("dd", curDate) + "-"
+                + android.text.format.DateFormat.format("MMM", curDate) + "-" +
+                android.text.format.DateFormat.format("yy", curDate);
     }
 
     private boolean compareDate(Date todaysDate, Date otherDate) {
