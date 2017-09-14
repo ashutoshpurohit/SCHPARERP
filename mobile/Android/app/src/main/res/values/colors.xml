@@ -9,6 +9,9 @@
     <color name="primary_light">#83b9ff</color>
     <!--color name="accent">#FFD740</color>-->
     <color name="accent">#83b9ff</color>
+    <color name="colorAccent">#FFA000</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
 
 
 </resources>

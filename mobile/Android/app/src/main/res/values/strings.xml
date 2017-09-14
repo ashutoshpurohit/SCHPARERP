@@ -77,4 +77,13 @@
     <string name="clear">Clear</string>
     <string name="title_activity_calendar_events">School Calendar</string>
     <string name="no_timetable_available_for_today">No timetable available for today</string>
+
+    <string name="sign_out">Sign Out</string>
+    <string name="hint_phone_number">Enter Phone Number</string>
+    <string name="hint_verification_code">Verification Code</string>
+    <string name="start_phone_auth">Start</string>
+    <string name="verify_phone_auth">Verify</string>
+    <string name="resend_phone_auth">Resend</string>
+    <string name="CONSUMER_KEY">FYb2ipP3TtsjypFzFcqmUIgzR</string>
+    <string name="CONSUMER_SECRET">t0vQHLYZp6PSAyBYnZB4a260SFFT20RChlE1xx8ixzkCaWGuA6</string>
 </resources>

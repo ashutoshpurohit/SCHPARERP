@@ -28,6 +28,7 @@ import com.myapp.handbook.R;
 import static android.content.ContentValues.TAG;
 import static com.myapp.handbook.HttpConnectionUtil.DIARY_NOTE_TYPE;
 import static com.myapp.handbook.HttpConnectionUtil.HOMEWORK_TYPE;
+import static com.myapp.handbook.HttpConnectionUtil.PARENT_NOTE_TYPE;
 
 /**
  * Created by SAshutosh on 7/19/2016.
@@ -91,16 +92,21 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 // Binding operations
                 ViewHolder viewHolder = (ViewHolder) view.getTag();
                 viewHolder.titleView.setText(cursor.getString(5));
-                viewHolder.fromMsgView.setText(cursor.getString(6));
+                //viewHolder.fromMsgView.setText(cursor.getString(6));
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
                 viewHolder.dbId=cursor.getLong(0);
                 int msgType = cursor.getInt(8);
                 if(msgType == DIARY_NOTE_TYPE){
-                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
+                    viewHolder.fromMsgView.setText("Diary Note");
+                    //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
                 }
                 else if(msgType ==HOMEWORK_TYPE){
-                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
+                    //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
+                    viewHolder.fromMsgView.setText("Homework");
+                }
+                else if(msgType==PARENT_NOTE_TYPE){
+                    viewHolder.fromMsgView.setText("Parent message");
                 }
 
                 viewHolder.position=cursor.getPosition();
@@ -232,7 +238,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         public final TextView fromMsgView;
         public final TextView dateView;
         public final ImageView imageView;
-         public final ImageView msgTypeIcon;
+        // public final ImageView msgTypeIcon;
         public Long dbId;
         public int position;
         public ViewHolder(View view) {
@@ -246,7 +252,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             fromMsgView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
-            msgTypeIcon=(ImageView)view.findViewById(R.id.list_item_msg_type_icon);
+            //msgTypeIcon=(ImageView)view.findViewById(R.id.list_item_msg_type_icon);
             //position=this.getAdapterPosition();
         }
 

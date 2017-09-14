@@ -31,15 +31,10 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
     ProgressDialog progressDialog;
     private DownloadCallback mCallback;
 
-    public FetchProfileAsyncTask(List<ProfileDownloadListener> listeners){
-
-        this.profileDownloadListeners = listeners;
-    }
-
     public FetchProfileAsyncTask(List<ProfileDownloadListener> profileDownloadListeners, Context currentContext) {
         this.profileDownloadListeners=profileDownloadListeners;
         this.context=currentContext;
-        progressDialog = new ProgressDialog(context);
+
     }
 
     /**
@@ -58,6 +53,7 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
                 cancel(true);
             }
         }
+        progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Downloading information, Please wait..");
         progressDialog.show();
     }

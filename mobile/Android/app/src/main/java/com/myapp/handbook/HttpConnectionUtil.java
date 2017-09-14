@@ -87,13 +87,19 @@ public class HttpConnectionUtil {
 
     public static void clearAllPreferences(SQLiteDatabase db, SharedPreferences sharedPreferences) {
 
-        sharedPreferences.edit().clear().commit();
-        //Clear all tables
-        db.execSQL("delete from "+ HandbookContract.ProfileEntry.TABLE_NAME);
-        db.execSQL("delete from "+ HandbookContract.TimetableEntry.TABLE_NAME);
-        db.execSQL("delete from "+HandbookContract.CalenderEventsEntry.TABLE_NAME);
-        db.execSQL("delete from "+HandbookContract.ContactSchoolEntry.TABLE_NAME);
-        db.execSQL("delete from "+HandbookContract.TeacherForStudentEntry.TABLE_NAME);
+        try {
+
+            sharedPreferences.edit().clear().commit();
+            //Clear all tables
+            db.execSQL("delete from " + HandbookContract.ProfileEntry.TABLE_NAME);
+            db.execSQL("delete from " + HandbookContract.TimetableEntry.TABLE_NAME);
+            db.execSQL("delete from " + HandbookContract.CalenderEventsEntry.TABLE_NAME);
+            db.execSQL("delete from " + HandbookContract.ContactSchoolEntry.TABLE_NAME);
+            db.execSQL("delete from " + HandbookContract.TeacherForStudentEntry.TABLE_NAME);
+        }
+        catch (Exception e){
+            Log.e(TAG, "clearAllPreferences: Failed to clean up tables",e );
+        }
 
 
     }

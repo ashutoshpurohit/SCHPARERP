@@ -74,6 +74,16 @@ public class TopFragment extends Fragment {
                 saveProfilestoDB(profiles,db,sharedPreferences);
             }
         });
+        listeners.add(new FetchProfileAsyncTask.ProfileDownloadListener() {
+            @Override
+            public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
+
+                if(profiles!=null && profiles.size() >0 ) {
+                    HttpConnectionUtil.setSelectedProfileId(profiles.get(0).getId());
+                    HttpConnectionUtil.setProfiles(profiles);
+                }
+            }
+        });
 
         listeners.add(new FetchProfileAsyncTask.ProfileDownloadListener(){
 
@@ -86,16 +96,13 @@ public class TopFragment extends Fragment {
         //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false).apply();
         if (!sharedPreferences.getBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, false)) {
             //Download the profile
-            new FetchProfileAsyncTask(listeners).execute();
+            new FetchProfileAsyncTask(listeners,getContext()).execute();
 
         } else
         {
             allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
+            SetUpView(allProfiles,fragmentView);
         }
-
-
-        SetUpView(allProfiles,fragmentView);
-        //UpdateSchoolDetails(schoolProfile);
         return view;
     }
 

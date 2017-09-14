@@ -161,16 +161,6 @@ public class HomeFragment extends Fragment {
                     updateOtherViewBasedOnSelectedProfile();
                 }
             });
-            /*profileDownloadListeners.add(new FetchProfileAsyncTask.ProfileDownloadListener(){
-
-                @Override
-                public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
-
-                   progressDialog.dismiss();
-                }
-            });*/
-            //Download the profile
-
             new FetchProfileAsyncTask(profileDownloadListeners, getContext()).execute();
         }
         else
@@ -179,9 +169,6 @@ public class HomeFragment extends Fragment {
             HttpConnectionUtil.setProfiles(allProfiles);
             updateOtherViewBasedOnSelectedProfile();
         }
-
-
-
         return view;
     }
 

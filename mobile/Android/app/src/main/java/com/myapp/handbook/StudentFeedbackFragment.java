@@ -78,7 +78,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
         if (!sharedPreferences.getBoolean(QuickstartPreferences.STUDENT_TEACHER_DOWNLOADED + "_" + selectedStudentId, false)) {
             if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
                 setupView();
-                new FetchProfileAsyncTask().execute();
+                new FetchTeacherAsyncTask().execute();
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
             }
@@ -264,7 +264,7 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
 
     }
 
-    private class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<TeacherProfile>> {
+    private class FetchTeacherAsyncTask extends AsyncTask<Void, Void, List<TeacherProfile>> {
         @Override
         protected List<TeacherProfile> doInBackground(Void... params) {
             HttpConnectionUtil util = new HttpConnectionUtil();

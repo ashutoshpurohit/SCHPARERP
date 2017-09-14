@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.myapp.handbook">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,8 +12,20 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
+    <!--You may already have io.fabric.ApiKey entry. Continue using it -->
+    <!--<meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="@string/FABRIC_API_KEY"
+        tools:replace="android:value"/>-->
+    <meta-data
+        android:name="com.digits.sdk.android.ConsumerKey"
+        android:value="@string/CONSUMER_KEY"/>
+    <meta-data
+        android:name="com.digits.sdk.android.ConsumerSecret"
+        android:value="@string/CONSUMER_SECRET"/>
 
     <application
+        tools:replace="android:allowBackup"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -34,6 +47,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.PhoneAuthActivity"
+            android:label="Authenticate"></activity>
         <activity
             android:name=".SearchResultActivity"
             android:label="@string/title_activity_search"
