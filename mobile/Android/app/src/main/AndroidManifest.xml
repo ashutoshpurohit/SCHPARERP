@@ -25,12 +25,21 @@
         android:value="@string/CONSUMER_SECRET"/>
 
     <application
-        tools:replace="android:allowBackup"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+        tools:replace="android:allowBackup">
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.com.myapp.handbook.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
         >
         <activity
             android:name=".MainActivity"

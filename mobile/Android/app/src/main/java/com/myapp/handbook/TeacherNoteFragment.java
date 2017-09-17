@@ -1,6 +1,7 @@
 package com.myapp.handbook;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -105,10 +107,12 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         //Check if permission is available to create file and access camera
         canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
 
-
+        Context context = getContext();
         if (canTakePhoto) {
-            Uri uri = Uri.fromFile( photoFile);
-            captureImage.putExtra( MediaStore.EXTRA_OUTPUT, uri);
+            //Uri uri = Uri.fromFile( photoFile);
+            Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".com.myapp.handbook.provider", photoFile);
+            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         //Check if there is a internet connection
@@ -402,7 +406,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
             String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
             JSONObject messageJson = prepareMessage();
-            util.UploadImage(photoFile);
+            HttpConnectionUtil.UploadImage(photoFile);
             while (!HttpConnectionUtil.imageUploaded) {
 
             }

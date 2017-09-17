@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    ;
     private static final String TAG = "MyActivity";
     SharedPreferences sharedPreferences;
     boolean doubleBackToExitPressedOnce = false;
@@ -336,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
     private void Logout() {
 
         sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
