@@ -69,7 +69,7 @@ public class NotesDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
-        message_id = intent.getLongExtra("ID", 0);
+        message_id = intent.getIntExtra("ID", 0);
 
     }
 

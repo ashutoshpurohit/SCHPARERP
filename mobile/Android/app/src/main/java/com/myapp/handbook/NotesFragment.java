@@ -1,10 +1,16 @@
 package com.myapp.handbook;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +34,8 @@ import com.myapp.handbook.adapter.MyRecyclerAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
+import static android.content.Context.DOWNLOAD_SERVICE;
+
 public class NotesFragment extends Fragment implements RecycleViewClickListener {
 
     private static final String TAG = "NotesFragment";
@@ -38,6 +46,8 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
     String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+ HandbookContract.NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+selectedProfileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
     private SQLiteDatabase db;
     private Cursor cursor;
+    private DownloadManager downloadManager=null;
+    private long lastDownload=-1L;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ActionMode.Callback notesContext = new ActionMode.Callback() {
@@ -139,6 +149,12 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
                              Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+        downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
+        getContext().registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        getContext().registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
         db = handbookDbHelper.getReadableDatabase();
@@ -288,6 +304,7 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
         switch (v.getId()) {
             case R.id.list_item_msg_type_icon:
                 Toast.makeText(getContext(), "File download clicked", Toast.LENGTH_LONG);
+                handleDownloadClick(position);
                 break;
             default:
                 Intent intent = new Intent(getContext(), NotesDetailActivity.class);
@@ -298,5 +315,67 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
         }
 
 
+    }
+
+    BroadcastReceiver onComplete=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            //findViewById(R.id.start).setEnabled(true);
+            Toast.makeText(ctxt, "Completed!", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private void handleDownloadClick(int message_id) {
+
+        SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(getContext());
+        String imageUrl=null;
+        db = handbookDbHelper.getReadableDatabase();
+
+        cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
+                null,
+                "_id= ?", new String[] {Long.toString(message_id)}, null, null, null, null);
+        if(cursor.moveToFirst()) {
+            //int id = cursor.getInt(0);
+            // int notificationId = cursor.getInt(0);
+            String title = cursor.getString(5);
+            String detail = cursor.getString(4);
+            String date = cursor.getString(3);
+            String from = cursor.getString(6);
+            int priority = cursor.getInt(2);
+            imageUrl = cursor.getString(7);
+        }
+
+        if(imageUrl!=null && !imageUrl.isEmpty()){
+            startDownload(imageUrl);
+        }
+
+    }
+
+    public void startDownload(String downloadUrl) {
+        Uri uri= Uri.parse(downloadUrl);
+        String fileName =getFileNameFromUrl(downloadUrl);
+        Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .mkdirs();
+
+        lastDownload=
+                downloadManager.enqueue(new DownloadManager.Request(uri)
+                        .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+                                DownloadManager.Request.NETWORK_MOBILE)
+                        .setTitle("SchoolLink")
+                        .setDescription("Something useful. No, really.")
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                                fileName));
+
+
+    }
+
+    private String getFileNameFromUrl(String downloadLink) {
+        return "doc.jpg";
     }
 }

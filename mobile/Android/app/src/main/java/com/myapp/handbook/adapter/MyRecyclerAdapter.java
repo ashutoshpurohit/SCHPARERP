@@ -90,6 +90,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 //viewHolder.fromMsgView.setText(cursor.getString(6));
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
+                //viewHolder.fileDownloadIcon.setOnClickListener(this);
                 viewHolder.dbId=cursor.getLong(0);
                 int msgType = cursor.getInt(8);
                 if(msgType == DIARY_NOTE_TYPE){
@@ -105,20 +106,29 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 }
 
                 viewHolder.position=cursor.getPosition();
-                String imageUrl = cursor.getString(7);
+                String downloadUrl = cursor.getString(7);
 
-                if(imageUrl!=null && !imageUrl.isEmpty()){
-                    imageUrl = checkImageUrl(imageUrl);
+                if(downloadUrl!=null && !downloadUrl.isEmpty()) {
+                    if (isImage(downloadUrl)) {
+                        downloadUrl = checkImageUrl(downloadUrl);
 
-                    Glide.with(context)
-                            .load(imageUrl)
-                            .placeholder(R.drawable.contact_picture_placeholder)
-                            .listener( requestListener )
-                            .error(R.drawable.contact_picture_error)
-                            .override(120,120)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(viewHolder.imageView);
+                        Glide.with(context)
+                                .load(downloadUrl)
+                                .placeholder(R.drawable.contact_picture_placeholder)
+                                .listener(requestListener)
+                                .error(R.drawable.contact_picture_error)
+                                .override(120, 120)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(viewHolder.imageView);
+                    }
+                    else if(isDocument(downloadUrl)){
+                        //download the file on click of icon
+                    }
+                    else{
+                        Toast.makeText(mContext,"Invalid url, could not download", Toast.LENGTH_LONG);
+                    }
                 }
+
                 else {
                     viewHolder.imageView.setImageDrawable(null);
                 }
@@ -130,6 +140,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
          this.itemClickListener = listener;
 
     }
+
+     private boolean isDocument(String downloadUrl) {
+         return true;
+     }
+
+     private boolean isImage(String downloadUrl) {
+         return false;
+     }
+
 
      public void setNotesContext(ActionMode.Callback notesContext) {
          this.notesContext = notesContext;
@@ -259,7 +278,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
          return new ViewHolder(v);
      }
 
-     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+     public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
         public final TextView titleView;
         public final TextView detailMsgView;
         public final TextView fromMsgView;
@@ -281,9 +300,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
             fileDownloadIcon = (ImageView) view.findViewById(R.id.list_item_msg_type_icon);
-            fileDownloadIcon.setOnClickListener(this);
+            //fileDownloadIcon.setOnClickListener(this);
             //position=this.getAdapterPosition();
-            view.setOnClickListener(this);
+            //view.setOnClickListener(this);
         }
 
 
@@ -292,7 +311,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
           *
           * @param v The view that was clicked.
           */
-         @Override
+         /*@Override*/
          public void onClick(View v) {
 
              int rowId = 0;
