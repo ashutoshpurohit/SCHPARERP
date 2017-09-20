@@ -4,16 +4,19 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -266,6 +269,14 @@ public class TimeTableActivity extends AppCompatActivity  {
                 timeTableListView.setVisibility(View.INVISIBLE);
                 view.setVisibility(View.VISIBLE);
                 view.setText(R.string.timetable_not_found);
+                view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                view.setGravity(Gravity.CENTER_HORIZONTAL);
+                view.setTextSize(20);
+                view.setTypeface(null, Typeface.BOLD);
+                //view.setPadding(0,350);
+
+
 
             }
         }
