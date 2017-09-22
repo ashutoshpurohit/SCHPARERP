@@ -23,11 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.adapter.MyRecyclerAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
-public class NotesFragment extends Fragment {
+public class NotesFragment extends Fragment implements RecycleViewClickListener {
 
     private static final String TAG = "NotesFragment";
     RecyclerView mRecyclerView;
@@ -105,7 +106,7 @@ public class NotesFragment extends Fragment {
                         int key =adapter.selectedItems.keyAt(i);
                         if(adapter.selectedItems.get(key,false)){
                             mAdapter.notifyItemRemoved(key);
-                            adapter.selectedItems.delete((int)key);
+                            adapter.selectedItems.delete(key);
                         }
                     }
 
@@ -187,7 +188,7 @@ public class NotesFragment extends Fragment {
 
 
         // specify an timetableAdapter (see also next example)
-        mAdapter = new MyRecyclerAdapter(this.getContext(), cursor);
+        mAdapter = new MyRecyclerAdapter(this.getContext(), cursor, this);
         mRecyclerView.setAdapter(mAdapter);
         ((MyRecyclerAdapter) mAdapter).setActivity((AppCompatActivity) getActivity());
         ((MyRecyclerAdapter) mAdapter).setNotesContext(notesContext);
@@ -260,7 +261,7 @@ public class NotesFragment extends Fragment {
                 Log.d("NotesFragment", "Submitted query" + query);
                 String searchQuery = "SELECT *  FROM "+ HandbookContract.NotificationEntry.TABLE_NAME + " where " + HandbookContract.NotificationEntry.COLUMN_DETAIL +" like \'%"+ query + "%\'";// order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
                 cursor = db.rawQuery(searchQuery, null);
-                mAdapter = new MyRecyclerAdapter(getContext(),cursor);
+                //mAdapter = new MyRecyclerAdapter(getContext(),cursor,this);
                 mRecyclerView.setAdapter(mAdapter);
 
                 searchView.clearFocus();
@@ -279,5 +280,23 @@ public class NotesFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void recyclerViewClicked(View v, int position) {
+
+        switch (v.getId()) {
+            case R.id.list_item_msg_type_icon:
+                Toast.makeText(getContext(), "File download clicked", Toast.LENGTH_LONG);
+                break;
+            default:
+                Intent intent = new Intent(getContext(), NotesDetailActivity.class);
+                intent.putExtra("ID", position);
+                getContext().startActivity(intent);
+
+                break;
+        }
+
+
     }
 }

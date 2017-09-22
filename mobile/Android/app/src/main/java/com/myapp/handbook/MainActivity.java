@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +22,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +31,13 @@ import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.firebase.digitsmigrationhelpers.AuthMigrator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
 
@@ -40,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    ;
     private static final String TAG = "MyActivity";
     SharedPreferences sharedPreferences;
     boolean doubleBackToExitPressedOnce = false;
@@ -76,16 +82,41 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
+        AuthMigrator.getInstance().migrate(true).addOnSuccessListener(this,
+                new OnSuccessListener() {
+
+                    @Override
+                    public void onSuccess(Object authResult) {
+                        FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+                        if (u != null) {
+                            // Either a user was already logged in or token exchange succeeded
+                            Log.d("MyApp", "Digits id preserved:" + u.getUid());
+                            Log.d("MyApp", "Digits phone number preserved: " + u.getPhoneNumber());
+                        } else {
+                            // No tokens were found to exchange and no Firebase user logged in.
+                        }
+                    }
+                }).addOnFailureListener(this,
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Error migrating Digits token
+                    }
+                });
+
+
         //Check if logged in
+
 
         if (!sharedPreferences.getBoolean(QuickstartPreferences.LOGGED_IN, false)) {
             //Launch the digits app
-            Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
+            Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.PhoneAuthActivity.class);
             startActivity(intent);
             return;
         }
         else{
             String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
+
             //If valid mobile
             if(mobileNumber.length()>0)
             {
@@ -93,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 //Redirect user back to login Screen
-                Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.Login.class);
+                Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.PhoneAuthActivity.class);
                 startActivity(intent);
             }
         }
@@ -164,16 +195,19 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.feedback:
 
-                        if(RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),
-                            HttpConnectionUtil.getSelectedProfileId()).getProfileRole()== RoleProfile.ProfileRole.STUDENT) {
-                            fragment = new StudentFeedbackFragment();
-                            currentPosition=3;
+                        RoleProfile role =RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),HttpConnectionUtil.getSelectedProfileId());
+                        if(role!=null) {
+                            if (role.getProfileRole() == RoleProfile.ProfileRole.STUDENT) {
+                                fragment = new StudentFeedbackFragment();
+                                currentPosition = 3;
+                            } else {
+                                fragment = new TeacherNoteFragment();
+                                currentPosition = 4;
+                            }
                         }
                         else {
-                            fragment = new TeacherNoteFragment();
-                            currentPosition=4;
+                            Toast.makeText(getApplicationContext(), "Profile download not complete. Please wait..", Toast.LENGTH_SHORT).show();
                         }
-
                         break;
 
                     case R.id.contactSchool:
@@ -301,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
     private void Logout() {
 
         sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
+        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -487,6 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
             SQLiteDatabase db = handbookDbHelper.getReadableDatabase();
             HttpConnectionUtil.clearAllPreferences(db,sharedPreferences);
+            HttpConnectionUtil.launchHomePage(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

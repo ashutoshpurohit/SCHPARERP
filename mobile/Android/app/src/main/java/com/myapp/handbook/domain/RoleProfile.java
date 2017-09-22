@@ -210,7 +210,7 @@ public class RoleProfile implements Parcelable {
             //HandBookDbHelper.insertProfile(db,profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getMiddleName(),profile.getRole(),profile.getGender(),profile.getStd(),profile.getAddress(),profile.getBirth_date(),profile.getImageUrl());
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             String curentDate= df.format(new Date());
-            HandBookDbHelper.insertNotification(db, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", curentDate, 1, "SchoolLink", 10001,"", HttpConnectionUtil.DIARY_NOTE_TYPE,profile.getId());
+            HandBookDbHelper.insertNotification(db, "Welcome to SchoolLink", "Thanks for installing the app. This app wil help you to stay connected with school. You can send and receive messages, view timetable and see school events using this app. ", curentDate, 1, "SchoolLink", 10001,"", HttpConnectionUtil.DIARY_NOTE_TYPE,profile.getId());
         }
 
         //sharedPreferences.edit().putBoolean(QuickstartPreferences.PROFILE_DOWNLOADED, true).commit();

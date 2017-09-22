@@ -38,7 +38,7 @@ public class UpdateNavigationViewHeader implements SelectionChangeListener {
     private void updateNavViewHeader(String selectedProfileId, List<RoleProfile> roles, NavigationView navigationView, Context context) {
 
         NavigationView navView =  navigationView;
-        if(roles!=null && roles.size() > 0)
+        if(navView!=null && roles!=null && roles.size() > 0)
         {
             View header= navView.getHeaderView(0);
             TextView schoolName = (TextView) header.findViewById(R.id.schoolName);

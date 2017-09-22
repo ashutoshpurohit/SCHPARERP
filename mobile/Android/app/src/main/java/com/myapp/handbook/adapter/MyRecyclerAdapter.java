@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
@@ -17,18 +16,21 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
 
 import static android.content.ContentValues.TAG;
 import static com.myapp.handbook.HttpConnectionUtil.DIARY_NOTE_TYPE;
 import static com.myapp.handbook.HttpConnectionUtil.HOMEWORK_TYPE;
+import static com.myapp.handbook.HttpConnectionUtil.PARENT_NOTE_TYPE;
 
 /**
  * Created by SAshutosh on 7/19/2016.
@@ -36,47 +38,41 @@ import static com.myapp.handbook.HttpConnectionUtil.HOMEWORK_TYPE;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener
  {
 
+     public SparseBooleanArray selectedItems;
     // Because RecyclerView.Adapter in its current form doesn't natively
     // support cursors, we wrap a CursorAdapter that will do all the job
     // for us.
      CursorAdapter mCursorAdapter;
-     public SparseBooleanArray selectedItems;
      Context mContext;
      AppCompatActivity activity;
      Toolbar toolbar;
+     RecycleViewClickListener itemClickListener;
 
      ActionMode.Callback notesContext;
-
-     public void setNotesContext(ActionMode.Callback notesContext) {
-         this.notesContext = notesContext;
-     }
-
-
-
-     public void setActivity(AppCompatActivity activity) {
-         this.activity = activity;
-     }
-
-     public void setToolbar(Toolbar toolbar){
-         this.toolbar =toolbar;
-     }
-
-
-
-     public long getDbId() {
-         return dbId;
-     }
-
-     public void setDbId(long dbId) {
-         this.dbId = dbId;
-     }
-
      long dbId;
-    public MyRecyclerAdapter(Context context, Cursor c) {
+     ActionMode node;
+     private RequestListener<String, GlideDrawable> requestListener = new RequestListener<String, GlideDrawable>() {
+         @Override
+         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+             // todo log exception
+             Log.e(TAG, "onException:Glide exception ", e);
 
-        mContext = context;
+             // important to return false so the error placeholder can be placed
+             return false;
+         }
 
-        mCursorAdapter = new CursorAdapter(mContext, c, 0) {
+         @Override
+         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+             return false;
+         }
+     };
+
+
+     public MyRecyclerAdapter(Context context, Cursor c, RecycleViewClickListener listener) {
+
+         this.mContext = context;
+
+         this.mCursorAdapter = new CursorAdapter(mContext, c, 0) {
 
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -92,16 +88,21 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 // Binding operations
                 ViewHolder viewHolder = (ViewHolder) view.getTag();
                 viewHolder.titleView.setText(cursor.getString(5));
-                viewHolder.fromMsgView.setText(cursor.getString(6));
+                //viewHolder.fromMsgView.setText(cursor.getString(6));
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
                 viewHolder.dbId=cursor.getLong(0);
                 int msgType = cursor.getInt(8);
                 if(msgType == DIARY_NOTE_TYPE){
-                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
+                    viewHolder.fromMsgView.setText("Diary Note");
+                    //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
                 }
                 else if(msgType ==HOMEWORK_TYPE){
-                    viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
+                    //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
+                    viewHolder.fromMsgView.setText("Homework");
+                }
+                else if(msgType==PARENT_NOTE_TYPE){
+                    viewHolder.fromMsgView.setText("Parent message");
                 }
 
                 viewHolder.position=cursor.getPosition();
@@ -125,26 +126,31 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             }
         };
 
-        selectedItems= new SparseBooleanArray();
+         this.selectedItems = new SparseBooleanArray();
 
+         this.itemClickListener = listener;
 
     }
 
-     private RequestListener<String, GlideDrawable> requestListener = new RequestListener<String, GlideDrawable>() {
-         @Override
-         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-             // todo log exception
-             Log.e(TAG, "onException:Glide exception ",e);
+     public void setNotesContext(ActionMode.Callback notesContext) {
+         this.notesContext = notesContext;
+     }
 
-             // important to return false so the error placeholder can be placed
-             return false;
-         }
+     public void setActivity(AppCompatActivity activity) {
+         this.activity = activity;
+     }
 
-         @Override
-         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-             return false;
-         }
-     };
+     public void setToolbar(Toolbar toolbar) {
+         this.toolbar = toolbar;
+     }
+
+     public long getDbId() {
+         return dbId;
+     }
+
+     public void setDbId(long dbId) {
+         this.dbId = dbId;
+     }
 
      //Remove and add to image url for progressive loading of images
      @SuppressLint("LongLogTag")
@@ -176,7 +182,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             //TextView fromMsgView = (TextView) v.findViewById(R.id.list_item_noteid_textview);
             //long rowId = Integer.parseInt(fromMsgView.getText().toString());
             ViewHolder viewHolder = (ViewHolder) v.getTag();
-            rowId = viewHolder.dbId;
+            if (viewHolder != null)
+                rowId = viewHolder.dbId;
 
             //Check if the row is already selected de-select it
             if (selectedItems.get((int)rowId, false)) {
@@ -185,15 +192,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 return;
             }
 
-            Intent intent = new Intent(mContext ,NotesDetailActivity.class);
-            intent.putExtra("ID",rowId);
-            mContext.startActivity(intent);
+            if (v.getId() == R.id.list_item_msg_type_icon) {
+                Toast.makeText(mContext, "File download clicked", Toast.LENGTH_LONG);
+            } else {
+
+                Intent intent = new Intent(mContext, NotesDetailActivity.class);
+                intent.putExtra("ID", rowId);
+                mContext.startActivity(intent);
+            }
             //TO-DO Add the current fragment to back stack so that back button works
         }
 
     }
-
-     ActionMode node;
 
      /**
       * Called when a view has been clicked and held.
@@ -229,21 +239,45 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
          return true;
      }
 
+     @Override
+     public int getItemCount() {
+         return mCursorAdapter.getCount();
+     }
 
-     public  class ViewHolder extends RecyclerView.ViewHolder  {
-        View v1;
+     @Override
+     public void onBindViewHolder(ViewHolder holder, int position) {
+         // Passing the binding operation to cursor loader
+         //holder.position=position;
+         mCursorAdapter.getCursor().moveToPosition(position);
+         mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
+
+     }
+
+     @Override
+     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+         // Passing the inflater job to the cursor-adapter
+         View v = mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent);
+         v.setOnClickListener(this);
+         v.setOnLongClickListener(this);
+         ImageView fileDownloadIcon = (ImageView) v.findViewById(R.id.list_item_msg_type_icon);
+         fileDownloadIcon.setOnClickListener(this);
+         return new ViewHolder(v);
+     }
+
+     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView titleView;
         public final TextView detailMsgView;
         public final TextView fromMsgView;
         public final TextView dateView;
         public final ImageView imageView;
-         public final ImageView msgTypeIcon;
+         public final ImageView fileDownloadIcon;
         public Long dbId;
         public int position;
+         View v1;
         public ViewHolder(View view) {
 
             super(view);
-            //view.setOnClickListener(this);
+            //
             //view.setOnLongClickListener(this);
 
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
@@ -251,8 +285,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             fromMsgView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
-            msgTypeIcon=(ImageView)view.findViewById(R.id.list_item_msg_type_icon);
+            fileDownloadIcon = (ImageView) view.findViewById(R.id.list_item_msg_type_icon);
+            fileDownloadIcon.setOnClickListener(this);
             //position=this.getAdapterPosition();
+            view.setOnClickListener(this);
         }
 
 
@@ -261,10 +297,19 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
           *
           * @param v The view that was clicked.
           */
-         /*@Override
+         @Override
          public void onClick(View v) {
+
+             int rowId = 0;
              Log.d("Adapter", "onClick:Called ");
-         }*/
+             MyRecyclerAdapter.ViewHolder viewHolder = (MyRecyclerAdapter.ViewHolder) v.getTag();
+             if (viewHolder != null)
+                 rowId = (int) (long) viewHolder.dbId;
+
+             if (itemClickListener != null)
+                 itemClickListener.recyclerViewClicked(v, rowId);
+
+         }
 
          /**
           * Called when a view has been clicked and held.
@@ -278,27 +323,4 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
              return false;
          }*/
      }
-
-    @Override
-    public int getItemCount() {
-        return mCursorAdapter.getCount();
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // Passing the binding operation to cursor loader
-        //holder.position=position;
-        mCursorAdapter.getCursor().moveToPosition(position);
-        mCursorAdapter.bindView(holder.itemView, mContext, mCursorAdapter.getCursor());
-
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Passing the inflater job to the cursor-adapter
-        View v = mCursorAdapter.newView(mContext, mCursorAdapter.getCursor(), parent);
-        v.setOnClickListener(this);
-        v.setOnLongClickListener(this);
-        return new ViewHolder(v);
-    }
 }

@@ -1,43 +1,62 @@
 {
   "project_info": {
-    "project_id": "handbook-ea6f8",
     "project_number": "831321766992",
-    "name": "Handbook"
+    "firebase_url": "https://handbook-ea6f8.firebaseio.com",
+    "project_id": "handbook-ea6f8",
+    "storage_bucket": "handbook-ea6f8.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:831321766992:android:339c1f718628482a",
-        "client_id": "android:com.myapp.handbook",
-        "client_type": 1,
         "android_client_info": {
-          "package_name": "com.myapp.handbook",
-          "certificate_hash": []
+          "package_name": "com.myapp.handbook"
         }
       },
-      "oauth_client": [],
-      "api_key": [],
+      "oauth_client": [
+        {
+          "client_id": "831321766992-b26psv9t0egmfo5kdmtbadl71dm9uo8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myapp.handbook",
+            "certificate_hash": "e901d255a263f3b2da79477b2e56cba19511ac86"
+          }
+        },
+        {
+          "client_id": "831321766992-sb0h63gi1q9gkq9ogif5orq1lbj6l2oe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myapp.handbook",
+            "certificate_hash": "85db4d767fb01fdf5f2a22f39a87ce3c1dad97a0"
+          }
+        },
+        {
+          "client_id": "831321766992-poq4td5rgd89bopa7bv2ob8ooss9rdgf.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "831321766992-ronorasi8sbdrksgrp212hth052iumma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9Hi2e3jrE3s59uVwsq-lKzjF2WxN-SHw"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
-        },
-        "cloud_messaging_service": {
-          "status": 2,
-          "apns_config": []
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
-        "google_signin_service": {
-          "status": 1
-        },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }
