@@ -92,6 +92,7 @@ public class SchoolContactFragment extends Fragment {
             TextView schoolAddress2 = (TextView)contactView.findViewById(R.id.contact_school_Address_2);
             TextView schoolAddress3 = (TextView)contactView.findViewById(R.id.contact_school_Address_3);
             TextView schoolWebsite = (TextView)contactView.findViewById(R.id.school_website);
+            TextView schoolBrochure = (TextView) contactView.findViewById(R.id.school_brochure);
             TextView schoolPrimaryPhoneNumber = (TextView)contactView.findViewById(R.id.school_primary_contact_number);
             TextView schoolSecondaryPhoneNumber = (TextView)contactView.findViewById(R.id.school_secondary_contact_number);
             TextView schoolEmail = (TextView)contactView.findViewById(R.id.school_contact_email);
@@ -124,14 +125,14 @@ public class SchoolContactFragment extends Fragment {
 
             }else
             {
-                schoolAddress2.setVisibility(contactView.GONE);
-                schoolAddress2Img.setVisibility(contactView.GONE);
-                schoolAddress3.setVisibility(contactView.GONE);
-                schoolAddress3Img.setVisibility(contactView.GONE);
-                schoolSecondaryPhoneNumber.setVisibility(contactView.GONE);
-                schoolSecondaryContactNumberImg.setVisibility(contactView.GONE);
-                schoolEmail.setVisibility(contactView.GONE);
-                schoolEmailIdImg.setVisibility(contactView.GONE);
+                schoolAddress2.setVisibility(View.GONE);
+                schoolAddress2Img.setVisibility(View.GONE);
+                schoolAddress3.setVisibility(View.GONE);
+                schoolAddress3Img.setVisibility(View.GONE);
+                schoolSecondaryPhoneNumber.setVisibility(View.GONE);
+                schoolSecondaryContactNumberImg.setVisibility(View.GONE);
+                schoolEmail.setVisibility(View.GONE);
+                schoolEmailIdImg.setVisibility(View.GONE);
 
             }
 
@@ -157,7 +158,16 @@ public class SchoolContactFragment extends Fragment {
             schoolWebsite.setMovementMethod(LinkMovementMethod.getInstance());
             String schoolUrl = "<a href ='"+websiteText+"'>"+websiteText+"</a>";
             schoolWebsite.setText(Html.fromHtml(schoolUrl));
-           // schoolWebsite.setText(schoolProfile.getSchoolWebSite());
+
+            //Code to make Brochure Clickable
+            schoolBrochure.setClickable(true);
+            String brochureText = "School Brochure";
+            String brochureLink = schoolProfile.getSchoolWebSite();
+            schoolBrochure.setMovementMethod(LinkMovementMethod.getInstance());
+            String schoolBrochureDocument = "<a href ='" + brochureLink + "'>" + brochureText + "</a>";
+            schoolBrochure.setText(Html.fromHtml(schoolBrochureDocument));
+
+            // schoolWebsite.setText(schoolProfile.getSchoolWebSite());
         }
     }
 
@@ -165,6 +175,7 @@ public class SchoolContactFragment extends Fragment {
         @Override
         protected SchoolProfile doInBackground(Void... params) {
             HttpConnectionUtil.SchoolService schoolService = ServiceGenerator.createService(HttpConnectionUtil.SchoolService.class);
+
             //Get the id of teacher or student
             List<RoleProfile> profiles = HandBookDbHelper.LoadProfilefromDb(db);
             //TO-DO Hardcoded to 0th indexed need to be changed based on currently selected profile

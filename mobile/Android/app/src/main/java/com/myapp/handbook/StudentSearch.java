@@ -81,9 +81,11 @@ public class StudentSearch extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.selectallButton:
                 multiSelectAdapter.changeAllItemCheckedState(true);
+
                 break;
             case R.id.clearallButton:
                 multiSelectAdapter.changeAllItemCheckedState(false);
+
                 break;
 
         }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_time_table"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.myapp.handbook.TimeTableActivity">
+<RelativeLayout android:id="@+id/activity_time_table"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.myapp.handbook.TimeTableActivity">
     <include
         android:id="@+id/my_toolbar"
         layout="@layout/toolbar"
@@ -13,9 +13,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/my_toolbar"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar"
+        android:orientation="vertical"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,23 +27,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6"
                 android:padding="15dp"
-                android:textSize="16sp"
-                android:text="Schedule"/>
+                android:text="Schedule"
+                android:textSize="16sp"/>
             <TextView
-                android:padding="15dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:textSize="16sp"
-                android:text="Subject"/>
+                android:padding="15dp"
+                android:text="Subject"
+                android:textSize="16sp"/>
             <TextView
                 android:id="@+id/header_timetable_std"
-                android:padding="15dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
-                android:textSize="16sp"
-                android:text="Standard"/>
+                android:padding="15dp"
+                android:text="Standard"
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -57,6 +57,7 @@
             android:id="@+id/empty_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:text="List view is empty"
             />
         <include

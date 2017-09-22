@@ -1,5 +1,6 @@
 package com.myapp.handbook.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -171,13 +172,17 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
      }
 
      //Remove and add to image url for progressive loading of images
+     @SuppressLint("LongLogTag")
      public String checkImageUrl(String str){
 
          String updatedStr;
-         String str1 = str.substring(0,50);
-         String str2 = str.substring(61);
-         updatedStr = str1 + "w_0.5,h_0.5,c_fit" +str2;
+          String keyword1="v1504178917";
+         String keyword2="w_0.5,h_0.5,c_fit";
+
+         updatedStr= str.replace(keyword1,keyword2);
+
          return updatedStr;
+
      }
 
     /**

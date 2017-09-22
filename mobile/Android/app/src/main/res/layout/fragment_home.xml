@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/home_rootView">
+    >
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+
+        <LinearLayout android:id="@+id/home_rootView"
+                      xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/summaryView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_summary_view1"
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -37,23 +37,27 @@
                             android:id="@+id/summaryView1Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
                             android:background="@color/primary_light"
-                            android:text="@string/TimeTable"/>
+                            android:text="@string/TimeTable"
+                            android:textSize="16sp"/>
 
                         <View style="@style/Divider"></View>
                         <android.support.v7.widget.RecyclerView
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="10dp"
                             android:id="@+id/summaryTimetableListView1"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="5dp"
                             />
                         <TextView
                             android:id="@+id/empty_summary_timetable_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:gravity="center_horizontal"
                             android:text="@string/no_timetable_available_for_today"
+                            android:textSize="10dp"
+                            android:textStyle="bold"
                             />
 
                     </LinearLayout>
@@ -62,11 +66,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_marginTop="1dp"
                 android:id="@+id/summaryView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="vertical">
 
 
                 <android.support.v7.widget.CardView
@@ -83,12 +87,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/summaryView2Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/summaryView2Header"
                             android:background="@color/primary_light"
-                            android:textSize="16sp"
-                            android:text="@string/diary_notes"/>
+                            android:text="@string/diary_notes"
+                            android:textSize="16sp"/>
 
                         <View style="@style/Divider"></View>
 
@@ -102,11 +106,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/summaryView3"
-                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="vertical">
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_summary_view3"
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -126,8 +130,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/primary_light"
-                            android:textSize="16sp"
-                            android:text="@string/Homework"/>
+                            android:text="@string/Homework"
+                            android:textSize="16sp"/>
                         <View style="@style/Divider"></View>
 
                         <android.support.v7.widget.RecyclerView

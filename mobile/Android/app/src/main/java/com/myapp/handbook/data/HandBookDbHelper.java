@@ -287,9 +287,16 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase) {
         List<Event> schooolEvents = new ArrayList<>();
 
-        String query_to_fetch_earliest="select *  from "+HandbookContract.CalenderEventsEntry.TABLE_NAME+"" +
-                " order  by datetime("+HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE+") DESC ";
+        String currDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        //Log.v("CalenderAct",currDate);
 
+               /* String query_to_fetch_earliest="select *  from "+HandbookContract.CalenderEventsEntry.TABLE_NAME+"" +
+                " order  by datetime("+HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE+") DESC ";*/
+
+        String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
+                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " >= '" + currDate +
+                "' order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";
+        // Log.v("CalenderAct",query_to_fetch_earliest);
         //L
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
 
@@ -319,7 +326,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     public static List<DiaryNote> loadLatestDiaryNote(SQLiteDatabase sqliteDatabase, int type, String profileId, int count){
         List<DiaryNote> diaryNotes = new ArrayList<>();
         String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+
-                NotificationEntry.COLUMN_MSG_TYPE+ " = '"+ type+ "' and "+ NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+profileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+                NotificationEntry.COLUMN_MSG_TYPE + " = '" + type + "' and " + NotificationEntry.COLUMN_TO_IDS + " LIKE " +
+                "'%" + profileId + "%'" + " order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP + ") DESC ";
         int fetchedCount=0;
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
         try {
@@ -384,7 +392,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
         List<DiaryNote> diaryNotes = new ArrayList<>();
         String query_to_fetch_earliest="select *  from "+HandbookContract.NotificationEntry.TABLE_NAME+" where "+
-                NotificationEntry.COLUMN_MSG_TYPE+ " = '"+ type+ "' and "+ NotificationEntry.COLUMN_TO_IDS+" LIKE "+"'%"+profileId+"%'"  +" order  by datetime("+HandbookContract.NotificationEntry.COLUMN_TIMESTAMP+") DESC ";
+                NotificationEntry.COLUMN_MSG_TYPE + " = '" + type + "' and " + NotificationEntry.COLUMN_TO_IDS +
+                " LIKE " + "'%" + profileId + "%'" + " order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP + ") DESC ";
         int fetchedCount=0;
 
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);

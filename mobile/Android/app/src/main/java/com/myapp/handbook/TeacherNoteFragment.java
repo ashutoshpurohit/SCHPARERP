@@ -121,6 +121,9 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             SetupView();
         }else {
             Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+            selectStudent.setClickable(false);
+            homeworkButton.setClickable(false);
+            diaryNoteButton.setClickable(false);
         }
 
 

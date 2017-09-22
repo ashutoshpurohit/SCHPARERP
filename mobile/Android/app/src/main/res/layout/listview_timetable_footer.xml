@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
     <!--<Button
         android:layout_gravity="center"
         android:id="@+id/datepickerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/today"/>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        >
 
+        <ImageView
+            android:id="@+id/img_date_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/ic_action_arrow_left"
+            />
+
+        <ImageView
+            android:id="@+id/img_date_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_action_arrow_right"/>
+    </RelativeLayout>
 </LinearLayout>
