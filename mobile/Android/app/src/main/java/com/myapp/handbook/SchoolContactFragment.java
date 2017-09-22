@@ -31,7 +31,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-import static com.myapp.handbook.domain.SchoolProfile.saveSchooProfiletoDB;
+import static com.myapp.handbook.domain.SchoolProfile.saveSchooProfileToDB;
 
 /**
  * Created by SAshutosh on 10/13/2016.
@@ -64,7 +64,7 @@ public class SchoolContactFragment extends Fragment {
 
         } else
         {
-            schoolProfile=HandBookDbHelper.LoadSchoolProfilefromDb(db);
+            schoolProfile=HandBookDbHelper.loadSchoolProfileFromDB(db);
             Log.v("SchoolContact","Loading from DB");
             UpdateView();
         }
@@ -186,7 +186,7 @@ public class SchoolContactFragment extends Fragment {
             schoolProfile = profile;
             //TO-DO Store school profile to DB
             if (schoolProfile != null) {
-                saveSchooProfiletoDB(schoolProfile, db, sharedPreferences);
+                saveSchooProfileToDB(schoolProfile, db, sharedPreferences);
             }
             UpdateView();
                /* String schoolId = schoolProfile.getSchoolId();

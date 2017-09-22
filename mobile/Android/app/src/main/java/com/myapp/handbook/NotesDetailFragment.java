@@ -28,7 +28,7 @@ import com.myapp.handbook.data.HandbookContract;
  * Use the {@link NotesDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NotesDetailFragment extends Fragment {
+public class NotesDetailFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -99,21 +99,35 @@ public class NotesDetailFragment extends Fragment {
             TextView dateTextView = (TextView)view.findViewById(R.id.detail_date);
             TextView fromTextView = (TextView)view.findViewById(R.id.detail_from);
             ImageView imageDetailView = (ImageView) view.findViewById(R.id.detail_image);
+            ImageView attachmentIcon = (ImageView)view.findViewById(R.id.item_msg_type_icon);
+            View attachmentView = (View)view.findViewById(R.id.detail_section_file_download);
+            TextView downloadFileNameView = (TextView)view.findViewById(R.id.item_file_name);
+            attachmentIcon.setOnClickListener(this);
+            downloadFileNameView.setOnClickListener(this);
             titleTextView.setText(title);
             detailTextView.setText(detail);
             //priorityTextView.setText(Integer.toString(priority));
             dateTextView.setText(date);
             fromTextView.setText(from);
+
             if(imageUrl!=null && !imageUrl.isEmpty()){
-                Glide.with(getContext())
-                        .load(imageUrl)
-                        .placeholder(R.drawable.contact_picture_placeholder)
-                        .error(R.drawable.contact_picture_error)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(imageDetailView);
-            }
-            else {
-                imageDetailView.setVisibility(View.INVISIBLE);
+                if(HttpConnectionUtil.isImage(imageUrl)) {
+                    imageDetailView.setVisibility(View.VISIBLE);
+                    attachmentView.setVisibility(View.GONE);
+                    Glide.with(getContext())
+                            .load(imageUrl)
+                            .placeholder(R.drawable.contact_picture_placeholder)
+                            .error(R.drawable.contact_picture_error)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(imageDetailView);
+                }
+                else {
+                    imageDetailView.setVisibility(View.INVISIBLE);
+                    attachmentView.setVisibility(View.VISIBLE);
+                    downloadFileNameView.setText(HttpConnectionUtil.getFileNameFromUrl(imageUrl));
+
+                }
+
             }
 
 
@@ -146,6 +160,18 @@ public class NotesDetailFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.item_msg_type_icon:
+            case R.id.item_file_name:
+                
+                break;
+        }
+
     }
 
     /**

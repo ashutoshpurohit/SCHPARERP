@@ -130,6 +130,12 @@ public class HttpConnectionUtil {
         return selectedProfileId;
     }
 
+    public static String getSchoolId(){
+
+        String schoolId= sharedPreferences.getString(QuickstartPreferences.SCHOOL_ID,"");
+        return schoolId;
+    }
+
     public static void setSelectedProfileId(String profileId)
     {
         selectedProfileId = profileId;
@@ -238,6 +244,25 @@ public class HttpConnectionUtil {
 
     }
 
+    public static boolean isImage(String downloadUrl) {
+
+        boolean isImage=false;
+        String extension = getFileExtension(downloadUrl);
+        if(extension.equals("jpg") || extension.equals("png"))
+            isImage=true;
+
+        return isImage;
+    }
+
+    static String getFileExtension(String downloadUrl) {
+        String extension="";
+        if(downloadUrl!=null && downloadUrl.length() > 3) {
+            int length = downloadUrl.length();
+            extension = downloadUrl.substring(length - 3);
+        }
+        return extension;
+    }
+
     public static File getPhotoFile(Context ctx, String name) {
         File externalFilesDir = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (externalFilesDir == null) {
@@ -245,6 +270,14 @@ public class HttpConnectionUtil {
         }
         return new File(externalFilesDir, name);
 
+
+    }
+
+    public static String getFileNameFromUrl(String downloadUrl) {
+        String name = "";
+        int index = downloadUrl.lastIndexOf('/');
+        name = downloadUrl.substring(index+1);
+        return name;
 
     }
 
@@ -322,8 +355,8 @@ public class HttpConnectionUtil {
     }
 
     public interface SchoolCalendarService {
-        @GET("Events")
-        Call<List<Event>> getSchoolCalendar();
+        @GET("EventsForSchool/{schoolId}")
+        Call<List<Event>> getSchoolCalendar(@Path("schoolId") String schoolId);
 
     }
 

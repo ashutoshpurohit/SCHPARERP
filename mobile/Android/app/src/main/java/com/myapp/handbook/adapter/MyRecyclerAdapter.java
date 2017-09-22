@@ -22,6 +22,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
@@ -90,6 +91,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 //viewHolder.fromMsgView.setText(cursor.getString(6));
                 viewHolder.dateView.setText(cursor.getString(3));
                 viewHolder.detailMsgView.setText(cursor.getString(4));
+                viewHolder.dbRowId.setText( String.valueOf(cursor.getLong(0)));
                 //viewHolder.fileDownloadIcon.setOnClickListener(this);
                 viewHolder.dbId=cursor.getLong(0);
                 int msgType = cursor.getInt(8);
@@ -109,9 +111,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 String downloadUrl = cursor.getString(7);
 
                 if(downloadUrl!=null && !downloadUrl.isEmpty()) {
-                    if (isImage(downloadUrl)) {
+                    if (HttpConnectionUtil.isImage(downloadUrl)) {
                         downloadUrl = checkImageUrl(downloadUrl);
-
+                        viewHolder.downloadSection.setVisibility(View.GONE);
                         Glide.with(context)
                                 .load(downloadUrl)
                                 .placeholder(R.drawable.contact_picture_placeholder)
@@ -121,11 +123,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(viewHolder.imageView);
                     }
-                    else if(isDocument(downloadUrl)){
-                        //download the file on click of icon
-                    }
                     else{
-                        Toast.makeText(mContext,"Invalid url, could not download", Toast.LENGTH_LONG);
+                        //It is a downloadable document enable the download link
+                        viewHolder.downloadSection.setVisibility(View.VISIBLE);
+                        viewHolder.downloadFileName.setText(HttpConnectionUtil.getFileNameFromUrl(downloadUrl));
                     }
                 }
 
@@ -141,13 +142,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     }
 
-     private boolean isDocument(String downloadUrl) {
-         return true;
-     }
 
-     private boolean isImage(String downloadUrl) {
-         return false;
-     }
+
+
+
+
+
 
 
      public void setNotesContext(ActionMode.Callback notesContext) {
@@ -278,13 +278,17 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
          return new ViewHolder(v);
      }
 
-     public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/ {
+     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final TextView titleView;
         public final TextView detailMsgView;
         public final TextView fromMsgView;
         public final TextView dateView;
         public final ImageView imageView;
-         public final ImageView fileDownloadIcon;
+        public final ImageView fileDownloadIcon;
+         public final TextView downloadFileName;
+         public final View downloadSection;
+        //This is a hack to get the db id when item is clicked
+         public final TextView dbRowId;
         public Long dbId;
         public int position;
          View v1;
@@ -299,10 +303,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             fromMsgView = (TextView) view.findViewById(R.id.list_item_note_from_textview);
             titleView = (TextView) view.findViewById(R.id.list_item_title_textview);
             imageView =(ImageView)view.findViewById(R.id.list_item_notes_image);
+            dbRowId= (TextView)view.findViewById(R.id.dbRowId);
             fileDownloadIcon = (ImageView) view.findViewById(R.id.list_item_msg_type_icon);
-            //fileDownloadIcon.setOnClickListener(this);
-            //position=this.getAdapterPosition();
-            //view.setOnClickListener(this);
+            fileDownloadIcon.setOnClickListener(this);
+            downloadFileName= (TextView)view.findViewById(R.id.list_item_file_name);
+            downloadFileName.setOnClickListener(this);
+            downloadSection= (View)view.findViewById(R.id.list_section_file_download);
+            position=this.getAdapterPosition();
+            view.setOnClickListener(this);
         }
 
 
@@ -311,17 +319,19 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
           *
           * @param v The view that was clicked.
           */
-         /*@Override*/
+         @Override
          public void onClick(View v) {
 
              int rowId = 0;
              Log.d("Adapter", "onClick:Called ");
              MyRecyclerAdapter.ViewHolder viewHolder = (MyRecyclerAdapter.ViewHolder) v.getTag();
+             String dbRowId = this.dbRowId.getText().toString();
+             int currentId = Integer.parseInt(dbRowId);
              if (viewHolder != null)
                  rowId = (int) (long) viewHolder.dbId;
 
              if (itemClickListener != null)
-                 itemClickListener.recyclerViewClicked(v, rowId);
+                 itemClickListener.recyclerViewClicked(v, currentId);
 
          }
 

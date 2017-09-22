@@ -200,7 +200,8 @@ public class RoleProfile implements Parcelable {
 
     public static void saveSchoolProfiletoDB(SchoolProfile schoolProfiles, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
 
-        SchoolProfile.saveSchooProfiletoDB(schoolProfiles,db,sharedPreferences);
+        SchoolProfile.saveSchooProfileToDB(schoolProfiles,db,sharedPreferences);
+
     }
 
     public static void AddWelcomeMessage(List<RoleProfile> profiles, SQLiteDatabase db) {

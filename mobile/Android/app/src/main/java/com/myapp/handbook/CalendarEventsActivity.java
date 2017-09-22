@@ -23,6 +23,7 @@ import com.myapp.handbook.adapter.SchoolCalendarAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.SchoolProfile;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,47 +58,55 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
 
         if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
 
-            progressDialog = ProgressDialog.show(this, "Downloading calendar", "Please wait", false);
-            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener getEvents = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-                @Override
-                public void onFinished(List<Event> currentEvents) {
-                    events = currentEvents;
-                }
-            };
+            SchoolProfile schoolProfile=HandBookDbHelper.loadSchoolProfileFromDB(db);
+            if(schoolProfile!=null && schoolProfile.getSchoolId()!=null) {
 
-            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB =
-                    new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-                        @Override
-                        public void onFinished(List<Event> currentEvents) {
-                            CalendarEvents.saveSchoolCalendarEventsToDB(db,currentEvents,sharedPreferences);
-                            Log.v("CalenderEventsDBAct", "Saved to DB");
-                        }
-                    };
+                progressDialog = ProgressDialog.show(this, "Downloading calendar", "Please wait", false);
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener getEvents = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                    @Override
+                    public void onFinished(List<Event> currentEvents) {
+                        events = currentEvents;
+                    }
+                };
+
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener saveEventsToDB =
+                        new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                            @Override
+                            public void onFinished(List<Event> currentEvents) {
+                                CalendarEvents.saveSchoolCalendarEventsToDB(db, currentEvents, sharedPreferences);
+                                Log.v("CalenderEventsDBAct", "Saved to DB");
+                            }
+                        };
 
 
-            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-                @Override
-                public void onFinished(List<Event> currentEvents) {
-                    setupSchoolCalendarView(currentEvents);
-                }
-            };
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                    @Override
+                    public void onFinished(List<Event> currentEvents) {
+                        setupSchoolCalendarView(currentEvents);
+                    }
+                };
 
-            FetchSchoolCalendarAsyncTask.CalendarDownloadedListener clearBusyDialog = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
-                @Override
-                public void onFinished(List<Event> events) {
-                    progressDialog.dismiss();
-                }
-            };
+                FetchSchoolCalendarAsyncTask.CalendarDownloadedListener clearBusyDialog = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
+                    @Override
+                    public void onFinished(List<Event> events) {
+                        progressDialog.dismiss();
+                    }
+                };
 
-            List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
-            listeners.add(getEvents);
-            listeners.add(saveEventsToDB);
-            listeners.add(setupView);
+                List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
+                listeners.add(getEvents);
+                listeners.add(saveEventsToDB);
+                listeners.add(setupView);
 
-            listeners.add(clearBusyDialog);
+                listeners.add(clearBusyDialog);
 
-            FetchSchoolCalendarAsyncTask task = new FetchSchoolCalendarAsyncTask(listeners);
-            task.execute();
+                FetchSchoolCalendarAsyncTask task = new FetchSchoolCalendarAsyncTask(listeners, schoolProfile.getSchoolId());
+                task.execute();
+            }
+            else {
+                //School profile not yet fetched or fetched incorrectly
+                Toast.makeText(this,"Failed to fetch school calendar. Please click refresh menu item and restart app.", Toast.LENGTH_LONG);
+            }
         }
         else{
             //Time table has been downloaded just fetch from DB render it

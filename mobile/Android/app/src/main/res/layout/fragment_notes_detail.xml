@@ -61,8 +61,35 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:visibility="gone"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
+    <LinearLayout
+        android:id="@+id/detail_section_file_download"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:id="@+id/item_msg_type_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_attach_file" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+
+            android:text="Brochure.pdf"
+            android:id="@+id/item_file_name"
+            />
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

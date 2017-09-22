@@ -21,9 +21,11 @@ public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Eve
 
     List<CalendarDownloadedListener> postDownloadListener;
     private DownloadCallback mCallback;
+    String schoolId;
 
-    public FetchSchoolCalendarAsyncTask(List<CalendarDownloadedListener> postDownloadListener) {
+    public FetchSchoolCalendarAsyncTask(List<CalendarDownloadedListener> postDownloadListener, String schoolId) {
         this.postDownloadListener = postDownloadListener;
+        this.schoolId=schoolId;
     }
 
     /**
@@ -47,7 +49,7 @@ public class FetchSchoolCalendarAsyncTask extends AsyncTask<Void, Void, List<Eve
     protected List<Event> doInBackground(Void... params) {
         HttpConnectionUtil.SchoolCalendarService schoolCalendarService= ServiceGenerator.
                 createService(HttpConnectionUtil.SchoolCalendarService.class);
-        Call<List<Event>> call= schoolCalendarService.getSchoolCalendar();
+        Call<List<Event>> call= schoolCalendarService.getSchoolCalendar(schoolId);
         try {
             return call.execute().body();
         } catch (IOException e) {

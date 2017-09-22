@@ -334,12 +334,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void Logout() {
 
-        sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
         FirebaseAuth.getInstance().signOut();
+        sharedPreferences.edit().putBoolean(QuickstartPreferences.LOGGED_IN, false).apply();
+/*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+*/
+        Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.PhoneAuthActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

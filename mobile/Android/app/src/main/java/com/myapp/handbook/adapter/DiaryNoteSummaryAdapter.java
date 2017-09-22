@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.MainActivity;
 import com.myapp.handbook.NotesFragment;
 import com.myapp.handbook.R;
@@ -90,7 +91,16 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
         holder.date.setText(currentNote.getDate());
         String chkImage = currentNote.getImage_url();
         if( chkImage == null || chkImage.isEmpty()){
-            holder.msg_img.setVisibility(View.INVISIBLE);
+            holder.msg_img.setVisibility(View.GONE);
+            holder.msg_attchment.setVisibility(View.GONE);
+        }
+        else {
+            if(HttpConnectionUtil.isImage(chkImage)){
+                holder.msg_img.setVisibility(View.VISIBLE);
+            }
+            else {
+                holder.msg_attchment.setVisibility(View.VISIBLE);
+            }
         }
 
     }
@@ -140,6 +150,7 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
     public class DiaryNoteSummaryViewHolder extends RecyclerView.ViewHolder{
         TextView title, date, msg_detail;
         ImageView msg_img;
+        ImageView msg_attchment;
 
 
         public DiaryNoteSummaryViewHolder(View itemView) {
@@ -148,6 +159,7 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
             date= (TextView)itemView.findViewById(R.id.diaryNote_summary_date);
             msg_detail=(TextView)itemView.findViewById(R.id.diaryNote_summary_msg);
             msg_img = (ImageView)itemView.findViewById(R.id.diaryNote_msg_image);
+            msg_attchment=(ImageView) itemView.findViewById(R.id.diaryNote_msg_attachment);
         }
     }
 }

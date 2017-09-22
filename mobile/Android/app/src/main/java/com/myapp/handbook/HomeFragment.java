@@ -218,7 +218,9 @@ public class HomeFragment extends Fragment {
                 List<FetchSchoolCalendarAsyncTask.CalendarDownloadedListener> listeners = new ArrayList<>();
                 listeners.add(setupUI);
                 listeners.add(saveEventsToDB);
-                new FetchSchoolCalendarAsyncTask(listeners).execute();
+                String schoolId =HttpConnectionUtil.getSchoolId();
+                if(schoolId!=null)
+                    new FetchSchoolCalendarAsyncTask(listeners,schoolId).execute();
             }
             else{
                 List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);

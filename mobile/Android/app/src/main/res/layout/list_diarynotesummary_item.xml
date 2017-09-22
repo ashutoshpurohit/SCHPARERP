@@ -25,6 +25,15 @@
         android:layout_weight="1"
         android:id="@+id/diaryNote_msg_image"
         android:src="@drawable/ic_image_black_24dp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:id="@+id/diaryNote_msg_attachment"
+        android:src="@drawable/ic_attach_file"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView

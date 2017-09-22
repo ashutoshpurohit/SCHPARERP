@@ -5,13 +5,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -302,6 +309,7 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
     public void recyclerViewClicked(View v, int position) {
 
         switch (v.getId()) {
+            case R.id.list_item_file_name:
             case R.id.list_item_msg_type_icon:
                 Toast.makeText(getContext(), "File download clicked", Toast.LENGTH_LONG);
                 handleDownloadClick(position);
@@ -326,7 +334,7 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
 
     BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctxt, "Downloading message", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -351,14 +359,73 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
         }
 
         if(imageUrl!=null && !imageUrl.isEmpty()){
-            startDownload(imageUrl);
+            checkExternalStoragePermissionsAndDownload(imageUrl);
         }
 
+    }
+    int REQUEST_STORAGE = 1;
+
+    private void checkExternalStoragePermissionsAndDownload(String downloadUrl) {
+        if (hasStoragePermissionGranted()) {
+            //You can do what whatever you want to do as permission is granted
+            startDownload(downloadUrl);
+        } else {
+            requestExternalStoragePermission();
+        }
+    }
+
+    public boolean hasStoragePermissionGranted(){
+        return  ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestExternalStoragePermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            String [] permissions= {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            ActivityCompat.requestPermissions(getActivity(),permissions ,
+                    REQUEST_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //User allow from permission dialog
+                //You can do what whatever you want to do as permission is granted
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //User has deny from permission dialog
+                Snackbar.make(getView(), "Please enable storage permission",Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String [] permissions= {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};;
+                                ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_STORAGE);
+                            }
+                        })
+                        .show();
+            } else {
+                // User has deny permission and checked never show permission dialog so you can redirect to Application settings page
+                Snackbar.make(getView(), "Please enable permission from settings",Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
+        }
     }
 
     public void startDownload(String downloadUrl) {
         Uri uri= Uri.parse(downloadUrl);
-        String fileName =getFileNameFromUrl(downloadUrl);
+        String fileName =HttpConnectionUtil.getFileNameFromUrl(downloadUrl);
         Environment
                 .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .mkdirs();
@@ -368,14 +435,12 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
                         .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
                                 DownloadManager.Request.NETWORK_MOBILE)
                         .setTitle("SchoolLink")
-                        .setDescription("Something useful. No, really.")
+                        .setDescription(fileName)
                         .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
                                 fileName));
 
 
     }
 
-    private String getFileNameFromUrl(String downloadLink) {
-        return "doc.jpg";
-    }
+
 }

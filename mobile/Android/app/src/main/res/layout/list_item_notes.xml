@@ -98,13 +98,36 @@
                     android:text="This is a Detail Message sent via GCM to the device"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/list_item_msg_type_icon"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/list_section_file_download"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_view_list" />
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:id="@+id/list_item_msg_type_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/ic_attach_file" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+
+                        android:text="Brochure.pdf"
+                        android:id="@+id/list_item_file_name"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dbRowId"
+                        android:visibility="gone"/>
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

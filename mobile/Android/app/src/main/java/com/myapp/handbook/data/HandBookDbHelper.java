@@ -207,7 +207,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     }
 
     //Load School profile from DB if already exists..
-    public static SchoolProfile LoadSchoolProfilefromDb(SQLiteDatabase sqliteDatabase) {
+    public static SchoolProfile loadSchoolProfileFromDB(SQLiteDatabase sqliteDatabase) {
         SchoolProfile profile = new SchoolProfile();
 
         Cursor cursor= sqliteDatabase.query(HandbookContract.ContactSchoolEntry.TABLE_NAME,

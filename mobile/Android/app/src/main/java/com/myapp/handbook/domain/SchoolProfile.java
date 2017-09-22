@@ -2,6 +2,7 @@ package com.myapp.handbook.domain;
 
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.myapp.handbook.QuickstartPreferences;
 import com.myapp.handbook.data.HandBookDbHelper;
@@ -143,13 +144,23 @@ public class SchoolProfile {
         this.SchoolWebSite = schoolWebSite;
     }
 
-    public static void saveSchooProfiletoDB(SchoolProfile schoolProfile, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
-        HandBookDbHelper.insertSchoolContactEntry(db,schoolProfile.getSchoolId(),schoolProfile.getSchoolName(),
-                schoolProfile.getSchoolFullAddress(),schoolProfile.getSchoolAddress2(),schoolProfile.getSchoolAddress3(),
-                schoolProfile.getSchoolMainTelephoneNumber(),schoolProfile.getSchoolSecondaryTelephoneNumber(),
-                schoolProfile.getSchoolEmailId(),schoolProfile.getSchoolWebSite(),schoolProfile.getSchoolLogoImageURL());
+    public static void saveSchooProfileToDB(SchoolProfile schoolProfile, SQLiteDatabase db, SharedPreferences sharedPreferences ) {
 
-        sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_PROFILE_DOWNLOADED, true).commit();
+        try {
+
+            if (schoolProfile != null && schoolProfile.getSchoolId() != null) {
+                HandBookDbHelper.insertSchoolContactEntry(db, schoolProfile.getSchoolId(), schoolProfile.getSchoolName(),
+                        schoolProfile.getSchoolFullAddress(), schoolProfile.getSchoolAddress2(), schoolProfile.getSchoolAddress3(),
+                        schoolProfile.getSchoolMainTelephoneNumber(), schoolProfile.getSchoolSecondaryTelephoneNumber(),
+                        schoolProfile.getSchoolEmailId(), schoolProfile.getSchoolWebSite(), schoolProfile.getSchoolLogoImageURL());
+
+                sharedPreferences.edit().putBoolean(QuickstartPreferences.SCHOOL_PROFILE_DOWNLOADED, true).commit();
+                sharedPreferences.edit().putString(QuickstartPreferences.SCHOOL_ID, schoolProfile.getSchoolId()).commit();
+            }
+        }
+        catch (Exception e){
+            Log.d("SchoolProfile","Failed to save school profile to DB", e);
+        }
 
     }
 
@@ -161,7 +172,7 @@ public class SchoolProfile {
         if(jsonObj!=null) {
 
             schoolProfile = new SchoolProfile();
-            schoolProfile.setSchoolId(SCHOOL_ID);
+            schoolProfile.setSchoolId(jsonObj.getString(SCHOOL_ID));
             schoolProfile.setSchoolLogoImageURL(jsonObj.getString(LOGO_IMAGE_URL));
             schoolProfile.setSchoolName(jsonObj.getString(SCHOOL_NAME));
             schoolProfile.setSchoolFullAddress(jsonObj.getString(SCHOOL_ADDRESS_1));

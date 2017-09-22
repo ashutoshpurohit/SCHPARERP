@@ -162,7 +162,12 @@ public class PhoneAuthActivity extends AppCompatActivity implements
     private boolean validatePhoneNumber() {
         String phoneNumber = mPhoneNumberField.getText().toString();
         if (TextUtils.isEmpty(phoneNumber)) {
-            mPhoneNumberField.setError("Invalid phone number.");
+            mPhoneNumberField.setError("Please enter a valid phone number.");
+            return false;
+        }
+        else if(phoneNumber.length()!=10){
+
+            mPhoneNumberField.setError("Enter 10 digit phone number");
             return false;
         }
         return true;
@@ -178,6 +183,11 @@ public class PhoneAuthActivity extends AppCompatActivity implements
             startActivity(new Intent(PhoneAuthActivity.this, MainActivity.class));
             finish();
         }
+        else {
+            //Set the previous number set by user
+            String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE, "");
+            mPhoneNumberField.setText(mobileNumber);
+        }
     }
 
     @Override
@@ -187,7 +197,8 @@ public class PhoneAuthActivity extends AppCompatActivity implements
                 if (!validatePhoneNumber()) {
                     return;
                 }
-                startPhoneNumberVerification(mPhoneNumberField.getText().toString());
+                String i8nPhoneNumber= updatePhoneNumberToI8N(mPhoneNumberField.getText().toString());
+                startPhoneNumberVerification(i8nPhoneNumber);
                 break;
             case R.id.button_verify_phone:
                 String code = mVerificationField.getText().toString();
@@ -199,10 +210,18 @@ public class PhoneAuthActivity extends AppCompatActivity implements
                 verifyPhoneNumberWithCode(mVerificationId, code);
                 break;
             case R.id.button_resend:
-                resendVerificationCode(mPhoneNumberField.getText().toString(), mResendToken);
+                resendVerificationCode(updatePhoneNumberToI8N(mPhoneNumberField.getText().toString()), mResendToken);
                 break;
         }
 
+    }
+
+    private String updatePhoneNumberToI8N(String phoneNumber) {
+        if(phoneNumber.length()==10){
+            return "+91"+phoneNumber;
+        }
+        else
+            return phoneNumber;
     }
 
 }

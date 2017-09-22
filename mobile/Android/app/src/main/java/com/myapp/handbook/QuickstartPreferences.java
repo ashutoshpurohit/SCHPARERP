@@ -28,6 +28,7 @@ public class QuickstartPreferences {
     public static final String SELECTED_PROFILE_ID ="selectedProfileId";
     public static final String SCHOOL_CALENDER_EVENTS_DOWNLOADED ="CalenderEventsDownloaded";
     public static final String STUDENT_TEACHER_DOWNLOADED ="StudentTeacherDownloaded";
+    public static final String SCHOOL_ID ="SchoolId";
 
     public static final String CALENDAR_DOWNLOADED = "calendarDownloaded";
 }
