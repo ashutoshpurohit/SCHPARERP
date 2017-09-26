@@ -290,12 +290,12 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         String currDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //Log.v("CalenderAct",currDate);
 
-               /* String query_to_fetch_earliest="select *  from "+HandbookContract.CalenderEventsEntry.TABLE_NAME+"" +
-                " order  by datetime("+HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE+") DESC ";*/
+        String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
+                " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";
 
-        String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
+        /*String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
                 HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " >= '" + currDate +
-                "' order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";
+                "' order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";*/
         // Log.v("CalenderAct",query_to_fetch_earliest);
         //L
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
