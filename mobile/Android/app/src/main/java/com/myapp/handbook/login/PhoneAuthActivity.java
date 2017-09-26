@@ -25,7 +25,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.myapp.handbook.CalendarEventsActivity;
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.MainActivity;
 import com.myapp.handbook.QuickstartPreferences;
@@ -41,16 +40,14 @@ import java.util.concurrent.TimeUnit;
 public class PhoneAuthActivity extends AppCompatActivity implements
         View.OnClickListener {
 
+    private static final String TAG = "PhoneAuthActivity";
     EditText mPhoneNumberField, mVerificationField;
     Button mStartButton, mVerifyButton, mResendButton;
-
+    String mVerificationId;
+    SharedPreferences sharedPreferences;
     private FirebaseAuth mAuth;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    String mVerificationId;
-    SharedPreferences sharedPreferences;
-
-    private static final String TAG = "PhoneAuthActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -199,6 +196,7 @@ public class PhoneAuthActivity extends AppCompatActivity implements
                 }
                 String i8nPhoneNumber= updatePhoneNumberToI8N(mPhoneNumberField.getText().toString());
                 startPhoneNumberVerification(i8nPhoneNumber);
+                checkVerificationVisibility();
                 break;
             case R.id.button_verify_phone:
                 String code = mVerificationField.getText().toString();
@@ -216,6 +214,12 @@ public class PhoneAuthActivity extends AppCompatActivity implements
 
     }
 
+    private void checkVerificationVisibility() {
+        mVerifyButton.setVisibility(View.VISIBLE);
+        mResendButton.setVisibility(View.VISIBLE);
+        mVerificationField.setVisibility(View.VISIBLE);
+
+    }
     private String updatePhoneNumberToI8N(String phoneNumber) {
         if(phoneNumber.length()==10){
             return "+91"+phoneNumber;
