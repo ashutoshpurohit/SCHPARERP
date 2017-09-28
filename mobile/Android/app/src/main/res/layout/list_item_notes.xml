@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="Date"
+                    android:text="26/07/2017"
                     android:textSize="12sp" />
             </LinearLayout>
             <LinearLayout

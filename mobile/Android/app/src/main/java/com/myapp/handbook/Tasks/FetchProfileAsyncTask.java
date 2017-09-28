@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.domain.RoleProfile;
@@ -114,6 +115,9 @@ public class FetchProfileAsyncTask extends AsyncTask<Void, Void, List<RoleProfil
                 listener.onProfileDownload(allProfiles, schoolProfile);
             }
 
+        }
+        else {
+            Toast.makeText(context,"Failed to download the information. Please click refresh again from top right menu item",Toast.LENGTH_LONG);
         }
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
