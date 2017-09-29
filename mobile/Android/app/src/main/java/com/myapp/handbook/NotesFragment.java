@@ -1,7 +1,9 @@
 package com.myapp.handbook;
 
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,6 +21,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -41,6 +44,8 @@ import com.myapp.handbook.adapter.MyRecyclerAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
 
+import java.io.File;
+
 import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class NotesFragment extends Fragment implements RecycleViewClickListener {
@@ -57,6 +62,7 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
     private long lastDownload=-1L;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    boolean receiversRegistered = false;
     private ActionMode.Callback notesContext = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -157,10 +163,9 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
 
         setHasOptionsMenu(true);
         downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
-        getContext().registerReceiver(onComplete,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        getContext().registerReceiver(onNotificationClick,
-                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+        if(receiversRegistered) {
+            registerDownloadManagerIntentReceivers();
+        }
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
@@ -168,37 +173,10 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
 
 
         cursor = db.rawQuery(query_to_fetch_earliest, null);
-        /*cursor= db.query(HandbookContract.NotificationEntry.TABLE_NAME,
-                null,
-                null, null, null, null, HandbookContract.NotificationEntry.COLUMN_TIMESTAMP, null);*/
-
-        /* CursorAdapter listAdapter = new SimpleCursorAdapter(inflater.getContext(),
-                android.R.layout.simple_list_item_1,
-                cursor,new String[]{HandbookContract.NotificationEntry.COLUMN_TITLE},new int[]{android.R.id.text1},0 );*/
-        //NotesAdapter listAdapter = new NotesAdapter(inflater.getContext(),cursor,0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        /*ListView timeTableListView = (ListView) rootView.findViewById(R.id.listview_notes);
-        timeTableListView.setAdapter(listAdapter);
-        timeTableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if(cursor!=null){
-                    long rowId = cursor.getLong(0);
-                    Intent intent = new Intent(getActivity(),NotesDetailActivity.class);
-                    intent.putExtra("ID",rowId);
-                    startActivity(intent);
-                }
-
-            }
-        });*/
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
-
-        //registerForContextMenu(mRecyclerView);
 
 
         // use this setting to improve performance if you know that changes
@@ -215,24 +193,36 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
         mRecyclerView.setAdapter(mAdapter);
         ((MyRecyclerAdapter) mAdapter).setActivity((AppCompatActivity) getActivity());
         ((MyRecyclerAdapter) mAdapter).setNotesContext(notesContext);
-        //mRecyclerView.set
         return rootView;
+    }
 
-        //setListAdapter(listAdapter);
+    private void registerDownloadManagerIntentReceivers() {
+        getContext().registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        getContext().registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+        receiversRegistered=true;
+    }
 
+    private void unRegisterDownloadManagerIntentReceivers() {
 
-
-        /*ArrayAdapter<String> timetableAdapter = new ArrayAdapter<String>(
-                                                                inflater.getContext(),
-                                                                android.R.layout.simple_list_item_1,
-                                                                Notifications.notes);
-        setListAdapter(timetableAdapter);*/
-        //return super.onCreateView(inflater, container, savedInstanceState);
+        getContext().unregisterReceiver(onComplete);
+        getContext().unregisterReceiver(onNotificationClick);
+        receiversRegistered=false;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(!receiversRegistered){
+            registerDownloadManagerIntentReceivers();
+        }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        unRegisterDownloadManagerIntentReceivers();
     }
 
     private String prepareTextMessage(String title, String detail, String from, int date) {
@@ -328,9 +318,50 @@ public class NotesFragment extends Fragment implements RecycleViewClickListener 
     BroadcastReceiver onComplete=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
             //findViewById(R.id.start).setEnabled(true);
-            Toast.makeText(ctxt, "Completed!", Toast.LENGTH_LONG).show();
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                long downloadId = intent.getLongExtra(
+                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                openDownloadedAttachment(getContext(), downloadId);
+            }
         }
     };
+
+    private void openDownloadedAttachment(final Context context, final long downloadId) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadId);
+        Cursor cursor = downloadManager.query(query);
+        if (cursor.moveToFirst()) {
+            int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
+            if ((downloadStatus == DownloadManager.STATUS_SUCCESSFUL) && downloadLocalUri != null) {
+                openDownloadedAttachment(context, Uri.parse(downloadLocalUri), downloadMimeType);
+            }
+        }
+        cursor.close();
+    }
+
+    private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
+        if(attachmentUri!=null) {
+            // Get Content Uri.
+            if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
+                // FileUri - Convert it to contentUri.
+                File file = new File(attachmentUri.getPath());
+                attachmentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+".com.myapp.handbook.provider", file);;
+            }
+
+            Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);
+            openAttachmentIntent.setDataAndType(attachmentUri, attachmentMimeType);
+            openAttachmentIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                context.startActivity(openAttachmentIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, context.getString(R.string.unable_to_open_file), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {

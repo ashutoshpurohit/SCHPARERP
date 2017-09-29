@@ -86,4 +86,5 @@
     <string name="resend_phone_auth">Resend</string>
     <string name="CONSUMER_KEY">FYb2ipP3TtsjypFzFcqmUIgzR</string>
     <string name="CONSUMER_SECRET">t0vQHLYZp6PSAyBYnZB4a260SFFT20RChlE1xx8ixzkCaWGuA6</string>
+    <string name="unable_to_open_file">Unable to open file</string>
 </resources>

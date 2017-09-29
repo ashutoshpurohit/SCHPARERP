@@ -3,6 +3,7 @@ package com.myapp.handbook.application;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 
@@ -10,7 +11,7 @@ import android.util.Log;
  * Created by user on 9/17/2017.
  */
 
-public class HandbookApp extends Application {
+public class HandbookApp extends MultiDexApplication {
 
 
     @Override
