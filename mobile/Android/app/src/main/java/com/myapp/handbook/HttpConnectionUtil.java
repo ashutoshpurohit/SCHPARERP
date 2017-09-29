@@ -250,7 +250,6 @@ public class HttpConnectionUtil {
         String extension = getFileExtension(downloadUrl);
         if(extension.equals("jpg") || extension.equals("png"))
             isImage=true;
-
         return isImage;
     }
 

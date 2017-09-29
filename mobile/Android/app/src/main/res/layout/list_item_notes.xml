@@ -61,6 +61,7 @@
                     android:layout_weight="1"
                     android:gravity="left"
                     android:text="ID"
+                    android:textStyle="bold"
                     android:textSize="14sp" />
                 <TextView
                     android:id="@+id/list_item_date_textview"
@@ -117,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-
+                        android:textColor="@color/black"
                         android:text="Brochure.pdf"
                         android:id="@+id/list_item_file_name"
                         />

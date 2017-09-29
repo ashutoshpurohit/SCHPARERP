@@ -1,23 +1,42 @@
 package com.myapp.handbook;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.util.AndroidPermissions;
+
+import java.io.File;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 
 /**
@@ -36,6 +55,9 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
     private  long message_id;
     private SQLiteDatabase db;
     private Cursor cursor;
+    DownloadManager downloadManager;
+    boolean receiversRegistered=false;
+    String imageUrl;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -78,6 +100,10 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notes_detail,container,false);
+        downloadManager=(DownloadManager)getContext().getSystemService(DOWNLOAD_SERVICE);
+        if(receiversRegistered) {
+            registerDownloadManagerIntentReceivers();
+        }
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
 
@@ -92,7 +118,7 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
             String date = cursor.getString(3);
             String from = cursor.getString(6);
             int priority = cursor.getInt(2);
-            String imageUrl = cursor.getString(7);
+            imageUrl = cursor.getString(7);
             TextView titleTextView = (TextView)view.findViewById(R.id.detail_header);
             TextView detailTextView = (TextView)view.findViewById(R.id.detail_message);
             //TextView priorityTextView = (TextView)view.findViewById(R.id.detail_priority);
@@ -125,8 +151,12 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
                     imageDetailView.setVisibility(View.INVISIBLE);
                     attachmentView.setVisibility(View.VISIBLE);
                     downloadFileNameView.setText(HttpConnectionUtil.getFileNameFromUrl(imageUrl));
+                    //Register download manager if there is a file to download
+
 
                 }
+
+
 
             }
 
@@ -137,6 +167,75 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
 
         return view;
     }
+
+    private void registerDownloadManagerIntentReceivers() {
+        getContext().registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        getContext().registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+        receiversRegistered=true;
+    }
+
+    private void unRegisterDownloadManagerIntentReceivers() {
+
+        getContext().unregisterReceiver(onComplete);
+        getContext().unregisterReceiver(onNotificationClick);
+        receiversRegistered=false;
+    }
+
+    BroadcastReceiver onComplete=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            //findViewById(R.id.start).setEnabled(true);
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                long downloadId = intent.getLongExtra(
+                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                openDownloadedAttachment(getContext(), downloadId);
+            }
+        }
+    };
+
+    private void openDownloadedAttachment(final Context context, final long downloadId) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(downloadId);
+        Cursor cursor = downloadManager.query(query);
+        if (cursor.moveToFirst()) {
+            int downloadStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            String downloadLocalUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            String downloadMimeType = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_MEDIA_TYPE));
+            if ((downloadStatus == DownloadManager.STATUS_SUCCESSFUL) && downloadLocalUri != null) {
+                openDownloadedAttachment(context, Uri.parse(downloadLocalUri), downloadMimeType);
+            }
+        }
+        cursor.close();
+    }
+
+    private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
+        if(attachmentUri!=null) {
+            // Get Content Uri.
+            if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
+                // FileUri - Convert it to contentUri.
+                File file = new File(attachmentUri.getPath());
+                attachmentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+".com.myapp.handbook.provider", file);;
+            }
+
+            Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);
+            openAttachmentIntent.setDataAndType(attachmentUri, attachmentMimeType);
+            openAttachmentIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                context.startActivity(openAttachmentIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, context.getString(R.string.unable_to_open_file), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Downloading message", Toast.LENGTH_LONG).show();
+        }
+    };
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -168,10 +267,81 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
         switch (v.getId()){
             case R.id.item_msg_type_icon:
             case R.id.item_file_name:
-                
+                if(imageUrl!=null && !imageUrl.isEmpty()){
+                    checkExternalStoragePermissionsAndDownload(imageUrl);
+                }
                 break;
+
         }
 
+    }
+
+    private void checkExternalStoragePermissionsAndDownload(String downloadUrl) {
+        if (AndroidPermissions.hasStoragePermissionGranted(getContext())) {
+            //You can do what whatever you want to do as permission is granted
+            startDownload(downloadUrl);
+        } else {
+            AndroidPermissions.requestExternalStoragePermission(getActivity());
+        }
+    }
+
+    public void startDownload(String downloadUrl) {
+        Uri uri= Uri.parse(downloadUrl);
+        long lastDownload=-1L;
+        String fileName =HttpConnectionUtil.getFileNameFromUrl(downloadUrl);
+        Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .mkdirs();
+
+        lastDownload=
+                downloadManager.enqueue(new DownloadManager.Request(uri)
+                        .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+                                DownloadManager.Request.NETWORK_MOBILE)
+                        .setTitle("SchoolLink")
+                        .setDescription(fileName)
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                                fileName));
+
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == AndroidPermissions.REQUEST_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //User allow from permission dialog
+                //You can do what whatever you want to do as permission is granted
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //User has deny from permission dialog
+                Snackbar.make(getView(), "Please enable storage permission",Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String [] permissions= {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};;
+                                ActivityCompat.requestPermissions(getActivity(), permissions, AndroidPermissions.REQUEST_STORAGE);
+                            }
+                        })
+                        .show();
+            } else {
+                // User has deny permission and checked never show permission dialog so you can redirect to Application settings page
+                Snackbar.make(getView(), "Please enable permission from settings",Snackbar.LENGTH_INDEFINITE)
+                        .setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+            }
+        }
     }
 
     /**
