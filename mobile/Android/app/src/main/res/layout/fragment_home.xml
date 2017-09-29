@@ -37,6 +37,7 @@
                             android:id="@+id/summaryView1Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="5dp"
                             android:background="@color/primary_light"
                             android:text="@string/TimeTable"
                             android:textSize="16sp"/>
@@ -90,6 +91,7 @@
                             android:id="@+id/summaryView2Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="5dp"
                             android:background="@color/primary_light"
                             android:text="@string/diary_notes"
                             android:textSize="16sp"/>
@@ -129,6 +131,7 @@
                             android:id="@+id/summaryView3Header"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:padding="5dp"
                             android:background="@color/primary_light"
                             android:text="@string/Homework"
                             android:textSize="16sp"/>
