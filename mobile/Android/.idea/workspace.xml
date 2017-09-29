@@ -7,31 +7,13 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CUSTOM_FILTER" value="com.myapp.handbook" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Firebase" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfcfe8c9-7aca-4e9b-87ed-398d80976131" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/CalendarEventsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/CalendarEventsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HomeFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HomeFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/QuickstartPreferences.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/QuickstartPreferences.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/SchoolContactFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/SchoolContactFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/Tasks/FetchSchoolCalendarAsyncTask.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/Tasks/FetchSchoolCalendarAsyncTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/data/HandBookDbHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/data/HandBookDbHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/domain/RoleProfile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/domain/RoleProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/domain/SchoolProfile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/domain/SchoolProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml" />
     </list>
     <ignored path="Android.iws" />
@@ -55,7 +37,12 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <projects_view />
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state />
+        </projects_view>
       </state>
     </system>
   </component>
@@ -63,22 +50,38 @@
     <favorites_list name="Android" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java">
+    <leaf>
+      <file leaf-file-name="list_diarynotesummary_item.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="128" column="13" selection-start-line="128" selection-start-column="13" selection-end-line="128" selection-end-column="13" />
+            <state relative-caret-position="238">
+              <caret line="53" column="27" selection-start-line="53" selection-start-column="27" selection-end-line="53" selection-end-column="27" />
               <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fragment_notes_detail.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="MyRecyclerAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="328" column="0" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
+            <state relative-caret-position="156">
+              <caret line="101" column="66" selection-start-line="101" selection-start-column="66" selection-end-line="101" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -87,8 +90,8 @@
       <file leaf-file-name="list_item_notes.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="114" column="35" selection-start-line="114" selection-start-column="35" selection-end-line="114" selection-end-column="35" />
+            <state relative-caret-position="285">
+              <caret line="65" column="25" selection-start-line="65" selection-start-column="25" selection-end-line="65" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -97,80 +100,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotesDetailFragment.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java">
+      <file leaf-file-name="strings.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="170" column="16" selection-start-line="170" selection-start-column="16" selection-end-line="170" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fragment_notes_detail.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_phone.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml">
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider selected="true" editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DiaryNoteSummaryAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="103" column="9" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NotesFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="310" column="0" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="list_diarynotesummary_item.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HttpConnectionUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="253" column="22" selection-start-line="253" selection-start-column="22" selection-end-line="253" selection-end-column="22" />
+            <state relative-caret-position="64">
+              <caret line="69" column="45" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -199,7 +133,7 @@
   <component name="GradleLocalSettings">
     <option name="myGradleHomes">
       <map>
-        <entry key="$PROJECT_DIR$" value="C:\Users\user\.gradle\wrapper\dists\gradle-3.3-all\55gk2rcmfc6p2dg9u9ohc3hw9\gradle-3.3" />
+        <entry key="$PROJECT_DIR$" value="C:\Users\Ashutosh\.gradle\wrapper\dists\gradle-3.3-all\55gk2rcmfc6p2dg9u9ohc3hw9\gradle-3.3" />
       </map>
     </option>
     <option name="myGradleVersions">
@@ -274,13 +208,18 @@
                 <option name="name" value="mockableAndroidJar" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:appcompat-v7:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportAppcompatV72531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileDebugSources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-fragment:25.4.0" />
+                <option name="description" value="Prepare com.android.support:support-vector-drawable:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportFragment2540Library" />
+                <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -343,11 +282,6 @@
                 <option name="description" value="Displays the components produced by root project 'Android'. [incubating]" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="components" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:appcompat-v7:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportAppcompatV72540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -516,6 +450,11 @@
                 <option name="name" value="prepareComGoogleFirebaseFirebaseConfig1122Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-core-ui:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportSupportCoreUi2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks on currently connected devices." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="connectedCheck" />
@@ -633,6 +572,11 @@
                 <option name="name" value="preReleaseUnitTestBuild" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-fragment:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportSupportFragment2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="generateDebugResValues" />
               </ExternalTaskPojo>
@@ -671,28 +615,18 @@
                 <option name="name" value="jarDebugClasses" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:animated-vector-drawable:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Installs the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="installDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:animated-vector-drawable:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-compat:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportCompat2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="preBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-vector-drawable:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-crash:11.2.2" />
@@ -819,11 +753,6 @@
                 <option name="name" value="prepareComCrashlyticsSdkAndroidAnswers1313Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-core-ui:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportCoreUi2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="assembleReleaseUnitTest" />
               </ExternalTaskPojo>
@@ -844,11 +773,6 @@
                 <option name="description" value="Runs lint on the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="lintDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-v4:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportV42540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays the configuration model of root project 'Android'. [incubating]" />
@@ -883,6 +807,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="incrementalDebugJavaCompilationSafeguard" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-media-compat:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportSupportMediaCompat2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays all dependencies declared in root project 'Android'." />
@@ -921,11 +850,6 @@
                 <option name="name" value="testReleaseUnitTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-media-compat:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportMediaCompat2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="mergeDebugShaders" />
               </ExternalTaskPojo>
@@ -949,9 +873,14 @@
                 <option name="name" value="prepareComAndroidSupportMediarouterV72520Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.tonyodev.fetch:fetch:1.1.3" />
+                <option name="description" value="Prepare com.android.support:support-core-utils:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComTonyodevFetchFetch113Library" />
+                <option name="name" value="prepareComAndroidSupportSupportCoreUtils2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-v4:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportSupportV42531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:design:25.3.1" />
@@ -1074,11 +1003,6 @@
                 <option name="name" value="packageRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-core-utils:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComAndroidSupportSupportCoreUtils2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-analytics:11.2.2" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComGoogleFirebaseFirebaseAnalytics1122Library" />
@@ -1177,6 +1101,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="javaPreCompileDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-compat:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComAndroidSupportSupportCompat2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Installs and runs instrumentation tests for all flavors on connected devices." />
@@ -1366,13 +1295,18 @@
                 <option name="name" value="mockableAndroidJar" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:appcompat-v7:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportAppcompatV72531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="compileDebugSources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-fragment:25.4.0" />
+                <option name="description" value="Prepare com.android.support:support-vector-drawable:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportFragment2540Library" />
+                <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -1435,11 +1369,6 @@
                 <option name="description" value="Displays the components produced by project ':app'. [incubating]" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="components" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:appcompat-v7:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportAppcompatV72540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -1608,6 +1537,11 @@
                 <option name="name" value="prepareComGoogleFirebaseFirebaseConfig1122Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-core-ui:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportSupportCoreUi2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Runs all device checks on currently connected devices." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="connectedCheck" />
@@ -1725,6 +1659,11 @@
                 <option name="name" value="preReleaseUnitTestBuild" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-fragment:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportSupportFragment2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="generateDebugResValues" />
               </ExternalTaskPojo>
@@ -1763,28 +1702,18 @@
                 <option name="name" value="jarDebugClasses" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:animated-vector-drawable:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Installs the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="installDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:animated-vector-drawable:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-compat:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportCompat2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="preBuild" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-vector-drawable:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportVectorDrawable2540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-crash:11.2.2" />
@@ -1911,11 +1840,6 @@
                 <option name="name" value="prepareComCrashlyticsSdkAndroidAnswers1313Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-core-ui:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportCoreUi2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="assembleReleaseUnitTest" />
               </ExternalTaskPojo>
@@ -1936,11 +1860,6 @@
                 <option name="description" value="Runs lint on the Debug build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="lintDebug" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-v4:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportV42540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays the configuration model of project ':app'. [incubating]" />
@@ -1970,6 +1889,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="incrementalDebugJavaCompilationSafeguard" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-media-compat:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportSupportMediaCompat2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays all dependencies declared in project ':app'." />
@@ -2008,11 +1932,6 @@
                 <option name="name" value="testReleaseUnitTest" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-media-compat:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportMediaCompat2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="mergeDebugShaders" />
               </ExternalTaskPojo>
@@ -2036,9 +1955,14 @@
                 <option name="name" value="prepareComAndroidSupportMediarouterV72520Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.tonyodev.fetch:fetch:1.1.3" />
+                <option name="description" value="Prepare com.android.support:support-core-utils:25.3.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComTonyodevFetchFetch113Library" />
+                <option name="name" value="prepareComAndroidSupportSupportCoreUtils2531Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-v4:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportSupportV42531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:design:25.3.1" />
@@ -2161,11 +2085,6 @@
                 <option name="name" value="packageRelease" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.android.support:support-core-utils:25.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareComAndroidSupportSupportCoreUtils2540Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Prepare com.google.firebase:firebase-analytics:11.2.2" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="prepareComGoogleFirebaseFirebaseAnalytics1122Library" />
@@ -2259,6 +2178,11 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="javaPreCompileDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.android.support:support-compat:25.3.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareComAndroidSupportSupportCompat2531Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Installs and runs instrumentation tests for all flavors on connected devices." />
@@ -2411,6 +2335,7 @@
     </option>
     <option name="modificationStamps">
       <map>
+        <entry key="C:\Users\Ashutosh\Handbook\SCHPARERP\mobile\Android" value="4508414139774" />
         <entry key="D:\Handbook\mobile\SCHPARERP\mobile\Android" value="4512945644569" />
         <entry key="E:\Handbook\SCHPARERP\mobile\Android" value="4419697485786" />
       </map>
@@ -2604,7 +2529,7 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.4/commons-codec-1.4.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/com-intellij/uast/162.2228.14/uast-162.2228.14.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric.tools/gradle/1.24.1/362e6846ef4dbc85ceec7bee13795c09185e39d3/gradle-1.24.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.fabric.tools/gradle/1.24.2/c8de5974420cef0e983ef07339734a7931e5923b/gradle-1.24.2.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$/app" />
@@ -2764,9 +2689,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/ImageUploadResponse.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values-v21/styles.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/toolbar.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_notes_context.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/drawer.xml" />
@@ -2796,9 +2718,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/xml/provider_paths.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/data/HandBookDbHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/Tasks/FetchSchoolCalendarAsyncTask.java" />
@@ -2810,19 +2729,25 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_time_table.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_holiday_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HolidayListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="876" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -2902,18 +2827,50 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="handbook" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane" />
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="device.picker.selection" value="Galaxy_Nexus_API_19" />
-    <property name="SearchEverywhereHistoryKey" value="NotesDeta&#9;PSI&#9;JAVA://com.myapp.handbook.NotesDetailFragment&#10;Htt&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;Re&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;HomeFra&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;My&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;Schoo&#9;PSI&#9;JAVA://com.myapp.handbook.SchoolContactFragment&#10;Tea&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Teache&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Note&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/NotesFragment.java&#10;Phone&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java&#10;Main&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/MainActivity.java&#10;And&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;gc&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/GcmIntentService.java&#10;Mani&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;Events&#9;PSI&#9;JAVA://com.myapp.handbook.CalendarEventsActivity&#10;An&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;bui&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;logi&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/Login.java&#10;Log&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/Login.java&#10;MyRe&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;htt&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;Ho&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;FetchP&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;mani&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;Fet&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;Teacher&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Up&#9;PSI&#9;JAVA://com.myapp.handbook.Tasks.UpdateNavigationViewHeader&#10;UNVH&#9;PSI&#9;JAVA://com.myapp.handbook.Tasks.UpdateNavigationViewHeader&#10;mainAct&#9;PSI&#9;JAVA://com.myapp.handbook.MainActivity&#10;TimeTa&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TimeTableActivity.java&#10;HttpC&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;fetch&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;Hand&#9;PSI&#9;JAVA://com.myapp.handbook.data.HandBookDbHelper&#10;Home&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;buil&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;ho&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;TeacherPro&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherProfile.java&#10;teache&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;bu&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;Timeta&#9;PSI&#9;JAVA://com.myapp.handbook.TimeTableActivity&#10;action_sha&#9;PSI&#9;JAVA://com.myapp.handbook.R.id#action_share_note&#10;Activity&#9;FILE&#9;file://D:/Android/sdk/sources/android-23/android/app/Activity.java&#10;Top&#9;FILE&#9;file://E:/Handbook/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TopFragment.java" />
+    <property name="device.picker.selection" value="ZY223DHWDP" />
+    <property name="SearchEverywhereHistoryKey" value="onCreate&#9;PSI&#9;JAVA://com.myapp.handbook.MainActivity#onCreate&#10;NotesDeta&#9;PSI&#9;JAVA://com.myapp.handbook.NotesDetailFragment&#10;Htt&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;Re&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;HomeFra&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;My&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;Schoo&#9;PSI&#9;JAVA://com.myapp.handbook.SchoolContactFragment&#10;Tea&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Teache&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Note&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/NotesFragment.java&#10;Phone&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java&#10;Main&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/MainActivity.java&#10;And&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;gc&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/GcmIntentService.java&#10;Mani&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;Events&#9;PSI&#9;JAVA://com.myapp.handbook.CalendarEventsActivity&#10;An&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;bui&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;logi&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/Login.java&#10;Log&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/login/Login.java&#10;MyRe&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java&#10;htt&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;Ho&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;FetchP&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;mani&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/AndroidManifest.xml&#10;Fet&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;Teacher&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;Up&#9;PSI&#9;JAVA://com.myapp.handbook.Tasks.UpdateNavigationViewHeader&#10;UNVH&#9;PSI&#9;JAVA://com.myapp.handbook.Tasks.UpdateNavigationViewHeader&#10;mainAct&#9;PSI&#9;JAVA://com.myapp.handbook.MainActivity&#10;TimeTa&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TimeTableActivity.java&#10;HttpC&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java&#10;fetch&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java&#10;Hand&#9;PSI&#9;JAVA://com.myapp.handbook.data.HandBookDbHelper&#10;Home&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;buil&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;ho&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/HomeFragment.java&#10;TeacherPro&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherProfile.java&#10;teache&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java&#10;bu&#9;FILE&#9;file://D:/Handbook/mobile/SCHPARERP/mobile/Android/app/build.gradle&#10;Timeta&#9;PSI&#9;JAVA://com.myapp.handbook.TimeTableActivity&#10;action_sha&#9;PSI&#9;JAVA://com.myapp.handbook.R.id#action_share_note&#10;Activity&#9;FILE&#9;file://D:/Android/sdk/sources/android-23/android/app/Activity.java&#10;Top&#9;FILE&#9;file://E:/Handbook/SCHPARERP/mobile/Android/app/src/main/java/com/myapp/handbook/TopFragment.java" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
     <property name="last_opened_file_path" value="D:/android/samples/Fetch" />
     <property name="ExportApk.ApkPath" value="D:\Handbook\mobile\SCHPARERP\mobile\Android\app" />
@@ -2930,6 +2887,24 @@
     <property name="resolutions" value="MDPI&#10;XHDPI&#10;HDPI&#10;XXHDPI&#10;XXXHDPI" />
   </component>
   <component name="RunManager" selected="Android App.app">
+    <configuration default="false" name="Android:app [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/app" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -3216,9 +3191,15 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method />
     </configuration>
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Android App.app" />
+      <item index="1" class="java.lang.String" itemvalue="Gradle.Android:app [clean]" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Gradle.Android:app [clean]" />
+      </list>
+    </recent_temporary>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -3297,34 +3278,51 @@
       <option name="project" value="LOCAL" />
       <updated>1503943322049</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Updated diary notes and homework with bold and color.">
+      <created>1506656164669</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1506656164670</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973504" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293718" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31754875" sideWeight="0.45565552" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24871466" sideWeight="0.51058203" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37743732" sideWeight="0.48907456" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.60724235" sideWeight="0.6426735" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36726806" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962447" sideWeight="0.4974293" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3259053" sideWeight="0.6076031" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37181664" sideWeight="0.6426735" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36706948" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293718" sideWeight="0.4974293" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32427844" sideWeight="0.6076031" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32973504" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962447" sideWeight="0.5070694" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20372751" sideWeight="0.489418" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.54178274" sideWeight="0.4781491" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2031722" sideWeight="0.489418" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Assistant" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930514" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20203735" sideWeight="0.4781491" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930514" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35654595" sideWeight="0.5109255" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3565365" sideWeight="0.5109255" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -3372,7 +3370,9 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="1. Cleanup database on uninstall&#10;2. Progress dialog causing crash fix&#10;3. Adding class information to student message." />
-    <option name="LAST_COMMIT_MESSAGE" value="1. Cleanup database on uninstall&#10;2. Progress dialog causing crash fix&#10;3. Adding class information to student message." />
+    <MESSAGE value="Updated diary notes and homework with bold and color." />
+    <MESSAGE value="Updated message type as bold" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated message type as bold" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -3424,13 +3424,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>248</line>
+          <line>251</line>
           <properties />
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>237</line>
+          <line>240</line>
           <properties />
           <option name="timeStamp" value="62" />
         </line-breakpoint>
@@ -3466,7 +3466,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>226</line>
+          <line>229</line>
           <properties />
           <option name="timeStamp" value="169" />
         </line-breakpoint>
@@ -3490,7 +3490,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/data/HandBookDbHelper.java</url>
-          <line>605</line>
+          <line>606</line>
           <properties />
           <option name="timeStamp" value="191" />
         </line-breakpoint>
@@ -3526,12 +3526,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java</url>
-          <line>82</line>
-          <properties />
-          <option name="timeStamp" value="205" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java</url>
           <line>117</line>
           <properties />
           <option name="timeStamp" value="207" />
@@ -3547,12 +3541,6 @@
           <line>107</line>
           <properties />
           <option name="timeStamp" value="210" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java</url>
-          <line>95</line>
-          <properties />
-          <option name="timeStamp" value="212" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java</url>
@@ -3586,7 +3574,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>193</line>
+          <line>196</line>
           <properties />
           <option name="timeStamp" value="221" />
         </line-breakpoint>
@@ -3597,14 +3585,8 @@
           <option name="timeStamp" value="229" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java</url>
-          <line>299</line>
-          <properties />
-          <option name="timeStamp" value="230" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>283</line>
+          <line>286</line>
           <properties />
           <option name="timeStamp" value="232" />
         </line-breakpoint>
@@ -3622,7 +3604,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java</url>
-          <line>328</line>
+          <line>331</line>
           <properties />
           <option name="timeStamp" value="241" />
         </line-breakpoint>
@@ -3661,18 +3643,6 @@
           <line>368</line>
           <properties />
           <option name="timeStamp" value="250" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java</url>
-          <line>112</line>
-          <properties />
-          <option name="timeStamp" value="252" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java</url>
-          <line>117</line>
-          <properties />
-          <option name="timeStamp" value="253" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/TeacherNoteFragment.java</url>
@@ -3716,8 +3686,14 @@
           <properties />
           <option name="timeStamp" value="268" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java</url>
+          <line>117</line>
+          <properties />
+          <option name="timeStamp" value="269" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="269" />
+      <option name="time" value="270" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
@@ -3737,71 +3713,7 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="42" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-24/android/text/SpannableStringBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19380">
-          <caret line="1175" column="0" selection-start-line="1175" selection-start-column="0" selection-end-line="1175" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/Login.java" />
-    <entry file="jar://$USER_HOME$/.android/build-cache/5fd3f0e8a09439eb9b6dbad6c1d03f169626f3d6/output/jars/classes.jar!/com/google/firebase/auth/PhoneAuthCredential.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-24/android/widget/EditText.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-24/android/app/ActivityThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41905">
-          <caret line="2656" column="0" selection-start-line="2656" selection-start-column="0" selection-end-line="2656" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.firebase/digitsmigrationhelpers/0.1.1/5d7de6f6507e39008e259d5e21a373cf7d599a3d/digitsmigrationhelpers-0.1.1-sources.jar!/com/firebase/digitsmigrationhelpers/AuthMigrator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2261">
-          <caret line="170" column="29" selection-start-line="170" selection-start-column="22" selection-end-line="170" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.android/build-cache/1261ad93862dff9e613502df759d49d8bca74c6c/output/jars/classes.jar!/com/google/android/gms/tasks/Task.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="38" column="34" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://$USER_HOME$/.android/build-cache/1261ad93862dff9e613502df759d49d8bca74c6c/output/jars/classes.jar!/com/google/android/gms/tasks/Task.class" />
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -3810,7 +3722,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/AppData/Local/Android/Sdk/extras/android/m2repository/com/android/support/recyclerview-v7/25.3.1/recyclerview-v7-25.3.1-sources.jar!/android/support/v7/widget/RecyclerView.java">
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/recyclerview-v7/25.3.1/recyclerview-v7-25.3.1-sources.jar!/android/support/v7/widget/RecyclerView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="139">
           <caret line="10391" column="0" selection-start-line="10391" selection-start-column="0" selection-end-line="10391" selection-end-column="0" />
@@ -3849,14 +3761,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-24/android/widget/CursorAdapter.java">
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-24/android/widget/CursorAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
           <caret line="226" column="0" selection-start-line="226" selection-start-column="0" selection-end-line="226" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-25/android/widget/CursorAdapter.java">
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-25/android/widget/CursorAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="318" column="25" selection-start-line="318" selection-start-column="25" selection-end-line="318" selection-end-column="25" />
@@ -3870,7 +3782,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-24/android/os/Looper.java">
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-24/android/os/Looper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="571">
           <caret line="154" column="0" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
@@ -3891,35 +3803,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-25/android/content/Intent.java">
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-25/android/content/Intent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72726">
           <caret line="4345" column="27" selection-start-line="4345" selection-start-column="27" selection-end-line="4345" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.android/build-cache/5fd3f0e8a09439eb9b6dbad6c1d03f169626f3d6/output/jars/classes.jar!/com/google/firebase/auth/FirebaseAuth.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="986">
-          <caret line="120" column="25" selection-start-line="120" selection-start-column="25" selection-end-line="120" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://$USER_HOME$/.android/build-cache/5fd3f0e8a09439eb9b6dbad6c1d03f169626f3d6/output/jars/classes.jar!/com/google/firebase/auth/FirebaseAuth.class" />
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="833">
           <caret line="49" column="55" selection-start-line="49" selection-start-column="55" selection-end-line="49" selection-end-column="55" />
           <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -3979,7 +3878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
           <caret line="102" column="67" selection-start-line="102" selection-start-column="67" selection-end-line="102" selection-end-column="67" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3987,17 +3885,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3077">
           <caret line="202" column="28" selection-start-line="202" selection-start-column="28" selection-end-line="202" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4033,63 +3920,170 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="601">
           <caret line="48" column="63" selection-start-line="48" selection-start-column="63" selection-end-line="48" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HomeFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="68" column="21" selection-start-line="68" selection-start-column="21" selection-end-line="68" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
-          <folding />
+        <state relative-caret-position="17">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HolidayListActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="103" column="9" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="9" />
+        <state relative-caret-position="170">
+          <caret line="56" column="13" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_holiday_list.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="50" column="44" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="44" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/login/PhoneAuthActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="88" column="21" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HttpConnectionUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="253" column="22" selection-start-line="253" selection-start-column="22" selection-end-line="253" selection-end-column="22" />
+        <state relative-caret-position="216">
+          <caret line="57" column="56" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/buildConfig/debug/com/myapp/handbook/BuildConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
           <folding />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer2">
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-24/android/app/Activity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="6672" column="0" selection-start-line="6672" selection-start-column="0" selection-end-line="6672" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-25/org/json/JSONObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="612" column="0" selection-start-line="612" selection-start-column="0" selection-end-line="612" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/Tasks/FetchProfileAsyncTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_notes_detail.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="114" column="35" selection-start-line="114" selection-start-column="35" selection-end-line="114" selection-end-column="35" />
+        <state relative-caret-position="197">
+          <caret line="29" column="40" selection-start-line="29" selection-start-column="40" selection-end-line="29" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/DiaryNoteSummaryAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="60" column="92" selection-start-line="60" selection-start-column="92" selection-end-line="60" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/HomeFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="315" column="52" selection-start-line="315" selection-start-column="52" selection-end-line="315" selection-end-column="52" />
+          <folding>
+            <element signature="e#13123#13169#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="115" column="9" selection-start-line="115" selection-start-column="9" selection-end-line="115" selection-end-column="9" />
+          <folding>
+            <element signature="e#6150#10809#0" expanded="true" />
+            <element signature="e#10808#10809#0" expanded="true" />
+            <element signature="e#11022#11042#0" expanded="true" />
+            <element signature="e#11044#11065#0" expanded="true" />
+            <element signature="e#13457#14207#0" expanded="true" />
+            <element signature="e#14206#14207#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="79" column="61" selection-start-line="79" selection-start-column="61" selection-end-line="79" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_diarynotesummary_item.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="53" column="27" selection-start-line="53" selection-start-column="27" selection-end-line="53" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -4099,32 +4093,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/adapter/MyRecyclerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="328" column="0" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
+        <state relative-caret-position="156">
+          <caret line="101" column="66" selection-start-line="101" selection-start-column="66" selection-end-line="101" selection-end-column="66" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_time_table.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="310" column="0" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="128" column="13" selection-start-line="128" selection-start-column="13" selection-end-line="128" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_notes_detail.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="87" column="44" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
+        <state relative-caret-position="81">
+          <caret line="60" column="51" selection-start-line="60" selection-start-column="51" selection-end-line="60" selection-end-column="51" />
           <folding />
         </state>
       </provider>
@@ -4132,10 +4110,21 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/myapp/handbook/NotesDetailFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_item_notes.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="170" column="16" selection-start-line="170" selection-start-column="16" selection-end-line="170" selection-end-column="16" />
+        <state relative-caret-position="285">
+          <caret line="65" column="25" selection-start-line="65" selection-start-column="25" selection-end-line="65" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="69" column="45" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
           <folding />
         </state>
       </provider>
