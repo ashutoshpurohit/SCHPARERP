@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
@@ -98,11 +99,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 int msgType = cursor.getInt(8);
                 if(msgType == DIARY_NOTE_TYPE){
                     viewHolder.fromMsgView.setText("Diary Note");
+                    viewHolder.fromMsgView.setTextColor(Color.BLUE);
                     //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_view_list, null));
                 }
                 else if(msgType ==HOMEWORK_TYPE){
                     //viewHolder.msgTypeIcon.setImageDrawable( ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_create, null));
                     viewHolder.fromMsgView.setText("Homework");
+                    viewHolder.fromMsgView.setTextColor(Color.GREEN);
                 }
                 else if(msgType==PARENT_NOTE_TYPE){
                     viewHolder.fromMsgView.setText("Parent message");
@@ -313,7 +316,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             fileDownloadIcon.setOnClickListener(this);
             downloadFileName= (TextView)view.findViewById(R.id.list_item_file_name);
             downloadFileName.setOnClickListener(this);
-            downloadSection= (View)view.findViewById(R.id.list_section_file_download);
+            downloadSection = view.findViewById(R.id.list_section_file_download);
             position=this.getAdapterPosition();
             view.setOnClickListener(this);
         }
