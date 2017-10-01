@@ -284,14 +284,32 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     }
 
     //Load School calendar from DB if already exists..
-    public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase) {
+    public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase, int selectedMonth) {
         List<Event> schooolEvents = new ArrayList<>();
 
         String currDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //Log.v("CalenderAct",currDate);
 
-        String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
-                " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";
+       /* String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
+                " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";*/
+
+        /*String query_to_fetch_earliest="SELECT * FROM calenderevents where  strftime('%Y',event_date) == strftime('%Y',date('now')) " +
+                "AND  strftime('%m',event_date) = strftime('%m',date(1))";
+        */
+        String query_to_fetch_earliest;
+        if (selectedMonth < 10) {
+            /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
+        * */
+            query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '0" + selectedMonth + "' " +
+                    "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+        } else {
+            query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '" + selectedMonth + "' " +
+                    "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+        }
 
         /*String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
                 HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " >= '" + currDate +
@@ -303,11 +321,13 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 Event newEvent = new Event();
+
                 newEvent.setSchoolId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID)));
                 newEvent.setEventId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID)));
                 newEvent.setEventName(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME)));
                 newEvent.setEventPlace(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION)));
                 newEvent.setEventDate(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE)));
+                Log.v("check event date", String.valueOf(newEvent.getEventDate()));
                 newEvent.setEventStartTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME)));
                 newEvent.setEventEndTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME)));
                 newEvent.setEventLikeButtonClicked(cursor.getString(cursor.getColumnIndex

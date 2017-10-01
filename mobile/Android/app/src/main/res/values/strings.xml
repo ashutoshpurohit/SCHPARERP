@@ -87,4 +87,34 @@
     <string name="CONSUMER_KEY">FYb2ipP3TtsjypFzFcqmUIgzR</string>
     <string name="CONSUMER_SECRET">t0vQHLYZp6PSAyBYnZB4a260SFFT20RChlE1xx8ixzkCaWGuA6</string>
     <string name="unable_to_open_file">Unable to open file</string>
+
+    <!--Array of months for the calender-->
+    <string-array name="cal_month_name">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string-array name="cal_month_values">
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
 </resources>

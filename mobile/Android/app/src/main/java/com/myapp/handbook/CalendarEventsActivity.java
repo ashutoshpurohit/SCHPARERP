@@ -14,7 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.myapp.handbook.Listeners.RecycleViewClickListener;
@@ -29,12 +32,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CalendarEventsActivity extends AppCompatActivity implements RecycleViewClickListener{
+public class CalendarEventsActivity extends AppCompatActivity implements RecycleViewClickListener, AdapterView.OnItemSelectedListener {
 
     List<Event> events;
     RecyclerView calendarView;
     SQLiteDatabase db;
     SharedPreferences sharedPreferences;
+    ArrayAdapter<CharSequence> monthAdapter;
+    Spinner selectedMonthSpinner;
+    int selectedMonth;
     private ProgressDialog progressDialog;
 
     @Override
@@ -55,6 +61,17 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
 
         calendarView.setLayoutManager(calendarLayoutManager);
         setSupportActionBar(toolbar);
+
+        /*Code to get spiiner values of calendar
+        * Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
+        * */
+
+        Calendar c = Calendar.getInstance();
+        selectedMonth = c.get(Calendar.MONTH) + 1;
+        setupMonthSpinner(selectedMonth);
+        selectedMonthSpinner.setOnItemSelectedListener(this);
+
+
 
         if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
 
@@ -110,7 +127,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         }
         else{
             //Time table has been downloaded just fetch from DB render it
-            List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);
+            List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonth);
             Log.v("CalenderEventsDBAct", "loading from DB");
             events=currentEvents;
             setupSchoolCalendarView(events);
@@ -122,7 +139,51 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private void setupMonthSpinner(int selectedMonth) {
+        selectedMonthSpinner = (Spinner) findViewById(R.id.spin_calender_month);
 
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        monthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.cal_month_name, R.layout.simple_spinner_dropdown_item);
+
+        // Specify the layout to use when the list of choices appears
+        monthAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        selectedMonthSpinner.setAdapter(monthAdapter);
+
+        if (selectedMonth != 0) {
+            /*
+            * Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
+            * since we added +1 while fetting current default month hence we need to -1 while we match spinner value-postion
+            * with selected month*/
+            int tempMonth = selectedMonth - 1;
+            selectedMonthSpinner.setSelection(tempMonth);
+        }
+
+
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+
+        int spinner_pos = selectedMonthSpinner.getSelectedItemPosition();
+        String[] size_values = getResources().getStringArray(R.array.cal_month_values);
+        String tempVal = size_values[spinner_pos];
+        selectedMonth = Integer.valueOf(size_values[spinner_pos]);
+
+
+        List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonth);
+        Log.v("CalenderEventsDBAct", "loading from DB");
+        events = currentEvents;
+        setupSchoolCalendarView(events);
+
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
 
 
     private void setupSchoolCalendarView(List<Event> currentEvents) {

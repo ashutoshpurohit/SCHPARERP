@@ -17,7 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primary"
-            app:popupTheme="@style/PopupOverlay" />
+            app:popupTheme="@style/PopupOverlay">
+
+            <Spinner
+                android:id="@+id/spin_calender_month"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+        </android.support.v7.widget.Toolbar>
+
 
     </android.support.design.widget.AppBarLayout>
 
