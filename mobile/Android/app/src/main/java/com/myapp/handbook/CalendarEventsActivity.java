@@ -28,6 +28,7 @@ import com.myapp.handbook.domain.CalendarEvents;
 import com.myapp.handbook.domain.Event;
 import com.myapp.handbook.domain.SchoolProfile;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,7 +41,8 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
     SharedPreferences sharedPreferences;
     ArrayAdapter<CharSequence> monthAdapter;
     Spinner selectedMonthSpinner;
-    int selectedMonth;
+    int selectedMonthNumber;
+    String selectedMonthName;
     private ProgressDialog progressDialog;
 
     @Override
@@ -67,8 +69,11 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         * */
 
         Calendar c = Calendar.getInstance();
-        selectedMonth = c.get(Calendar.MONTH) + 1;
-        setupMonthSpinner(selectedMonth);
+        //selectedMonth = c.get(Calendar.MONTH)+1;
+
+        SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+        selectedMonthName = month_date.format(c.getTime());
+        setupMonthSpinner(selectedMonthName);
         selectedMonthSpinner.setOnItemSelectedListener(this);
 
 
@@ -127,7 +132,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         }
         else{
             //Time table has been downloaded just fetch from DB render it
-            List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonth);
+            List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
             Log.v("CalenderEventsDBAct", "loading from DB");
             events=currentEvents;
             setupSchoolCalendarView(events);
@@ -139,7 +144,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupMonthSpinner(int selectedMonth) {
+    private void setupMonthSpinner(String selectedMonthName) {
         selectedMonthSpinner = (Spinner) findViewById(R.id.spin_calender_month);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -151,13 +156,15 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         // Apply the adapter to the spinner
         selectedMonthSpinner.setAdapter(monthAdapter);
 
-        if (selectedMonth != 0) {
-            /*
-            * Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
+        if (!selectedMonthName.equals(null)) {
+
+            /** Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
             * since we added +1 while fetting current default month hence we need to -1 while we match spinner value-postion
             * with selected month*/
-            int tempMonth = selectedMonth - 1;
-            selectedMonthSpinner.setSelection(tempMonth);
+            // int tempMonth=selectedMonth-1;
+            selectedMonthNumber = monthAdapter.getPosition(selectedMonthName);
+
+            selectedMonthSpinner.setSelection(selectedMonthNumber);
         }
 
 
@@ -171,10 +178,12 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         int spinner_pos = selectedMonthSpinner.getSelectedItemPosition();
         String[] size_values = getResources().getStringArray(R.array.cal_month_values);
         String tempVal = size_values[spinner_pos];
-        selectedMonth = Integer.valueOf(size_values[spinner_pos]);
+        selectedMonthNumber = Integer.valueOf(size_values[spinner_pos]);
 
+        /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
+        * */
 
-        List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonth);
+        List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
         Log.v("CalenderEventsDBAct", "loading from DB");
         events = currentEvents;
         setupSchoolCalendarView(events);
