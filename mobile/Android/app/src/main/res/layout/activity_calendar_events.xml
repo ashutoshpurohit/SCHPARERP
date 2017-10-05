@@ -21,9 +21,9 @@
 
             <Spinner
                 android:id="@+id/spin_calender_month"
-
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"></Spinner>
         </android.support.v7.widget.Toolbar>
 
 
