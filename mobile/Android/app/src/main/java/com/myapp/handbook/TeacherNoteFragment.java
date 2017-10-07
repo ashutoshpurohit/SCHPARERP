@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
+import com.myapp.handbook.util.ImageCompression;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +65,9 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     boolean canTakePhoto;
     Spinner stdSpinner;
     ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
+    Uri photoURI;
+    Uri compressedPhotoURI;
+    File compressedPhotoFile;
     private OnFragmentInteractionListener mListener;
     //private ImageButton photoButton;
     private ImageView photoView;
@@ -110,7 +115,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         Context context = getContext();
         if (canTakePhoto) {
             //Uri uri = Uri.fromFile( photoFile);
-            Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".com.myapp.handbook.provider", photoFile);
+            photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".com.myapp.handbook.provider", photoFile);
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             captureImage.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
@@ -154,7 +159,10 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             photoView.setVisibility(View.GONE);
         }
         else{
-            Bitmap bitmap = PictureUtil.getScaledBitmap(photoFile.getPath(),getActivity());
+            ImageCompression imgCompression = new ImageCompression(getContext());
+            File destDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            compressedPhotoFile= new File(imgCompression.compress(photoFile.getPath(),destDir,true));
+            Bitmap bitmap = PictureUtil.getScaledBitmap(compressedPhotoFile.getPath(),getActivity());
             photoView.setImageBitmap(bitmap);
             photoView.setVisibility(View.VISIBLE);
         }
@@ -409,18 +417,19 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
             String url = HttpConnectionUtil.URL_ENPOINT + "/SendMessageToMultipleUser/";
             JSONObject messageJson = prepareMessage();
-            HttpConnectionUtil.UploadImage(photoFile);
-            while (!HttpConnectionUtil.imageUploaded) {
+            if(compressedPhotoFile!=null && compressedPhotoFile.exists()) {
+                HttpConnectionUtil.UploadImage(compressedPhotoFile);
+                while (!HttpConnectionUtil.imageUploaded) {
 
-            }
-            try {
-                if (HttpConnectionUtil.imageUploadStatus) {
-                    messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                try {
+                    if (HttpConnectionUtil.imageUploadStatus) {
+                        messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
             return util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
 
         }

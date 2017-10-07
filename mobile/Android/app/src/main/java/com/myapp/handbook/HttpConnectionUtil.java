@@ -143,16 +143,16 @@ public class HttpConnectionUtil {
 
     }
 
-    public static String UploadImage(File fileToTranser)
+    public static String UploadImage(File fileToTransfer)
     {
         String response=null;
         imageUploaded=false;
         FileUploadService service =
                 ServiceGenerator.createService(FileUploadService.class);
 
-        RequestBody fBody = RequestBody.create(MediaType.parse("multipart/form-data"), fileToTranser);
+        RequestBody fBody = RequestBody.create(MediaType.parse("multipart/form-data"), fileToTransfer);
         MultipartBody.Part body =
-                MultipartBody.Part.createFormData("picture", fileToTranser.getName(), fBody);
+                MultipartBody.Part.createFormData("picture", fileToTransfer.getName(), fBody);
 
         String descriptionString = "hello, this is description speaking";
         RequestBody description =
