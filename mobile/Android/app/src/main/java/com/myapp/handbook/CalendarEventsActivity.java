@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -76,8 +77,6 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         setupMonthSpinner(selectedMonthName);
         selectedMonthSpinner.setOnItemSelectedListener(this);
 
-
-
         if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_CALENDER_EVENTS_DOWNLOADED, false)) {
 
             SchoolProfile schoolProfile=HandBookDbHelper.loadSchoolProfileFromDB(db);
@@ -132,11 +131,41 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         }
         else{
             //Time table has been downloaded just fetch from DB render it
-            List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
+            loadEventsFromDB(db, selectedMonthNumber);
+            /*List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
             Log.v("CalenderEventsDBAct", "loading from DB");
             events=currentEvents;
-            setupSchoolCalendarView(events);
+            setupSchoolCalendarView(events);*/
         }
+        ImageView img_prev_month = (ImageView) findViewById(R.id.img_month_previous);
+        ImageView img_nxt_month = (ImageView) findViewById(R.id.img_month_next);
+        img_nxt_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (selectedMonthNumber >= 12) {
+                    selectedMonthNumber = 1;
+                } else {
+                    selectedMonthNumber = selectedMonthNumber + 1;
+                }
+                selectedMonthSpinner.setSelection(selectedMonthNumber);
+                //loadEventsFromDB(db,selectedMonthNumber);
+            }
+        });
+
+        img_prev_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedMonthNumber <= 1) {
+                    selectedMonthNumber = 1;
+                } else {
+                    selectedMonthNumber = selectedMonthNumber - 1;
+                }
+                selectedMonthSpinner.setSelection(selectedMonthNumber);
+                //loadEventsFromDB(db,selectedMonthNumber);
+            }
+        });
+
 
 
         if (toolbar != null)
@@ -144,6 +173,15 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /*Load events from database*/
+    private void loadEventsFromDB(SQLiteDatabase db, int monthSelected) {
+        List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, monthSelected);
+        Log.v("CalenderEventsDBAct", "loading from DB");
+        events = currentEvents;
+        setupSchoolCalendarView(events);
+    }
+
+    /*Setup spinner*/
     private void setupMonthSpinner(String selectedMonthName) {
         selectedMonthSpinner = (Spinner) findViewById(R.id.spin_calender_month);
 
@@ -166,8 +204,6 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
 
             selectedMonthSpinner.setSelection(selectedMonthNumber);
         }
-
-
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -182,11 +218,11 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
 
         /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
         * */
-
-        List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
+        loadEventsFromDB(db, selectedMonthNumber);
+       /* List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
         Log.v("CalenderEventsDBAct", "loading from DB");
         events = currentEvents;
-        setupSchoolCalendarView(events);
+        setupSchoolCalendarView(events);*/
 
     }
 
