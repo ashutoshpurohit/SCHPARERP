@@ -148,8 +148,11 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
                 } else {
                     selectedMonthNumber = selectedMonthNumber + 1;
                 }
+
+
                 selectedMonthSpinner.setSelection(selectedMonthNumber);
-                //loadEventsFromDB(db,selectedMonthNumber);
+                //-loadEventsFromDB(db,selectedMonthNumber);
+
             }
         });
 
@@ -197,7 +200,7 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         if (!selectedMonthName.equals(null)) {
 
             /** Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
-            * since we added +1 while fetting current default month hence we need to -1 while we match spinner value-postion
+             * since we added +1 while fetching current default month hence we need to -1 while we match spinner value-postion
             * with selected month*/
             // int tempMonth=selectedMonth-1;
             selectedMonthNumber = monthAdapter.getPosition(selectedMonthName);
@@ -214,11 +217,11 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
         int spinner_pos = selectedMonthSpinner.getSelectedItemPosition();
         String[] size_values = getResources().getStringArray(R.array.cal_month_values);
         String tempVal = size_values[spinner_pos];
-        selectedMonthNumber = Integer.valueOf(size_values[spinner_pos]);
+        int calendarMonth = Integer.valueOf(size_values[spinner_pos]);
 
         /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
         * */
-        loadEventsFromDB(db, selectedMonthNumber);
+        loadEventsFromDB(db, calendarMonth);
        /* List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
         Log.v("CalenderEventsDBAct", "loading from DB");
         events = currentEvents;
