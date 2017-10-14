@@ -147,6 +147,9 @@ public class CalendarEventsActivity extends AppCompatActivity implements Recycle
                     selectedMonthNumber = 1;
                 } else {
                     selectedMonthNumber = selectedMonthNumber + 1;
+                    if (selectedMonthNumber == 12) {
+                        selectedMonthNumber = 11;
+                    }
                 }
 
 

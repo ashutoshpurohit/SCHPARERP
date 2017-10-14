@@ -288,34 +288,39 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         List<Event> schooolEvents = new ArrayList<>();
 
         String currDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        //Log.v("CalenderAct",currDate);
 
        /* String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
                 " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";*/
 
-        /*String query_to_fetch_earliest="SELECT * FROM calenderevents where  strftime('%Y',event_date) == strftime('%Y',date('now')) " +
-                "AND  strftime('%m',event_date) = strftime('%m',date(1))";
+       /*This query contains current year check
+          if (selectedMonth < 10) {
+            /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
+
+        query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '0" + selectedMonth + "' " +
+                "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+    } else {
+        query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '" + selectedMonth + "' " +
+                "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+    }
+
         */
+
         String query_to_fetch_earliest;
         if (selectedMonth < 10) {
             /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
         * */
             query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
-                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
-                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '0" + selectedMonth + "' " +
+                    " where   strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '0" + selectedMonth + "' " +
                     "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
         } else {
             query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
-                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
-                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '" + selectedMonth + "' " +
+                    " where   strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '" + selectedMonth + "' " +
                     "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
         }
-
-        /*String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
-                HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " >= '" + currDate +
-                "' order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";*/
-        // Log.v("CalenderAct",query_to_fetch_earliest);
-        //L
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
 
         try {
