@@ -13,12 +13,49 @@
                 tools:context="com.myapp.handbook.CalendarEventsActivity"
                 tools:showIn="@layout/activity_calendar_events">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_light"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="Select Month"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/spin_calender_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            ></Spinner>
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/schoolCalendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/empty_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp"
+            android:text="Events not scehduled for this month"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
     <ImageView
         android:id="@+id/img_month_previous"
         android:layout_width="wrap_content"
