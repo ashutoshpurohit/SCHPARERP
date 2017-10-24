@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="List view is empty"
+            android:text="Time table is not available"
             />
         <include
             layout="@layout/listview_timetable_footer"></include>
