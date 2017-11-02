@@ -13,6 +13,7 @@ import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.HolidayLists;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
@@ -139,6 +140,33 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
         return sqliteDatabase.insert(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, contacts);
     }
+
+
+    public static long insertHolidayListsToDB(SQLiteDatabase sqliteDatabase, List<HolidayLists> schoolHolidayLists) {
+        long retVal = 0;
+        ContentValues holiday = new ContentValues();
+        for (int i = 0; i < schoolHolidayLists.size(); i++) {
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID, schoolHolidayLists.get(i).getSchoolId());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID, schoolHolidayLists.get(i).getHolidayId());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME, schoolHolidayLists.get(i).getHoliday());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION, schoolHolidayLists.get(i).getHolidayDescription());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE, schoolHolidayLists.get(i).getHolidayDate());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH, schoolHolidayLists.get(i).getHolidayMonth());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR, schoolHolidayLists.get(i).getHolidayYear());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE, schoolHolidayLists.get(i).getHolidayType());
+
+            try {
+                retVal = sqliteDatabase.insert(HandbookContract.HolidayListsEntry.TABLE_NAME, null, holiday);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return retVal;
+    }
+
+
+
 
     public static long insertSchoolCalendarEventsToDB(SQLiteDatabase sqliteDatabase,List<Event> schoolCalendar){
         long retVal = 0;
@@ -282,6 +310,42 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
         return teacherProfiles;
     }
+
+    //Load Holiday List from DB if already exists..
+    public static List<HolidayLists> loadHolidayListsfromDb(SQLiteDatabase sqliteDatabase) {
+        List<HolidayLists> schooolHolidayLists = new ArrayList<>();
+        String query_to_fetch_earliest = "select *  from " + HandbookContract.HolidayListsEntry.TABLE_NAME + "" +
+                " order  by datetime(" + HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + ") DESC ";
+        Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                HolidayLists newHoliday = new HolidayLists();
+
+                newHoliday.setSchoolId(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID)));
+                newHoliday.setHolidayId(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID)));
+                newHoliday.setHoliday(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME)));
+                newHoliday.setHolidayDescription(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION
+                )));
+                newHoliday.setHolidayDate(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE)));
+
+                newHoliday.setHolidayMonth(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH)));
+                newHoliday.setHolidayYear(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR)));
+                newHoliday.setHolidayType(cursor.getString(cursor.getColumnIndex
+                        (HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE)));
+
+                schooolHolidayLists.add(newHoliday);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return schooolHolidayLists;
+    }
+
+
+
+
 
     //Load School calendar from DB if already exists..
     public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase, int selectedMonth) {
@@ -632,6 +696,15 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.CalenderEventsEntry.COLUMN_STUDENT_ID + " TEXT , " +
                 HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT " + " );";
 
+        final String SQL_CREATE_SCHOOL_HOLIDAY_TABLE = "CREATE TABLE " + HandbookContract.HolidayListsEntry.TABLE_NAME + " (" +
+                HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE + " TEXT );";
 
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
@@ -639,6 +712,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
         sqLiteDatabase.execSQL(SQL_CREATE_TEACHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_SCHOOL_HOLIDAY_TABLE);
         //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
 
     }

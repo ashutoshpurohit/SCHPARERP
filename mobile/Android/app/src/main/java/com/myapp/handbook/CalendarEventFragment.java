@@ -172,15 +172,13 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
                 task.execute();
             } else {
                 //School profile not yet fetched or fetched incorrectly
-                Toast.makeText(getContext(), "Failed to fetch school calendar. Please click refresh menu item and restart app.", Toast.LENGTH_LONG);
+                Toast.makeText(getContext(), "Failed to fetch school holiday lists. Please click refresh menu item and restart app.",
+                        Toast.LENGTH_LONG);
             }
         } else {
-            //Time table has been downloaded just fetch from DB render it
+            //Holiday Lists has been downloaded just fetch from DB render it
             loadEventsFromDB(db, selectedMonthNumber);
-            /*List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonthNumber);
-            Log.v("CalenderEventsDBAct", "loading from DB");
-            events=currentEvents;
-            setupSchoolCalendarView(events);*/
+
         }
         emptyListView = (TextView) view.findViewById(R.id.empty_list_view);
         ImageView img_prev_month = (ImageView) view.findViewById(R.id.img_month_previous);
@@ -264,8 +262,12 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
             calendarView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
-       /* if (currentEvents.size()==0){emptyListView.setVisibility(View.VISIBLE);}else {emptyListView.setVisibility(View.INVISIBLE);}*/
-
+       /* if (currentEvents.size()!=0 || emptyListView.getVisibility()== View.VISIBLE){
+            emptyListView.setVisibility(View.INVISIBLE);
+        }else{
+            emptyListView.setVisibility(View.VISIBLE);
+        }
+*/
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
