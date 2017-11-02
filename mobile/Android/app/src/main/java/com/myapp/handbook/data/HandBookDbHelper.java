@@ -315,7 +315,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     public static List<HolidayLists> loadHolidayListsfromDb(SQLiteDatabase sqliteDatabase) {
         List<HolidayLists> schooolHolidayLists = new ArrayList<>();
         String query_to_fetch_earliest = "select *  from " + HandbookContract.HolidayListsEntry.TABLE_NAME + "" +
-                " order  by datetime(" + HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + ") DESC ";
+                " order  by datetime(" + HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + ") ASC ";
         Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
 
         try {

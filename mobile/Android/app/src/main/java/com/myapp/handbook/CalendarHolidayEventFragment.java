@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.Tasks.FetchHolidayListsAsyncTask;
@@ -34,6 +36,8 @@ public class CalendarHolidayEventFragment extends Fragment {
     /*ListView holidayListView;*/
     List<HolidayLists> holidayLists;
     RecyclerView holidayView;
+    TextView emptyRecyclerView;
+    DividerItemDecoration mDividerItemDecoration;
     private SharedPreferences sharedPreferences;
     private SQLiteDatabase db;
     private ProgressDialog progressDialog;
@@ -61,6 +65,12 @@ public class CalendarHolidayEventFragment extends Fragment {
         LinearLayoutManager holidayLayoutManager = new LinearLayoutManager(getContext());
         holidayLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        mDividerItemDecoration = new DividerItemDecoration(
+                holidayView.getContext(),
+                holidayLayoutManager.getOrientation()
+        );
+        holidayView.addItemDecoration(mDividerItemDecoration);
+
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(getContext());
@@ -68,8 +78,9 @@ public class CalendarHolidayEventFragment extends Fragment {
         db = handbookDbHelper.getReadableDatabase();
         holidayView.setLayoutManager(holidayLayoutManager);
 
+        emptyRecyclerView = (TextView) view.findViewById(R.id.empty_view);
 
-        //holidayListView.setEmptyView(view.findViewById(R.id.empty_holiday_list_view));
+
 
         if (!sharedPreferences.getBoolean(QuickstartPreferences.SCHOOL_HOLIDAY_LISTS_DOWNLOADED, false)) {
             SchoolProfile schoolProfile = HandBookDbHelper.loadSchoolProfileFromDB(db);
@@ -142,10 +153,14 @@ public class CalendarHolidayEventFragment extends Fragment {
 
     private void setupHolidayView(List<HolidayLists> currentHolidayLists) {
 
-        if (currentHolidayLists != null) {
+        if (currentHolidayLists != null && !currentHolidayLists.isEmpty()) {
+            holidayView.setVisibility(View.VISIBLE);
             HolidayListsAdapter adapter = new HolidayListsAdapter(getContext(), currentHolidayLists);
             holidayView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+        } else if (currentHolidayLists.isEmpty()) {
+            holidayView.setVisibility(View.GONE);
+            emptyRecyclerView.setVisibility(View.VISIBLE);
         }
 
     }

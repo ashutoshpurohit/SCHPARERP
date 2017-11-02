@@ -54,7 +54,7 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
     int selectedMonthNumber;
     String selectedMonthName;
     View view;
-    TextView emptyListView;
+    TextView emptyRecyclerView;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -180,7 +180,7 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
             loadEventsFromDB(db, selectedMonthNumber);
 
         }
-        emptyListView = (TextView) view.findViewById(R.id.empty_list_view);
+        emptyRecyclerView = (TextView) view.findViewById(R.id.empty_view);
         ImageView img_prev_month = (ImageView) view.findViewById(R.id.img_month_previous);
         ImageView img_nxt_month = (ImageView) view.findViewById(R.id.img_month_next);
         img_nxt_month.setOnClickListener(new View.OnClickListener() {
@@ -256,18 +256,19 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
 
     private void setupSchoolCalendarView(List<Event> currentEvents) {
 
-        if (currentEvents != null) {
+        if (currentEvents != null && !currentEvents.isEmpty()) {
+
+            calendarView.setVisibility(View.VISIBLE);
+            //emptyRecyclerView.setVisibility(View.GONE);
             SchoolCalendarAdapter adapter = new SchoolCalendarAdapter(getContext(), currentEvents, HttpConnectionUtil.ViewType.DETAIL,
                     this);
             calendarView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+        } else if (currentEvents.isEmpty()) {
+            calendarView.setVisibility(View.GONE);
+            emptyRecyclerView.setVisibility(View.VISIBLE);
         }
-       /* if (currentEvents.size()!=0 || emptyListView.getVisibility()== View.VISIBLE){
-            emptyListView.setVisibility(View.INVISIBLE);
-        }else{
-            emptyListView.setVisibility(View.VISIBLE);
-        }
-*/
+
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
