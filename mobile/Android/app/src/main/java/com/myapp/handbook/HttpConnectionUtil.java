@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.myapp.handbook.data.HandbookContract;
 import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.HolidayLists;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
@@ -70,8 +71,6 @@ public class HttpConnectionUtil {
         return profiles;
     }
 
-    ;
-
     public static void setProfiles(List<RoleProfile> profiles) {
         HttpConnectionUtil.profiles = profiles;
 
@@ -130,17 +129,17 @@ public class HttpConnectionUtil {
         return selectedProfileId;
     }
 
-    public static String getSchoolId(){
-
-        String schoolId= sharedPreferences.getString(QuickstartPreferences.SCHOOL_ID,"");
-        return schoolId;
-    }
-
     public static void setSelectedProfileId(String profileId)
     {
         selectedProfileId = profileId;
         sharedPreferences.edit().putString(QuickstartPreferences.SELECTED_PROFILE_ID,selectedProfileId).commit();
 
+    }
+
+    public static String getSchoolId() {
+
+        String schoolId = sharedPreferences.getString(QuickstartPreferences.SCHOOL_ID, "");
+        return schoolId;
     }
 
     public static String UploadImage(File fileToTranser)
@@ -356,6 +355,12 @@ public class HttpConnectionUtil {
     public interface SchoolCalendarService {
         @GET("EventsForSchool/{schoolId}")
         Call<List<Event>> getSchoolCalendar(@Path("schoolId") String schoolId);
+
+    }
+
+    public interface SchoolHolidayListsService {
+        @GET("Holidays/{schoolId}")
+        Call<List<HolidayLists>> getSchoolHolidayLists(@Path("schoolId") String schoolId);
 
     }
 
