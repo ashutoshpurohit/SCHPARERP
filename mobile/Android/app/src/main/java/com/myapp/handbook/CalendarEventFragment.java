@@ -150,7 +150,8 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
                 FetchSchoolCalendarAsyncTask.CalendarDownloadedListener setupView = new FetchSchoolCalendarAsyncTask.CalendarDownloadedListener() {
                     @Override
                     public void onFinished(List<Event> currentEvents) {
-                        setupSchoolCalendarView(currentEvents);
+                        /*setupSchoolCalendarView(currentEvents)*/
+                        loadEventsFromDB(db, selectedMonthNumber);
                     }
                 };
 
