@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp"
-    card_view:cardCornerRadius="1dp"
-    card_view:cardElevation="5dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="4dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:orientation="vertical"
+                                    card_view:cardCornerRadius="1dp"
+                                    card_view:cardElevation="5dp"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,40 +23,40 @@
             android:id="@+id/event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textSize="16sp"
             android:background="@color/primary_light"
-            android:text="Color week - Pink color day"/>
+            android:padding="5dp"
+            android:text="Color week - Pink color day"
+            android:textSize="16sp"/>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:padding="5dp"
             android:gravity="center_vertical|center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_weight="1"
             android:id="@+id/event_date"
-            android:textSize="14sp"
-            android:text="16-Jan-2016"/>
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:layout_weight="1"
+            android:gravity="left"
+            android:text="16-Jan-2016"
+            android:textSize="14sp"/>
+        <TextView
             android:id="@+id/event_timing"
-            android:textSize="14sp"
-            android:text="8.30 - 12.30"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="8.30 - 12.30"
+            android:textSize="14sp"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/event_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:textSize="14sp"
-            android:id="@+id/event_location"
-            android:text="School Campus"/>
+            android:text="School Campus"
+            android:textSize="14sp"/>
         </LinearLayout>
         <View style="@style/Divider"></View>
     <LinearLayout
@@ -71,18 +71,18 @@
             android:id="@+id/event_LikeButton"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="5dp"
             android:layout_gravity="right"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/ic_favorite_border"
             />
         <ImageButton
             android:id="@+id/event_AddToCalendarButton"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="5dp"
             android:layout_gravity="right"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/ic_event"
             />
     </LinearLayout>

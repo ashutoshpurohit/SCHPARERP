@@ -179,6 +179,9 @@ public class StudentFeedbackFragment extends Fragment implements AdapterView.OnI
             //TO-DO figure out a way to differentiate between two teachers
             for(int i=0;i<allTeacherProfiles.size();i++){
                 String fullName = allTeacherProfiles.get(i).firstName+ " "+allTeacherProfiles.get(i).lastName;
+                if (allTeacherProfiles.get(i).getSubject() != null) {
+                    fullName = fullName + " (" + allTeacherProfiles.get(i).getSubject() + ")";
+                }
                 teacherNames.add(fullName);
             }
             //Set up the timetableAdapter for stdSpinner

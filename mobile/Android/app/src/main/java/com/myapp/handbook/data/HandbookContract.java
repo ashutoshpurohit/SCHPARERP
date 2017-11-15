@@ -146,10 +146,26 @@ public class HandbookContract {
         public static final String COLUMN_EVENT_LIKE_BUTTON_CLICKED = "like_button_clicked";
         public static final String COLUMN_EVENT_ADD_TO_CALENDER = "add_to_calender";
 
-        //below 2 columns are lists and they need to be assoicated with single event id in seperate table
+        //below 2 columns are lists and they need to be associated with single event id in seperate table
         //temperory its stored in this table for assuming single student and single teacher
         public static final String COLUMN_STUDENT_ID = "student_id";
         public static final String COLUMN_TEACHER_ID = "teacher_id";
+
+    }
+
+    //Table for Calender events entries
+    public static final class HolidayListsEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "holidaylists";
+
+        public static final String COLUMN_SCHOOL_ID = "school_id";
+        public static final String COLUMN_HOLIDAY_ID = "holiday_id";
+        public static final String COLUMN_HOLIDAY_NAME = "holiday_name";
+        public static final String COLUMN_HOLIDAY_DESCRIPTION = "holiday_description";
+        public static final String COLUMN_HOLIDAY_DATE = "holiday_date";
+        public static final String COLUMN_HOLIDAY_MONTH = "holiday_month";
+        public static final String COLUMN_HOLIDAY_YEAR = "holiday_year";
+        public static final String COLUMN_HOLIDAY_TYPE = "holiday_type";
 
     }
 

@@ -13,6 +13,7 @@ import com.myapp.handbook.data.HandbookContract.ProfileEntry;
 import com.myapp.handbook.domain.BaseTimeTable;
 import com.myapp.handbook.domain.DiaryNote;
 import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.HolidayLists;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.domain.TeacherTimeTable;
@@ -139,6 +140,33 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
         return sqliteDatabase.insert(HandbookContract.ContactSchoolEntry.TABLE_NAME, null, contacts);
     }
+
+
+    public static long insertHolidayListsToDB(SQLiteDatabase sqliteDatabase, List<HolidayLists> schoolHolidayLists) {
+        long retVal = 0;
+        ContentValues holiday = new ContentValues();
+        for (int i = 0; i < schoolHolidayLists.size(); i++) {
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID, schoolHolidayLists.get(i).getSchoolId());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID, schoolHolidayLists.get(i).getHolidayId());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME, schoolHolidayLists.get(i).getHoliday());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION, schoolHolidayLists.get(i).getHolidayDescription());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE, schoolHolidayLists.get(i).getHolidayDate());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH, schoolHolidayLists.get(i).getHolidayMonth());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR, schoolHolidayLists.get(i).getHolidayYear());
+            holiday.put(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE, schoolHolidayLists.get(i).getHolidayType());
+
+            try {
+                retVal = sqliteDatabase.insert(HandbookContract.HolidayListsEntry.TABLE_NAME, null, holiday);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return retVal;
+    }
+
+
+
 
     public static long insertSchoolCalendarEventsToDB(SQLiteDatabase sqliteDatabase,List<Event> schoolCalendar){
         long retVal = 0;
@@ -283,15 +311,69 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         return teacherProfiles;
     }
 
+    //Load Holiday List from DB if already exists..
+    public static List<HolidayLists> loadHolidayListsfromDb(SQLiteDatabase sqliteDatabase) {
+        List<HolidayLists> schooolHolidayLists = new ArrayList<>();
+        String query_to_fetch_earliest = "select *  from " + HandbookContract.HolidayListsEntry.TABLE_NAME + "" +
+                " order  by datetime(" + HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + ") ASC ";
+        Cursor cursor = sqliteDatabase.rawQuery(query_to_fetch_earliest, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                HolidayLists newHoliday = new HolidayLists();
+
+                newHoliday.setSchoolId(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID)));
+                newHoliday.setHolidayId(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID)));
+                newHoliday.setHoliday(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME)));
+                newHoliday.setHolidayDescription(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION
+                )));
+                newHoliday.setHolidayDate(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE)));
+
+                newHoliday.setHolidayMonth(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH)));
+                newHoliday.setHolidayYear(cursor.getString(cursor.getColumnIndex(HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR)));
+                newHoliday.setHolidayType(cursor.getString(cursor.getColumnIndex
+                        (HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE)));
+
+                schooolHolidayLists.add(newHoliday);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return schooolHolidayLists;
+    }
+
+
+
+
+
     //Load School calendar from DB if already exists..
-    public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase) {
+    public static List<Event> loadSchoolCalendarfromDb(SQLiteDatabase sqliteDatabase, int selectedMonth) {
         List<Event> schooolEvents = new ArrayList<>();
 
         String currDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //Log.v("CalenderAct",currDate);
 
-        String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
-                " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";
+       /* String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "" +
+                " order  by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC ";*/
+
+        /*String query_to_fetch_earliest="SELECT * FROM calenderevents where  strftime('%Y',event_date) == strftime('%Y',date('now')) " +
+                "AND  strftime('%m',event_date) = strftime('%m',date(1))";
+        */
+        String query_to_fetch_earliest;
+        if (selectedMonth < 10) {
+            /*  To format month recieved as single digit to double digit for sqlite db to identify month in double digit
+        * */
+            query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '0" + selectedMonth + "' " +
+                    "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+        } else {
+            query_to_fetch_earliest = "SELECT * FROM " + HandbookContract.CalenderEventsEntry.TABLE_NAME +
+                    " where  strftime('%Y'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") == strftime('%Y',date('now'))" +
+                    " AND  strftime('%m'," + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") = '" + selectedMonth + "' " +
+                    "order by datetime(" + HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + ") DESC";
+        }
 
         /*String query_to_fetch_earliest = "select *  from " + HandbookContract.CalenderEventsEntry.TABLE_NAME + "  WHERE " +
                 HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE + " >= '" + currDate +
@@ -303,11 +385,13 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 Event newEvent = new Event();
+
                 newEvent.setSchoolId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID)));
                 newEvent.setEventId(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID)));
                 newEvent.setEventName(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_NAME)));
                 newEvent.setEventPlace(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_LOCATION)));
                 newEvent.setEventDate(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_DATE)));
+                Log.v("check event date", String.valueOf(newEvent.getEventDate()));
                 newEvent.setEventStartTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_START_TIME)));
                 newEvent.setEventEndTime(cursor.getString(cursor.getColumnIndex(HandbookContract.CalenderEventsEntry.COLUMN_EVENT_END_TIME)));
                 newEvent.setEventLikeButtonClicked(cursor.getString(cursor.getColumnIndex

@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.myapp.handbook.data.HandbookContract;
 import com.myapp.handbook.domain.Event;
+import com.myapp.handbook.domain.HolidayLists;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
@@ -70,8 +71,6 @@ public class HttpConnectionUtil {
         return profiles;
     }
 
-    ;
-
     public static void setProfiles(List<RoleProfile> profiles) {
         HttpConnectionUtil.profiles = profiles;
 
@@ -130,12 +129,6 @@ public class HttpConnectionUtil {
         return selectedProfileId;
     }
 
-    public static String getSchoolId(){
-
-        String schoolId= sharedPreferences.getString(QuickstartPreferences.SCHOOL_ID,"");
-        return schoolId;
-    }
-
     public static void setSelectedProfileId(String profileId)
     {
         selectedProfileId = profileId;
@@ -143,16 +136,22 @@ public class HttpConnectionUtil {
 
     }
 
-    public static String UploadImage(File fileToTransfer)
+    public static String getSchoolId() {
+
+        String schoolId = sharedPreferences.getString(QuickstartPreferences.SCHOOL_ID, "");
+        return schoolId;
+    }
+
+    public static String UploadImage(File fileToTranser)
     {
         String response=null;
         imageUploaded=false;
         FileUploadService service =
                 ServiceGenerator.createService(FileUploadService.class);
 
-        RequestBody fBody = RequestBody.create(MediaType.parse("multipart/form-data"), fileToTransfer);
+        RequestBody fBody = RequestBody.create(MediaType.parse("multipart/form-data"), fileToTranser);
         MultipartBody.Part body =
-                MultipartBody.Part.createFormData("picture", fileToTransfer.getName(), fBody);
+                MultipartBody.Part.createFormData("picture", fileToTranser.getName(), fBody);
 
         String descriptionString = "hello, this is description speaking";
         RequestBody description =
@@ -356,6 +355,12 @@ public class HttpConnectionUtil {
     public interface SchoolCalendarService {
         @GET("EventsForSchool/{schoolId}")
         Call<List<Event>> getSchoolCalendar(@Path("schoolId") String schoolId);
+
+    }
+
+    public interface SchoolHolidayListsService {
+        @GET("Holidays/{schoolId}")
+        Call<List<HolidayLists>> getSchoolHolidayLists(@Path("schoolId") String schoolId);
 
     }
 
