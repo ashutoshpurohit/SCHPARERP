@@ -137,6 +137,10 @@ public class SchoolProfile {
 
     //Getter and Setter method for School Website
     public String getSchoolWebSite() {
+        return SchoolWebSite;
+    }
+
+    public String getSchoolMagazine() {
         //return SchoolWebSite;
         return "http://gdglobalschool.in/images/magazine.pdf";
     }

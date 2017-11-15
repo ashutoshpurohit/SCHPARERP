@@ -162,7 +162,7 @@ public class SchoolContactFragment extends Fragment {
             //Code to make Brochure Clickable
             schoolBrochure.setClickable(true);
             String brochureText = "School Magazine";
-            String brochureLink = schoolProfile.getSchoolWebSite();
+            String brochureLink = schoolProfile.getSchoolMagazine();
             schoolBrochure.setMovementMethod(LinkMovementMethod.getInstance());
             String schoolBrochureDocument = "<a href ='" + brochureLink + "'>" + brochureText + "</a>";
             schoolBrochure.setText(Html.fromHtml(schoolBrochureDocument));

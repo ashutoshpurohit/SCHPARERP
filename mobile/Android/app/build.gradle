@@ -23,7 +23,7 @@ android {
         applicationId "com.myapp.handbook"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 23
+        versionCode 25
         versionName "0.5"
         multiDexEnabled true
         testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
