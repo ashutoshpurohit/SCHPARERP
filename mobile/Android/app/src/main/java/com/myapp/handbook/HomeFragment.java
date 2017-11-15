@@ -1,6 +1,5 @@
 package com.myapp.handbook;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -142,7 +140,10 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onProfileDownload(List<RoleProfile> profiles, SchoolProfile schoolProfile) {
 
-                    AddWelcomeMessage(profiles,db);
+                    if (!sharedPreferences.getBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, false)) {
+                        AddWelcomeMessage(profiles, db);
+                        sharedPreferences.edit().putBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, true).apply();
+                    }
                 }
             });
 
@@ -225,7 +226,10 @@ public class HomeFragment extends Fragment {
                     new FetchSchoolCalendarAsyncTask(listeners,schoolId).execute();
             }
             else{
-                List<Event> currentEvents= HandBookDbHelper.loadSchoolCalendarfromDb(db);
+                /*Added selected month code for calender month selection on School Calendar page*/
+                Calendar c = Calendar.getInstance();
+                int selectedMonth = c.get(Calendar.MONTH) + 1;
+                List<Event> currentEvents = HandBookDbHelper.loadSchoolCalendarfromDb(db, selectedMonth);
                 setupEventsView(selectedProfileId,selectedProfile.getProfileRole(),currentEvents);
             }
 
