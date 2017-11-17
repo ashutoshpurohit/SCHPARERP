@@ -1,8 +1,12 @@
 package com.myapp.handbook;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -32,12 +36,14 @@ import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.MsgType;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.util.ImageCompression;
+import com.myapp.handbook.util.ImageFilePath;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,17 +51,16 @@ import java.util.List;
 public class TeacherNoteFragment extends Fragment implements View.OnClickListener {
 
 
-
-
     public static final String TAG = "Teacher Note Fragment";
-    private static final int REQUEST_PHOTO = 2;
-    View fragmentView =null;
+    private static final int REQUEST_CAMERA = 1;
+    private static final int SELECT_FILE = 2;
+    View fragmentView = null;
     SQLiteDatabase db;
     String selectedTeacherId;
     List<RoleProfile> teacherProfile;
     List<Assignment> teacherAssignments = new ArrayList<>();
     List<String> stds = new ArrayList<>();
-    List<String> subjects =new ArrayList<>();
+    List<String> subjects = new ArrayList<>();
     TextView messageText;
     RadioButton homeworkButton;
     RadioButton diaryNoteButton;
@@ -64,8 +69,9 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     Intent captureImage;
     boolean canTakePhoto;
     Spinner stdSpinner;
-    ArrayList<RoleProfile> selectedStudents= new ArrayList<>();
+    ArrayList<RoleProfile> selectedStudents = new ArrayList<>();
     Uri photoURI;
+    String userChoosenTask;
     Uri compressedPhotoURI;
     File compressedPhotoFile;
     private OnFragmentInteractionListener mListener;
@@ -85,19 +91,19 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
-        fragmentView= inflater.inflate(R.layout.fragment_teacher_note, container, false);
+        fragmentView = inflater.inflate(R.layout.fragment_teacher_note, container, false);
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
         db = handbookDbHelper.getReadableDatabase();
         teacherProfile = RoleProfile.GetProfileForRole(db, RoleProfile.ProfileRole.TEACHER);
-        selectedTeacherId= teacherProfile.get(0).getId();
-        studentCountTextView = (TextView)fragmentView.findViewById(R.id.selected_student_count);
+        selectedTeacherId = teacherProfile.get(0).getId();
+        studentCountTextView = (TextView) fragmentView.findViewById(R.id.selected_student_count);
         messageText = (TextView) fragmentView.findViewById(R.id.teacher_note);
-        Button selectStudent = (Button)fragmentView.findViewById(R.id.studentSelect);
+        Button selectStudent = (Button) fragmentView.findViewById(R.id.studentSelect);
         selectStudent.setOnClickListener(this);
-        photoView =(ImageView)fragmentView.findViewById(R.id.message_image);
+        photoView = (ImageView) fragmentView.findViewById(R.id.message_image);
 
-        homeworkButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_homework);
-        diaryNoteButton= (RadioButton)fragmentView.findViewById(R.id.msg_type_diarynote);
+        homeworkButton = (RadioButton) fragmentView.findViewById(R.id.msg_type_homework);
+        diaryNoteButton = (RadioButton) fragmentView.findViewById(R.id.msg_type_diarynote);
         //Set up the timetableAdapter for stdSpinner
         stdSpinner = (Spinner) fragmentView.findViewById(R.id.std_spinner);
         diaryNoteButton.setChecked(true);
@@ -106,11 +112,11 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         homeworkButton.setOnClickListener(this);
         diaryNoteButton.setOnClickListener(this);
 
-        photoFile = HttpConnectionUtil.getPhotoFile(getContext(),HttpConnectionUtil.getPhotoFileName());
+        photoFile = HttpConnectionUtil.getPhotoFile(getContext(), HttpConnectionUtil.getPhotoFileName());
 
-        captureImage = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
+        captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //Check if permission is available to create file and access camera
-        canTakePhoto = photoFile!=null && captureImage.resolveActivity(getContext().getPackageManager())!=null;
+        canTakePhoto = photoFile != null && captureImage.resolveActivity(getContext().getPackageManager()) != null;
 
         Context context = getContext();
         if (canTakePhoto) {
@@ -121,31 +127,27 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         }
 
         //Check if there is a internet connection
-        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())==true) {
+        if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext()) == true) {
             new FetchTeacherAssignmentAsyncTask().execute();
             SetupView();
-        }else {
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
             selectStudent.setClickable(false);
             homeworkButton.setClickable(false);
             diaryNoteButton.setClickable(false);
         }
 
-
-
-
-
         updatePhotoView();
         return fragmentView;
     }
 
     private boolean checkMessageForValidity() {
-        boolean status=true;
-        if(selectedStudents ==null ||selectedStudents.size() <= 0){
+        boolean status = true;
+        if (selectedStudents == null || selectedStudents.size() <= 0) {
             Toast.makeText(getContext(), "Failure Sending! No students selected. Please select student before sending", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(messageText.getText().length() <= 0){
+        if (messageText.getText().length() <= 0) {
 
             Toast.makeText(getContext(), "Failure Sending! Message is empty. Please input some message.", Toast.LENGTH_SHORT).show();
             return false;
@@ -153,40 +155,41 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         return true;
     }
 
-    public void updatePhotoView(){
-        if (photoFile == null || !photoFile.exists()) {
-            photoView.setImageDrawable(null);
-            photoView.setVisibility(View.GONE);
-        }
-        else{
-            ImageCompression imgCompression = new ImageCompression(getContext());
-            File destDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            compressedPhotoFile= new File(imgCompression.compress(photoFile.getPath(),destDir,true));
-            Bitmap bitmap = PictureUtil.getScaledBitmap(compressedPhotoFile.getPath(),getActivity());
-            photoView.setImageBitmap(bitmap);
-            photoView.setVisibility(View.VISIBLE);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PictureUtil.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (userChoosenTask.equals("Take Photo"))
+                        cameraIntent();
+                    else if (userChoosenTask.equals("Choose from Library"))
+                        galleryIntent();
+                } else {
+                    //code for deny
+                }
+                break;
         }
     }
 
     public void SetupView() {
         View view = fragmentView;
         TextView fromText = (TextView) view.findViewById(R.id.feedback_from);
-        if (teacherAssignments!=null && !teacherAssignments.isEmpty()) {
+        if (teacherAssignments != null && !teacherAssignments.isEmpty()) {
             fromText.setText("");
             stds.clear();
             subjects.clear();
             //TO-DO figure out a way to differentiate between two teachers
-            for(int i=0;i<teacherAssignments.size();i++){
+            for (int i = 0; i < teacherAssignments.size(); i++) {
                 String std = teacherAssignments.get(i).std;
                 String subject = teacherAssignments.get(i).subject;
-                if(!stds.contains(std))
+                if (!stds.contains(std))
                     stds.add(std);
-                if(!subjects.contains(subject))
+                if (!subjects.contains(subject))
                     subjects.add(subject);
             }
 
             // Create an ArrayAdapter using the string array and a default stdSpinner layout
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,stds);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, stds);
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Apply the timetableAdapter to the stdSpinner
@@ -200,8 +203,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             // Apply the timetableAdapter to the stdSpinner
             subjectSpinner.setAdapter(subjectAdapter);
 */
-        }
-        else {
+        } else {
 
             fromText.setText("Loading details. Please wait..");
         }
@@ -218,7 +220,7 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
 
             case R.id.studentSelect:
                 Intent intent = new Intent(getActivity(), StudentSearch.class);
-                String selectedClass = (String)stdSpinner.getSelectedItem();
+                String selectedClass = (String) stdSpinner.getSelectedItem();
                 if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
                     intent.putExtra("Teacher_ID", selectedTeacherId);
                     intent.putExtra("Std", selectedClass);
@@ -228,11 +230,11 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.msg_type_homework:
                 homeworkButton.setChecked(true);
-                msgType=MsgType.HOMEWORK;
+                msgType = MsgType.HOMEWORK;
                 break;
             case R.id.msg_type_diarynote:
                 diaryNoteButton.setChecked(true);
-                msgType= MsgType.DIARY_NOTE;
+                msgType = MsgType.DIARY_NOTE;
                 break;
             default:
                 break;
@@ -246,17 +248,21 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent result){
+    public void onActivityResult(int requestCode, int resultCode, Intent result) {
 
-        if(requestCode==REQUEST_PHOTO) {
-            updatePhotoView();
+        super.onActivityResult(requestCode, resultCode, result);
 
-        }
-        else if(result!=null) {
-            selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
-            if(selectedStudents!=null) {
-                int count = selectedStudents.size();
-                studentCountTextView.setText("Selected: " + count);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(result);
+            else if (requestCode == REQUEST_CAMERA) {
+                updatePhotoView();
+            } else if (result != null) {
+                selectedStudents = result.getParcelableArrayListExtra("selectedStudent");
+                if (selectedStudents != null) {
+                    int count = selectedStudents.size();
+                    studentCountTextView.setText("Selected: " + count);
+                }
             }
         }
     }
@@ -266,11 +272,11 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         JSONArray ids = new JSONArray();
         JSONArray studentNames = new JSONArray();
         JSONObject msgToSend = new JSONObject();
-        int i=0;
-        for (RoleProfile student:selectedStudents
+        int i = 0;
+        for (RoleProfile student : selectedStudents
                 ) {
             try {
-                numbers.put(i,student.getMobileNumber());
+                numbers.put(i, student.getMobileNumber());
                 ids.put(student.getId());
                 studentNames.put(student.getFirstName());
                 i++;
@@ -279,19 +285,19 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
             }
 
         }
-        String message ="";
+        String message = "";
         View view = fragmentView;
 
         message = messageText.getText().toString();
         try {
-            msgToSend.put("MessageBody",message);
-            msgToSend.put("MessageTitle","Teacher Note from "+ teacherProfile.get(0).getFirstName());
-            msgToSend.put("MobileNumbers",numbers);
-            msgToSend.put("type",msgType.toString());
-            msgToSend.put("ToIds",ids);
-            msgToSend.put("FromType","Teacher");
-            msgToSend.put("FromId",selectedTeacherId);
-            msgToSend.put("FromName",teacherProfile.get(0).getFirstName());
+            msgToSend.put("MessageBody", message);
+            msgToSend.put("MessageTitle", "Teacher Note from " + teacherProfile.get(0).getFirstName());
+            msgToSend.put("MobileNumbers", numbers);
+            msgToSend.put("type", msgType.toString());
+            msgToSend.put("ToIds", ids);
+            msgToSend.put("FromType", "Teacher");
+            msgToSend.put("FromId", selectedTeacherId);
+            msgToSend.put("FromName", teacherProfile.get(0).getFirstName());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -299,12 +305,114 @@ public class TeacherNoteFragment extends Fragment implements View.OnClickListene
         return msgToSend;
     }
 
+    private void cameraIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(captureImage, REQUEST_CAMERA);
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+
+
+        /*Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image*//*");
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);*/
+    }
+
+    @SuppressWarnings("deprecation")
+    private void onSelectFromGalleryResult(Intent data) {
+
+        Bitmap bm = null;
+        if (data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            String realPath = ImageFilePath.getPath(getActivity(), data.getData());
+//                realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+            //compressedPhotoFile = new File(uri.toString());
+            ImageCompression imgCompression = new ImageCompression(getContext());
+            File destDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            compressedPhotoFile = new File(imgCompression.compress(realPath, destDir, false));
+
+            Log.i(TAG, "onActivityResult: file path : " + realPath);
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+            /*} catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+
+            photoView.setImageBitmap(bm);
+            photoView.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+
+    public void updatePhotoView() {
+        if (photoFile == null || !photoFile.exists()) {
+            photoView.setImageDrawable(null);
+            photoView.setVisibility(View.GONE);
+        } else {
+            ImageCompression imgCompression = new ImageCompression(getContext());
+            File destDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            compressedPhotoFile = new File(imgCompression.compress(photoFile.getPath(), destDir, true));
+            Bitmap bitmap = PictureUtil.getScaledBitmap(compressedPhotoFile.getPath(), getActivity());
+            photoView.setImageBitmap(bitmap);
+            photoView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    private void selectImageDialog() {
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                boolean result = PictureUtil.checkPermission(getContext());
+                if (items[item].equals("Take Photo")) {
+                    userChoosenTask = "Take Photo";
+                    if (result)
+                        cameraIntent();
+
+                } else if (items[item].equals("Choose from Library")) {
+                    userChoosenTask = "Choose from Library";
+                    if (result)
+                        galleryIntent();
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case R.id.action_add_picture:
-                startActivityForResult(captureImage,REQUEST_PHOTO);
+                //startActivityForResult(captureImage,REQUEST_PHOTO);
+                selectImageDialog();
                 break;
             case R.id.action_send:
                 if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext())) {
