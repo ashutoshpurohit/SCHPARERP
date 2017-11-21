@@ -2,13 +2,13 @@ package com.myapp.handbook.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,20 +18,20 @@ import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.RoleProfile;
 
-
 import java.util.List;
 
 /**
  * Created by SAshutosh on 10/9/2016.
  */
 
-public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.OnClickListener {
+public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
 
     Context context;
     int layoutResourceId;
     RoleProfile [] roles=null;
     String selectedProfileId;
     List<SelectionChangeListener> listeners;
+    int selectedPosition;
 
     /**
      * Constructor
@@ -63,17 +63,50 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
         if(currentRow==null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             currentRow = inflater.inflate(layoutResourceId,parent,false);
-            currentRow.setOnClickListener(this);
+            /*currentRow.setOnClickListener(this);*/
 
         }
+        RadioButton selectedIdRadio = (RadioButton) currentRow.findViewById(R.id.radio_select_profile);
+
+        final TextView profileId = (TextView) currentRow.findViewById(R.id.profileId);
+        selectedIdRadio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedPosition = (Integer) view.getTag();
+                selectedProfileId = profileId.getText().toString();
+                HttpConnectionUtil.setSelectedProfileId(selectedProfileId);
+                for (SelectionChangeListener listener : listeners
+                        ) {
+                    listener.onSelectionChanged(selectedProfileId);
+
+                }
+                notifyDataSetChanged();
+            }
+        });
+
+
+
         ImageView imageView = (ImageView) currentRow.findViewById(R.id.profile_image);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         TextView profileName = (TextView)currentRow.findViewById(R.id.profile_name);
         TextView profileRole = (TextView)currentRow.findViewById(R.id.profile_role);
-        TextView profileId = (TextView)currentRow.findViewById(R.id.profileId);
+
         TextView profileStd = (TextView)currentRow.findViewById(R.id.profile_standard);
         TextView profileContactNumber = (TextView)currentRow.findViewById(R.id.profile_contact_number);
         RoleProfile profile= roles[position];
 
+        if (profile.getId().equals(selectedProfileId)) {
+            selectedIdRadio.setChecked(true);
+
+        } else {
+            selectedIdRadio.setChecked(false);
+        }
+        selectedIdRadio.setTag(position);
         if(profile.getLastName()!=null)
             profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
         else
@@ -107,12 +140,12 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }
-        if(profile.getId().equals(selectedProfileId)){
+       /* if(profile.getId().equals(selectedProfileId)){
             currentRow.setBackgroundColor(Color.GRAY);
         }
         else{
             currentRow.setBackgroundColor(Color.WHITE);
-        }
+        }*/
         return currentRow;
     }
 
@@ -121,6 +154,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
      *
      * @param v The view that was clicked.
      */
+/*
     @Override
     public void onClick(View v) {
         TextView profileId = (TextView)v.findViewById(R.id.profileId);
@@ -134,6 +168,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> implements View.On
 
         notifyDataSetChanged();
     }
+*/
 
 
 }
