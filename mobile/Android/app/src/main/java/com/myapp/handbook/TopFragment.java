@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.android.gms.internal.zzahf.runOnUiThread;
 import static com.myapp.handbook.domain.RoleProfile.saveProfilestoDB;
 
 public class TopFragment extends Fragment {
@@ -339,10 +340,19 @@ public class TopFragment extends Fragment {
                 HandBookDbHelper.updateProfile(db, profileImageURL, selectedProfileId);
 
             } else {
-                Toast.makeText(getContext(), "Selected Image Cannot be loaded,please select another image!", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getContext(), "Selected Image Cannot be loaded,please select another image!", Toast.LENGTH_LONG).show();
+                showToast("Selected Image Cannot be loaded,please select another image!");
             }
 
         }
+    }
+
+    public void showToast(final String toast) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getContext(), toast, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
