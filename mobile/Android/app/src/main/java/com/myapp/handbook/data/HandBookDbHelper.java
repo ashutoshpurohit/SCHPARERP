@@ -3,6 +3,7 @@ package com.myapp.handbook.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -606,6 +607,24 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
         }
         return  table;
     }
+
+    //function to update RoleProfile table like ImageURL of a profile
+    public static void updateProfile(SQLiteDatabase sqliteDatabase, String profileImageUrl, String profileId) {
+
+        // RoleProfile roleProfile = new RoleProfile();
+        String query_to_fetch_earliest = "UPDATE " + HandbookContract.ProfileEntry.TABLE_NAME + " SET "
+                + ProfileEntry.COLUMN_IMAGE + " = '" + profileImageUrl +
+                "' where " + HandbookContract.ProfileEntry.COLUMN_ID + " = '" + profileId + "' ";
+
+
+        try {
+            sqliteDatabase.execSQL(query_to_fetch_earliest);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

@@ -14,8 +14,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.HttpConnectionUtil;
+import com.myapp.handbook.Listeners.ProfileImageClickListener;
 import com.myapp.handbook.Listeners.SelectionChangeListener;
 import com.myapp.handbook.R;
+import com.myapp.handbook.TopFragment;
 import com.myapp.handbook.domain.RoleProfile;
 
 import java.util.List;
@@ -26,49 +28,101 @@ import java.util.List;
 
 public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
 
+    private static final int REQUEST_CAMERA = 1;
+    private static final int SELECT_FILE = 2;
     Context context;
     int layoutResourceId;
     RoleProfile [] roles=null;
     String selectedProfileId;
     List<SelectionChangeListener> listeners;
     int selectedPosition;
-
+    ImageView updatedProfileImage;
+    String userChoosenTask;
+    TopFragment myFragment;
+    List<ProfileImageClickListener> mProfileImageClickListeners;
     /**
      * Constructor
+     *
      *
      * @param context  The current context.
      * @param resource The resource ID for a layout file containing a TextView to use when
      *                 instantiating views.
      * @param roles  The objects to represent in the ListView.
      */
-    public ProfileAdapter(Context context, int resource, RoleProfile[] roles, List<SelectionChangeListener> selectionChangeListenerList) {
+    public ProfileAdapter(Context context, int resource, RoleProfile[] roles,
+                          List<SelectionChangeListener> selectionChangeListenerList, List<ProfileImageClickListener> profileImageClickListeners) {
         super(context, resource, roles);
         this.context=context;
         this.layoutResourceId=resource;
         this.roles=roles;
+
 
         this.listeners=selectionChangeListenerList;
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
         for (SelectionChangeListener listener:listeners
              ) {
             listener.onSelectionChanged(selectedProfileId);
+
         }
+        mProfileImageClickListeners = profileImageClickListeners;
 
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
         View currentRow =convertView;
+
         if(currentRow==null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             currentRow = inflater.inflate(layoutResourceId,parent,false);
             /*currentRow.setOnClickListener(this);*/
 
         }
+        final RoleProfile profile = roles[position];
+
+        TextView profileName = (TextView) currentRow.findViewById(R.id.profile_name);
+        TextView profileRole = (TextView) currentRow.findViewById(R.id.profile_role);
+
+        TextView profileStd = (TextView) currentRow.findViewById(R.id.profile_standard);
+        TextView profileContactNumber = (TextView) currentRow.findViewById(R.id.profile_contact_number);
+        final TextView profileId = (TextView) currentRow.findViewById(R.id.profileId);
+        ImageView profileImage = (ImageView) currentRow.findViewById(R.id.profile_image);
         RadioButton selectedIdRadio = (RadioButton) currentRow.findViewById(R.id.radio_select_profile);
 
-        final TextView profileId = (TextView) currentRow.findViewById(R.id.profileId);
+
+        String imagePath = profile.getImageUrl();
+        if (imagePath == null || TextUtils.isEmpty(imagePath.trim())) {
+            Glide.with(getContext())
+                    .load(R.drawable.ic_add_a_photo_black_24dp)
+                    //.placeholder(R.drawable.contact_picture_placeholder)
+
+                    .into(profileImage);
+        } else {
+            Glide.with(getContext())
+                    .load(profile.getImageUrl())
+                    //.placeholder(R.drawable.contact_picture_placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(profileImage);
+        }
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (ProfileImageClickListener listener : mProfileImageClickListeners
+                        ) {
+                    listener.onProfileImageClicked(profile.getId());
+                    //notifyDataSetChanged();
+                }
+                notifyDataSetChanged();
+
+            }
+
+        });
+
+
+
         selectedIdRadio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,22 +138,6 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
             }
         });
 
-
-
-        ImageView imageView = (ImageView) currentRow.findViewById(R.id.profile_image);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        TextView profileName = (TextView)currentRow.findViewById(R.id.profile_name);
-        TextView profileRole = (TextView)currentRow.findViewById(R.id.profile_role);
-
-        TextView profileStd = (TextView)currentRow.findViewById(R.id.profile_standard);
-        TextView profileContactNumber = (TextView)currentRow.findViewById(R.id.profile_contact_number);
-        RoleProfile profile= roles[position];
-
         if (profile.getId().equals(selectedProfileId)) {
             selectedIdRadio.setChecked(true);
 
@@ -107,6 +145,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
             selectedIdRadio.setChecked(false);
         }
         selectedIdRadio.setTag(position);
+
         if(profile.getLastName()!=null)
             profileName.setText(profile.getFirstName()+ " "+ profile.getLastName());
         else
@@ -125,22 +164,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
             profileStd.setText(profile.getStd());
         }
 
-        String imagePath = profile.getImageUrl();
-        if(imagePath==null || TextUtils.isEmpty(imagePath.trim())) {
-            Glide.with(getContext())
-                    .load(R.drawable.contact_picture_placeholder)
-                    .placeholder(R.drawable.contact_picture_placeholder)
-
-                    .into(imageView);
-        }
-        else {
-            Glide.with(getContext())
-                    .load(profile.getImageUrl())
-                    .placeholder(R.drawable.contact_picture_placeholder)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imageView);
-        }
-       /* if(profile.getId().equals(selectedProfileId)){
+        /* if(profile.getId().equals(selectedProfileId)){
             currentRow.setBackgroundColor(Color.GRAY);
         }
         else{
@@ -152,7 +176,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
     /**
      * Called when a view has been clicked.
      *
-     * @param v The view that was clicked.
+     *  The view that was clicked.
      */
 /*
     @Override
