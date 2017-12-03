@@ -40,6 +40,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
     String userChoosenTask;
     TopFragment myFragment;
     List<ProfileImageClickListener> mProfileImageClickListeners;
+
     /**
      * Constructor
      *
@@ -57,6 +58,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
         this.roles=roles;
 
 
+
         this.listeners=selectionChangeListenerList;
         selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
         for (SelectionChangeListener listener:listeners
@@ -68,6 +70,9 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
 
     }
 
+    public void setRoles(RoleProfile[] roles) {
+        this.roles = roles;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -115,7 +120,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
                     listener.onProfileImageClicked(profile.getId());
                     //notifyDataSetChanged();
                 }
-                notifyDataSetChanged();
+//                notifyDataSetChanged();
 
             }
 

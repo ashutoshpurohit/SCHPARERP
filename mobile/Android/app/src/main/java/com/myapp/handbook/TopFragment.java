@@ -27,7 +27,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,7 +42,6 @@ import com.myapp.handbook.util.ImageCompression;
 import com.myapp.handbook.util.ImageFilePath;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +62,8 @@ public class TopFragment extends Fragment {
     String userChoosenTask;
     Uri compressedPhotoURI;
     File compressedPhotoFile;
-    ImageView photoView;
+    //ImageView photoView;
+    Bitmap bitmap;
     ProfileAdapter adapter;
     private List<RoleProfile> allProfiles = new ArrayList<>();
     private SchoolProfile schoolProfile = null;
@@ -140,6 +139,7 @@ public class TopFragment extends Fragment {
             allProfiles=HandBookDbHelper.LoadProfilefromDb(db);
             SetUpView(allProfiles,fragmentView);
         }
+
         return view;
     }
 
@@ -279,12 +279,12 @@ public class TopFragment extends Fragment {
 
         if (photoFile == null || !photoFile.exists()) {
             //photoView.setImageDrawable(null);
-            photoView.setVisibility(View.GONE);
+            //photoView.setVisibility(View.GONE);
         } else {
             ImageCompression imgCompression = new ImageCompression(getContext());
             File destDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             compressedPhotoFile = new File(imgCompression.compress(photoFile.getPath(), destDir, true));
-            Bitmap bitmap = PictureUtil.getScaledBitmap(compressedPhotoFile.getPath(), getActivity());
+            // bitmap = PictureUtil.getScaledBitmap(compressedPhotoFile.getPath(), getActivity());
             new UploadImageAsyncTask().execute();
             /*photoView.setImageBitmap(bitmap);
             photoView.setVisibility(View.VISIBLE);*/
@@ -307,14 +307,14 @@ public class TopFragment extends Fragment {
             compressedPhotoFile = new File(imgCompression.compress(realPath, destDir, false));
 
             Log.i(TAG, "onActivityResult: file path : " + realPath);
-            try {
-                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            /*try {
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
 
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             if (HttpConnectionUtil.isOnline(this.getActivity().getApplicationContext()) == true) {
                 new UploadImageAsyncTask().execute();
@@ -337,6 +337,7 @@ public class TopFragment extends Fragment {
             //progressDialog.dismiss();
             if (HttpConnectionUtil.imageUploadStatus) {
                 profileImageURL = HttpConnectionUtil.imageUrl;
+
                 HandBookDbHelper.updateProfile(db, profileImageURL, selectedProfileId);
 
             } else {
@@ -350,7 +351,7 @@ public class TopFragment extends Fragment {
     public void showToast(final String toast) {
         runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(getContext(), toast, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), toast, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -367,12 +368,18 @@ public class TopFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+
             uploadImage();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+
+            allProfiles = HandBookDbHelper.LoadProfilefromDb(db);
+            RoleProfile[] profiles = new RoleProfile[allProfiles.size()];
+            profiles = allProfiles.toArray(profiles);
+            adapter.setRoles(profiles);
             adapter.notifyDataSetChanged();
         }
     }
