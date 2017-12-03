@@ -2,6 +2,7 @@ package com.myapp.handbook;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -365,6 +366,14 @@ public class TopFragment extends Fragment {
     }
 
     private class UploadImageAsyncTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Updating profile image, Please wait..");
+            progressDialog.show();
+        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -381,6 +390,9 @@ public class TopFragment extends Fragment {
             profiles = allProfiles.toArray(profiles);
             adapter.setRoles(profiles);
             adapter.notifyDataSetChanged();
+
+            if (progressDialog != null && progressDialog.isShowing())
+                progressDialog.dismiss();
         }
     }
 
