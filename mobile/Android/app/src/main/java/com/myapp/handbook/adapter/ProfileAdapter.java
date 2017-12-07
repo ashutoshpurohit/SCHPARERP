@@ -100,7 +100,7 @@ public class ProfileAdapter extends ArrayAdapter<RoleProfile> {
         String imagePath = profile.getImageUrl();
         if (imagePath == null || TextUtils.isEmpty(imagePath.trim())) {
             Glide.with(getContext())
-                    .load(R.drawable.ic_add_a_photo_black_24dp)
+                    .load(R.drawable.ic_add_a_photo)
                     //.placeholder(R.drawable.contact_picture_placeholder)
 
                     .into(profileImage);

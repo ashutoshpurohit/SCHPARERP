@@ -42,6 +42,9 @@ import com.myapp.handbook.domain.SchoolProfile;
 import com.myapp.handbook.util.ImageCompression;
 import com.myapp.handbook.util.ImageFilePath;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -324,12 +327,46 @@ public class TopFragment extends Fragment {
         }
     }
 
-    private void uploadImage() {
+    //function to get profile type
+    private RoleProfile.ProfileRole getProfileType(String profileId) {
+        RoleProfile.ProfileRole profileType = null;
 
+        for (int j = 0; j < allProfiles.size(); j++) {
+            if (allProfiles.get(j).getId() == profileId) {
+                profileType = allProfiles.get(j).getProfileRole();
+            }
+        }
+
+
+        return profileType;
+    }
+
+    //function to get url based on profile type
+    private String getUploadedImageUrl(String profileId) {
+        RoleProfile.ProfileRole profileRole;
+        String url = null;
+        profileRole = getProfileType(profileId);
+        if (profileRole == RoleProfile.ProfileRole.STUDENT) {
+            url = HttpConnectionUtil.URL_ENPOINT + "/students/" + selectedProfileId + "/" + "Image";
+        } else if (profileRole == RoleProfile.ProfileRole.TEACHER) {
+            url = HttpConnectionUtil.URL_ENPOINT + "/teachers/" + selectedProfileId + "/" + "Image";
+        }
+        return url;
+    }
+
+
+    private String uploadImage() {
+        RoleProfile.ProfileRole profileRole;
+        String url = null;
+        HttpConnectionUtil util = new HttpConnectionUtil();
+
+        url = getUploadedImageUrl(selectedProfileId);
+        JSONObject messageJson = new JSONObject();
         if (compressedPhotoFile != null && compressedPhotoFile.exists()) {
 
             //ProgressDialog progressDialog = ProgressDialog.show(getContext(), "Setting profile image", "Please wait", false);
             HttpConnectionUtil.UploadImage(compressedPhotoFile);
+
 
             while (!HttpConnectionUtil.imageUploaded) {
                 //Waiting for upload to complete
@@ -345,9 +382,19 @@ public class TopFragment extends Fragment {
                 // Toast.makeText(getContext(), "Selected Image Cannot be loaded,please select another image!", Toast.LENGTH_LONG).show();
                 showToast("Selected Image Cannot be loaded,please select another image!");
             }
-
+            try {
+                if (HttpConnectionUtil.imageUploadStatus) {
+                    messageJson.put("ImageUrl", HttpConnectionUtil.imageUrl);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+        return util.downloadUrl(url, HttpConnectionUtil.RESTMethod.PUT, messageJson);
+
+
     }
+
 
     public void showToast(final String toast) {
         runOnUiThread(new Runnable() {
