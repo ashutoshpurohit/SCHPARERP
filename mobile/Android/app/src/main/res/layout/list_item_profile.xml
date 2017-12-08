@@ -8,15 +8,18 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
+        android:layout_width="74dp"
+        android:layout_height="74dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/contact_picture_placeholder"
-        app:border_color="#FF000000"/>
+        app:border_color="#FF000000"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
