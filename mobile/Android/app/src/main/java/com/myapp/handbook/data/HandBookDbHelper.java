@@ -626,6 +626,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
     }
 
 
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + NotificationEntry.TABLE_NAME + " (" +
@@ -711,12 +712,24 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT " + " );";
 
 
+        final String SQL_CREATE_SCHOOL_HOLIDAY_TABLE = "CREATE TABLE " + HandbookContract.HolidayListsEntry.TABLE_NAME + " (" +
+                HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DESCRIPTION + " TEXT, " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_DATE + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_MONTH + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_YEAR + " TEXT , " +
+                HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_TYPE + " TEXT );";
+
+
         sqLiteDatabase.execSQL(SQL_CREATE_NOTIFICATIONS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PROFILE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_TIMETABLE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CONTACT_SCHOOL_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CALENDER_EVENTS);
         sqLiteDatabase.execSQL(SQL_CREATE_TEACHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_SCHOOL_HOLIDAY_TABLE);
         //HandBookDbHelper.insertNotification(sqLiteDatabase, "Welcome to SchoolLink", "SchoolLink is the app through which you will receive update from school", new Date().toString(), 1, "SchoolLink", 10001,"",101,"110,105");
 
     }
