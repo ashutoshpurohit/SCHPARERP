@@ -267,7 +267,8 @@ public class CalendarEventFragment extends Fragment implements RecycleViewClickL
             adapter.notifyDataSetChanged();
         } else if (currentEvents.isEmpty()) {
             calendarView.setVisibility(View.GONE);
-            emptyRecyclerView.setVisibility(View.VISIBLE);
+            if(emptyRecyclerView!=null)
+                emptyRecyclerView.setVisibility(View.VISIBLE);
         }
 
     }

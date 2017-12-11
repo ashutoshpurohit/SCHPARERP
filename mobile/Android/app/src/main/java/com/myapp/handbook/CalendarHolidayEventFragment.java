@@ -78,7 +78,7 @@ public class CalendarHolidayEventFragment extends Fragment {
         db = handbookDbHelper.getReadableDatabase();
         holidayView.setLayoutManager(holidayLayoutManager);
 
-        emptyRecyclerView = (TextView) view.findViewById(R.id.empty_view);
+        emptyRecyclerView = (TextView) view.findViewById(R.id.empty_holiday_view);
 
 
 
@@ -160,7 +160,8 @@ public class CalendarHolidayEventFragment extends Fragment {
             adapter.notifyDataSetChanged();
         } else if (currentHolidayLists.isEmpty()) {
             holidayView.setVisibility(View.GONE);
-            emptyRecyclerView.setVisibility(View.VISIBLE);
+            if(emptyRecyclerView!=null)
+                emptyRecyclerView.setVisibility(View.VISIBLE);
         }
 
     }
