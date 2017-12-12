@@ -11,37 +11,36 @@
           app:actionProviderClass="android.support.v7.widget.ShareActionProvider" /-->
 
     <item android:id="@+id/action_search"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_action_search"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+          android:icon="@drawable/ic_action_search"
+          android:title="@string/action_search"
+          app:actionViewClass="android.support.v7.widget.SearchView"
+          app:showAsAction="ifRoom|collapseActionView"/>
 
     <item android:id="@+id/action_add_picture"
-        android:title="Send"
-        android:icon="@drawable/ic_add_a_photo"
-        android:visible="false"
-        app:showAsAction="ifRoom"></item>
+          android:icon="@drawable/ic_add_a_photo"
+          android:title="Send"
+          android:visible="false"
+          app:showAsAction="ifRoom"></item>
 
 
     <item android:id="@+id/action_send"
-        android:title="Send"
-        android:icon="@drawable/ic_send"
-        android:visible="false"
-        app:showAsAction="ifRoom"></item>
-
-
+          android:icon="@drawable/ic_send"
+          android:title="Send"
+          android:visible="false"
+          app:showAsAction="ifRoom"></item>
 
 
     <item android:id="@+id/action_refresh"
-        android:title="Refresh"
-        app:showAsAction="never"
+          android:icon="@drawable/ic_refresh"
+          android:title="Refresh"
+          app:showAsAction="ifRoom"
         ></item>
     <item
         android:id="@+id/datepickerImg"
         android:icon="@drawable/ic_today"
+        android:title="Todays Date"
         android:visible="false"
-        app:showAsAction="ifRoom"
-        android:title="Todays Date">
+        app:showAsAction="ifRoom">
     </item>
 
 
