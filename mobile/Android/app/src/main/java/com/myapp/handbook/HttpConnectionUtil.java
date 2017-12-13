@@ -95,6 +95,10 @@ public class HttpConnectionUtil {
             db.execSQL("delete from " + HandbookContract.CalenderEventsEntry.TABLE_NAME);
             db.execSQL("delete from " + HandbookContract.ContactSchoolEntry.TABLE_NAME);
             db.execSQL("delete from " + HandbookContract.TeacherForStudentEntry.TABLE_NAME);
+            db.execSQL("delete from " + HandbookContract.HolidayListsEntry.TABLE_NAME);
+
+            //Set the welcome message flag. Don't need to show on every refresh
+            sharedPreferences.edit().putBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, true).commit();
         }
         catch (Exception e){
             Log.e(TAG, "clearAllPreferences: Failed to clean up tables",e );

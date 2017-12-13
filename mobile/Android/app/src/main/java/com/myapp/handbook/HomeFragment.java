@@ -142,7 +142,7 @@ public class HomeFragment extends Fragment {
 
                     if (!sharedPreferences.getBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, false)) {
                         AddWelcomeMessage(profiles, db);
-                        sharedPreferences.edit().putBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, true).apply();
+                        sharedPreferences.edit().putBoolean(QuickstartPreferences.WELCOME_MESSAGE_ADDED, true).commit();
                     }
                 }
             });
