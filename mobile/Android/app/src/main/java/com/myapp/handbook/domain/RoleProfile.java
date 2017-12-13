@@ -163,6 +163,8 @@ public class RoleProfile implements Parcelable {
             teacherProfile.setStd("");
             if(teacherObj.has(TEACHER_DOB))
                 teacherProfile.setBirth_date(teacherObj.getString(TEACHER_DOB));
+            if(teacherObj.has(IMAGE_URL))
+                teacherProfile.setImageUrl(teacherObj.getString(IMAGE_URL));
 
 
         }

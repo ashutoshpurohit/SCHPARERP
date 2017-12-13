@@ -49,7 +49,7 @@ public class FetchHolidayListsAsyncTask extends AsyncTask<Void, Void, List<Holid
     protected List<HolidayLists> doInBackground(Void... params) {
         HttpConnectionUtil.SchoolHolidayListsService schoolHolidayListsService = ServiceGenerator.
                 createService(HttpConnectionUtil.SchoolHolidayListsService.class);
-        Call<List<HolidayLists>> call = schoolHolidayListsService.getSchoolHolidayLists("501");
+        Call<List<HolidayLists>> call = schoolHolidayListsService.getSchoolHolidayLists(this.schoolId);
         try {
             return call.execute().body();
         } catch (IOException e) {
