@@ -76,6 +76,7 @@
     <string name="select_all">Select All</string>
     <string name="clear">Clear</string>
     <string name="title_activity_calendar_events">School Calendar</string>
+    <string name="title_activity_notes">Diary Notes</string>
     <string name="no_timetable_available_for_today">No timetable available for today</string>
 
     <string name="sign_out">Sign Out</string>

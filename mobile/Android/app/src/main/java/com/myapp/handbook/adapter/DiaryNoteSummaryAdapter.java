@@ -1,8 +1,7 @@
 package com.myapp.handbook.adapter;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.myapp.handbook.HttpConnectionUtil;
-import com.myapp.handbook.MainActivity;
-import com.myapp.handbook.NotesFragment;
+import com.myapp.handbook.NotesActivity;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.DiaryNote;
 
@@ -135,14 +133,18 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
         intent.putExtra("position", 1);
         context.startActivity(intent);*/
 
-        Fragment fragment = new NotesFragment();
+        Intent intent = new Intent(parentActivity.getApplicationContext(), NotesActivity.class);
+        parentActivity.startActivity(intent);
+
+       /* Fragment fragment = new DiaryNotesFragment();
+
         MainActivity mainActivity = (MainActivity)parentActivity;
         android.support.v4.app.FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
         //ft.replace(R.id.content_frame, fragment, "visible_fragment");
         ft.replace(R.id.frame, fragment, "visible_fragment");
         ft.addToBackStack(null);
         //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commitAllowingStateLoss();
+        ft.commitAllowingStateLoss();*/
         //Set the action bar title
 
     }
