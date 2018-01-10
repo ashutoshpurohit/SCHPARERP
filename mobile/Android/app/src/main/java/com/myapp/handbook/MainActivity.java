@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
-
             //If valid mobile
             if(mobileNumber.length()>0)
             {
@@ -182,8 +181,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.notifications:
                         Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
-                        fragment = new NotesFragment();
-                        currentPosition=1;
+                        intent = new Intent(getApplicationContext(), NotesActivity.class);
+                        startActivity(intent);
+                        /*fragment = new NotesFragment();
+                        currentPosition=1;*/
                         break;
                     case R.id.schoolCalendar:
                         //Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
@@ -289,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
                         if(fragment instanceof HomeFragment ){
                             currentPosition= 0;
                         }
-                        if (fragment instanceof NotesFragment) {
+                        if (fragment instanceof DiaryNotesFragment) {
                             currentPosition = 1;
                         }
 
@@ -347,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onNewIntent(Intent intent){
         Bundle b = intent.getExtras();
@@ -385,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
         switch(position) {
         case 1:
-            fragment = new NotesFragment();
+            fragment = new DiaryNotesFragment();
 
             break;
 
