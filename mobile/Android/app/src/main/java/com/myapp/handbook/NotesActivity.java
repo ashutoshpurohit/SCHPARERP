@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,18 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesActivity extends AppCompatActivity {
+    public static final String MESSAGE_TYPE = "messageType";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
+    private int messageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-        DiaryNotesFragment fragment = new DiaryNotesFragment();
+        DiaryNotesFragment diaryNotesFragment = new DiaryNotesFragment();
+        HomeWorkNotesFragment homeWorkNotesFragment = new HomeWorkNotesFragment();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Intent intent = getIntent();
+        int messageType = intent.getIntExtra(MESSAGE_TYPE, 1);
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
@@ -36,7 +42,8 @@ public class NotesActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        setupViewPager(viewPager, messageType);
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -47,12 +54,29 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle b = intent.getExtras();
+        if (b != null) {
+            int type = b.getInt(MESSAGE_TYPE);
+            Log.d("NotesActivity", "Message type is" + type);
+        }
+
+    }
+
+
+    private void setupViewPager(ViewPager viewPager, int messageType) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new DiaryNotesFragment(), "Diary Notes");
         adapter.addFragment(new HomeWorkNotesFragment(), "Home Work");
 
         viewPager.setAdapter(adapter);
+        if (messageType == HttpConnectionUtil.HOMEWORK_TYPE) {
+            viewPager.setCurrentItem(1);
+        } else if (messageType == HttpConnectionUtil.DIARY_NOTE_TYPE) {
+            viewPager.setCurrentItem(0);
+        }
+
     }
 
     @Override
