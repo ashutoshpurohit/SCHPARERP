@@ -152,12 +152,24 @@
         <activity
             android:name=".NotesActivity"
             android:label="@string/title_activity_notes"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.myapp.handbook.MainActivity" />
         </activity>
-    </application>
 
+        <activity
+            android:name=".SchoolContactsActivity"
+            android:label="@string/title_activity_contacts"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.myapp.handbook.MainActivity"/>
+        </activity>
+
+    </application>
 </manifest>
