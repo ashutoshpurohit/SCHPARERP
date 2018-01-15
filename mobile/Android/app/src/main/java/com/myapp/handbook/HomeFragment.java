@@ -310,14 +310,14 @@ public class HomeFragment extends Fragment {
             latestDiaryNotes = HandBookDbHelper.loadLatestDiaryNote(db, HttpConnectionUtil.DIARY_NOTE_TYPE, selectedProfileId, 3);
             latestHomeWork = HandBookDbHelper.loadLatestHomework(db, HttpConnectionUtil.HOMEWORK_TYPE, selectedProfileId, 3);
 
-            homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestHomeWork);
+            homeWorkSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestHomeWork, HttpConnectionUtil.HOMEWORK_TYPE);
             homeSummaryView3.setAdapter(homeWorkSummaryAdapter);
         }
         if(role.equals(RoleProfile.ProfileRole.TEACHER)){
             latestDiaryNotes =HandBookDbHelper.loadLatestDiaryNote(db,HttpConnectionUtil.PARENT_NOTE_TYPE,selectedProfileId,3);
 
         }
-        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestDiaryNotes);
+        diaryNoteSummaryAdapter = new DiaryNoteSummaryAdapter(getActivity(), latestDiaryNotes, HttpConnectionUtil.DIARY_NOTE_TYPE);
         homeSummaryView2.setAdapter(diaryNoteSummaryAdapter);
     }
 
