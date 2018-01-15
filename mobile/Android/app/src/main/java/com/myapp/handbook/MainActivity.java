@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
+            //String mobileNumber ="9343603060";
+
             //If valid mobile
             if(mobileNumber.length()>0)
             {
@@ -213,7 +215,10 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.contactSchool:
                         Toast.makeText(getApplicationContext(),"Contact School Selected",Toast.LENGTH_SHORT).show();
-                        fragment = new SchoolContactFragment();
+                        /*fragment = new SchoolContactFragmentMaster();
+                        */
+                        intent = new Intent(getApplicationContext(), SchoolContactsActivity.class);
+                        startActivity(intent);
                         currentPosition=5;
                         break;
 
@@ -300,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                         if (fragment instanceof TeacherNoteFragment) {
                             currentPosition = 4;
                         }
-                        if(fragment instanceof SchoolContactFragment){
+                        if (fragment instanceof SchoolContactsFragment) {
                             currentPosition=5;
                         }
 
@@ -347,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
 
 
     @Override
@@ -401,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
             break;
 
         case 5:
-            fragment = new SchoolContactFragment();
+            fragment = new SchoolContactsFragment();
             break;
             case 7:
                 fragment = new TopFragment();
