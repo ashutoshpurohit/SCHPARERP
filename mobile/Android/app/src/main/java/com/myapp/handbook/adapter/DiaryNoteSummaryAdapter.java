@@ -26,11 +26,13 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
     private final List<DiaryNote> diaryNotes;
    // private final Context context;
     private final Activity parentActivity;
+    private final int messageType;
 
-    public DiaryNoteSummaryAdapter(Activity activity,List<DiaryNote> notes)
+    public DiaryNoteSummaryAdapter(Activity activity, List<DiaryNote> notes, int messageType)
     {
         this.parentActivity = activity;
         this.diaryNotes=notes;
+        this.messageType = messageType;
     }
 
 
@@ -134,6 +136,10 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
         context.startActivity(intent);*/
 
         Intent intent = new Intent(parentActivity.getApplicationContext(), NotesActivity.class);
+      /* if(this.messageType==HttpConnectionUtil.DIARY_NOTE_TYPE) {*/
+        intent.putExtra(NotesActivity.MESSAGE_TYPE, this.messageType);
+        // }
+
         parentActivity.startActivity(intent);
 
        /* Fragment fragment = new DiaryNotesFragment();
