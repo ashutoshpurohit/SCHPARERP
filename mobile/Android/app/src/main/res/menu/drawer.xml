@@ -18,6 +18,11 @@
             android:checked="false"
             android:icon="@drawable/ic_view_list"
             android:title="@string/Notifications" />
+        <item
+            android:id="@+id/homework"
+            android:checked="false"
+            android:icon="@drawable/ic_assignment"
+            android:title="@string/Homework"/>
 
         <item
             android:id="@+id/schoolCalendar"

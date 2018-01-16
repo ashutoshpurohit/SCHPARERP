@@ -113,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getBaseContext(),com.myapp.handbook.login.PhoneAuthActivity.class);
             startActivity(intent);
             return;
-        }
-        else{
+        } else {
             String mobileNumber = sharedPreferences.getString(QuickstartPreferences.LOGGED_MOBILE,"");
             //String mobileNumber ="9343603060";
 
@@ -181,9 +180,16 @@ public class MainActivity extends AppCompatActivity {
                         ((TopFragment)fragment).setNavigationView(navigationView);
                         currentPosition=7;
                         break;
+                    case R.id.homework:
+                        Toast.makeText(getApplicationContext(), "Stared Selected", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(getApplicationContext(), NotesActivity.class);
+                        intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.HOMEWORK_TYPE);
+                        startActivity(intent);
+                        break;
                     case R.id.notifications:
                         Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
                         intent = new Intent(getApplicationContext(), NotesActivity.class);
+                        intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.DIARY_NOTE_TYPE);
                         startActivity(intent);
                         /*fragment = new NotesFragment();
                         currentPosition=1;*/
