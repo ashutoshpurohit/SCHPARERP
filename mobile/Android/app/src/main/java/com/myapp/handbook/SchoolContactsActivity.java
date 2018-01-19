@@ -51,7 +51,7 @@ public class SchoolContactsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SchoolContactsFragment(), "School Contacts");
-        adapter.addFragment(new SchoolContactsDocumentFragment(), "Contact Documents");
+        adapter.addFragment(new SchoolContactsDocumentFragment(), "School Documents");
 
         viewPager.setAdapter(adapter);
     }

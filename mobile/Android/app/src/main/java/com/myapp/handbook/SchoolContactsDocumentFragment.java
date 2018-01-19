@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.domain.SchoolProfile;
@@ -98,14 +96,14 @@ public class SchoolContactsDocumentFragment extends Fragment {
             ImageView schoolEmailIdImg = (ImageView) contactView.findViewById(R.id.ic_email_contact);
             ImageView schoolEmaImg = (ImageView) contactView.findViewById(R.id.ic_email_contact);
 
-            Glide.with(getContext())
+           /* Glide.with(getContext())
                     .load(schoolProfile.getSchoolLogoImageURL())
                     .placeholder(R.drawable.contact_picture_placeholder)
                     //.error(R.drawable.contact_picture_error)
                     //.override(120,120)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(schoolLogo);
-            schoolName.setText(schoolProfile.getSchoolName());
+                    .into(schoolLogo);*/
+/*            schoolName.setText(schoolProfile.getSchoolName());*/
             //Code to make Website Clickable
             schoolWebsite.setClickable(true);
             String websiteText = schoolProfile.getSchoolWebSite();
