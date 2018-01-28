@@ -218,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.contactSchool:
-                        Toast.makeText(getApplicationContext(),"Contact School Selected",Toast.LENGTH_SHORT).show();
                         /*fragment = new SchoolContactFragmentMaster();
                         */
                         intent = new Intent(getApplicationContext(), SchoolContactsActivity.class);

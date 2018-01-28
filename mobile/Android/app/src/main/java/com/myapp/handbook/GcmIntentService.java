@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -61,6 +62,11 @@ public class GcmIntentService extends IntentService {
         String title = data.getString("title");
         String message = data.getString("body");
         String ToIds = data.getString("ToIds");
+
+        if(sharedPreferences==null)
+        {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        }
 
         if (((msgType != null ? msgType.equalsIgnoreCase(MsgType.HOMEWORK.toString()) : false) || msgType.equalsIgnoreCase(MsgType.DIARY_NOTE.toString()) || msgType.equalsIgnoreCase(MsgType.PARENT_NOTE.toString()))) {
             Notifications.notify(data);
