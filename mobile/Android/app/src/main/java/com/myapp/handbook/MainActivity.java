@@ -181,13 +181,11 @@ public class MainActivity extends AppCompatActivity {
                         currentPosition=7;
                         break;
                     case R.id.homework:
-                        Toast.makeText(getApplicationContext(), "Stared Selected", Toast.LENGTH_SHORT).show();
                         intent = new Intent(getApplicationContext(), NotesActivity.class);
                         intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.HOMEWORK_TYPE);
                         startActivity(intent);
                         break;
                     case R.id.notifications:
-                        Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
                         intent = new Intent(getApplicationContext(), NotesActivity.class);
                         intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.DIARY_NOTE_TYPE);
                         startActivity(intent);
