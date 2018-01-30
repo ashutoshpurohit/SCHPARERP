@@ -629,7 +629,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String SQL_CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + NotificationEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE IF NOT EXISTS " + NotificationEntry.TABLE_NAME + " (" +
                 // Why AutoIncrement here, and not above?
                 // Unique keys will be auto-generated in either case.  But for weather
                 // forecasting, it's reasonable to assume the user will want information
@@ -650,7 +650,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 NotificationEntry.COLUMN_TO_IDS + " TEXT, " +
                 NotificationEntry.COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP" + " );";
 
-        final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE IF NOT EXISTS " + ProfileEntry.TABLE_NAME + " (" +
                 ProfileEntry.COLUMN_ID + " TEXT NOT NULL," +
                 ProfileEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 ProfileEntry.COLUMN_MIDDLE_NAME + " TEXT, " +
@@ -663,7 +663,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 ProfileEntry.COLUMN_ADDRESS + " TEXT" + " );";
 
 
-        final String SQL_CREATE_TIMETABLE_TABLE = "CREATE TABLE " + HandbookContract.TimetableEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_TIMETABLE_TABLE = "CREATE TABLE IF NOT EXISTS " + HandbookContract.TimetableEntry.TABLE_NAME + " (" +
                 HandbookContract.TimetableEntry.COLUMN_ID + " TEXT NOT NULL," +
                 HandbookContract.TimetableEntry.COLUMN_STD + " TEXT NOT NULL, " +
                 HandbookContract.TimetableEntry.COLUMN_SCHOOL_ID + " TEXT, " +
@@ -674,7 +674,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_NAME + " TEXT NOT NULL, " +
                 HandbookContract.TimetableEntry.COLUMN_TEACHER_ID + " TEXT" + " );";
 
-        final String SQL_CREATE_TEACHER_TABLE = "CREATE TABLE " + HandbookContract.TeacherForStudentEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_TEACHER_TABLE = "CREATE TABLE IF NOT EXISTS " + HandbookContract.TeacherForStudentEntry.TABLE_NAME + " (" +
                 HandbookContract.TeacherForStudentEntry.COLUMN_STUDENTID + " TEXT NOT NULL, " +
                 HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_ID+ " TEXT NOT NULL, "  +
                 HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_FIRST_NAME + " TEXT NOT NULL, " +
@@ -685,7 +685,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.TeacherForStudentEntry.COLUMN_TEACHER_SUBJECT + " TEXT  " +" );";
 
 
-        final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_CONTACT_SCHOOL_TABLE = "CREATE TABLE IF NOT EXISTS " + HandbookContract.ContactSchoolEntry.TABLE_NAME + " (" +
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_NAME + " TEXT NOT NULL, " +
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_ADDRESS_1 + " TEXT , " +
@@ -697,7 +697,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_WEBSITE + " TEXT," +
                 HandbookContract.ContactSchoolEntry.COLUMN_SCHOOL_LOGO + " BLOB);";
 
-        final String SQL_CREATE_CALENDER_EVENTS = "CREATE TABLE " + HandbookContract.CalenderEventsEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_CALENDER_EVENTS = "CREATE TABLE IF NOT EXISTS " + HandbookContract.CalenderEventsEntry.TABLE_NAME + " (" +
 
                 HandbookContract.CalenderEventsEntry.COLUMN_EVENT_ID + " TEXT , " +
                 HandbookContract.CalenderEventsEntry.COLUMN_SCHOOL_ID + " TEXT , " +
@@ -712,7 +712,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 HandbookContract.CalenderEventsEntry.COLUMN_TEACHER_ID + " TEXT " + " );";
 
 
-        final String SQL_CREATE_SCHOOL_HOLIDAY_TABLE = "CREATE TABLE " + HandbookContract.HolidayListsEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_SCHOOL_HOLIDAY_TABLE = "CREATE TABLE IF NOT EXISTS " + HandbookContract.HolidayListsEntry.TABLE_NAME + " (" +
                 HandbookContract.HolidayListsEntry.COLUMN_SCHOOL_ID + " TEXT NOT NULL, " +
                 HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_ID + " TEXT, " +
                 HandbookContract.HolidayListsEntry.COLUMN_HOLIDAY_NAME + " TEXT, " +
