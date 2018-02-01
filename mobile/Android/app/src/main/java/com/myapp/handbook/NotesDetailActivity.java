@@ -2,14 +2,17 @@ package com.myapp.handbook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class NotesDetailActivity extends AppCompatActivity {
+import static com.myapp.handbook.NotesActivity.MESSAGE_TYPE;
 
+public class NotesDetailActivity extends AppCompatActivity {
+    int messageType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +23,10 @@ public class NotesDetailActivity extends AppCompatActivity {
         Toolbar myChildToolbar =
                 (Toolbar) findViewById(R.id.my_child_toolbar);
         setSupportActionBar(myChildToolbar);
+
+        Intent intent = getIntent();
+        messageType = intent.getIntExtra(MESSAGE_TYPE, 1);
+
 
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
@@ -48,6 +55,16 @@ public class NotesDetailActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
+       /* finish();
+        Intent intent =null;
+        if(messageType == HttpConnectionUtil.HOMEWORK_TYPE) {
+           intent = new Intent(getApplicationContext(), NotesActivity.class);
+            intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.HOMEWORK_TYPE);
+        }else if(messageType == HttpConnectionUtil.DIARY_NOTE_TYPE){
+            intent = new Intent(getApplicationContext(), NotesActivity.class);
+            intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.DIARY_NOTE_TYPE);
+        }
+        startActivity(intent);*/
     }
 
     @Override
@@ -64,17 +81,24 @@ public class NotesDetailActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+       /* //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
         else if(id == android.R.id.home)
         {
             LaunchNotificationFragment();
+        }*/
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
 
-        return super.onOptionsItemSelected(item);
+        //return super.onOptionsItemSelected(item);
     }
 
 

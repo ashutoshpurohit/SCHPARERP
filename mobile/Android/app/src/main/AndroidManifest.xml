@@ -69,11 +69,10 @@
             android:name=".NotesDetailActivity"
             android:label="@string/details">
 
-            <!--
-                meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.myapp.handbook.MainActivity" /
-            -->
+                android:value="com.myapp.handbook.NotesActivity"/>
+
         </activity>
         <activity
             android:name=".TimeTableActivity"
