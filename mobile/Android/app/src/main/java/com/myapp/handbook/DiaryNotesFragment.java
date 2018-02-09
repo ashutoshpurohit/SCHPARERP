@@ -84,6 +84,7 @@ public class DiaryNotesFragment extends Fragment implements RecycleViewClickList
     SimpleDateFormat df;
     //TextView  current_date;
     TextView emptyRecyclerView;
+    String messageDate;
     private SQLiteDatabase db;
     private Cursor cursor;
     private DownloadManager downloadManager = null;
@@ -385,12 +386,14 @@ public class DiaryNotesFragment extends Fragment implements RecycleViewClickList
             case R.id.list_item_file_name:
             case R.id.list_item_msg_type_icon:
                 Toast.makeText(getContext(), "File download clicked", Toast.LENGTH_LONG);
+
                 handleDownloadClick(position);
                 break;
             default:
                 Intent intent = new Intent(getContext(), NotesDetailActivity.class);
                 intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.DIARY_NOTE_TYPE);
-                intent.putExtra("ID", position);
+                Long temp_pos = Long.valueOf(position);
+                intent.putExtra("ID", temp_pos);
                 getContext().startActivity(intent);
 
                 break;

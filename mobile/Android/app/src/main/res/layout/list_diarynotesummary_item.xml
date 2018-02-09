@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="5dp"
+              android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
     <TextView
-        android:layout_marginTop="5dp"
+        android:id="@+id/diaryNote_summary_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
+        android:gravity="left"
+        android:text="School holiday tomorrow"
         android:textColor="@color/black"
-        android:id="@+id/diaryNote_summary_title"
-        android:textSize="14sp"
-        android:text="School holiday tomorrow"/>
+        android:textSize="14sp"/>
 
     <ImageView
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
         android:id="@+id/diaryNote_msg_image"
-        android:src="@drawable/ic_image_black_24dp"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <ImageView
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:id="@+id/diaryNote_msg_attachment"
-        android:src="@drawable/ic_attach_file"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:layout_marginTop="5dp"
         android:layout_weight="1"
+        android:src="@drawable/ic_image_black_24dp"
+        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/diaryNote_msg_attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:src="@drawable/ic_attach_file"
+        android:visibility="gone"/>
+    <TextView
         android:id="@+id/diaryNote_summary_date"
-        android:textSize="14sp"
-        android:text="27-Nov-2017"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="27-Nov-2017"
+        android:textSize="14sp"/>
 
 </LinearLayout>
     <TextView
-        android:layout_marginTop="5dp"
+        android:id="@+id/diaryNote_summary_msg"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:id="@+id/diaryNote_summary_msg"
-        android:textSize="14sp"
+        android:layout_marginTop="5dp"
         android:text="School will remain closed tomorrow on account of.."
+        android:textSize="14sp"
         />
+
+    <TextView
+        android:id="@+id/dbRowId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <View style="@style/Divider"></View>
 

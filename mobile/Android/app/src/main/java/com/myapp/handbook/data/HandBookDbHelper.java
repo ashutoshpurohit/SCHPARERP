@@ -422,6 +422,8 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                 currentNote.setTitle(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_TITLE)));
                 currentNote.setDetail(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DETAIL)));
                 currentNote.setImage_url(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_IMAGE)));
+                currentNote.setMsg_id(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_NOTIFICATION_ID)));
+                currentNote.setDbRowId(cursor.getInt(cursor.getColumnIndex(NotificationEntry._ID)));
                 diaryNotes.add(currentNote);
                 fetchedCount++;
 
@@ -492,6 +494,7 @@ public class HandBookDbHelper extends SQLiteOpenHelper {
                     currentNote.setTitle(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_TITLE)));
                     currentNote.setDetail(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_DETAIL)));
                     currentNote.setImage_url(cursor.getString(cursor.getColumnIndex(NotificationEntry.COLUMN_IMAGE)));
+                    currentNote.setDbRowId(cursor.getInt(cursor.getColumnIndex(NotificationEntry._ID)));
                     diaryNotes.add(currentNote);
                     fetchedCount++;
                 }

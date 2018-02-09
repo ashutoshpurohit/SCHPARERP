@@ -385,7 +385,9 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
             default:
                 Intent intent = new Intent(getContext(), NotesDetailActivity.class);
                 intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.HOMEWORK_TYPE);
-                intent.putExtra("ID", position);
+                Long temp_pos = Long.valueOf(position);
+                intent.putExtra("ID", temp_pos);
+//                intent.putExtra("ID", position);
                 getContext().startActivity(intent);
 
                 break;

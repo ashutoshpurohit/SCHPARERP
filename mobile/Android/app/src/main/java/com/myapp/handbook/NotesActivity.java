@@ -22,7 +22,7 @@ public class NotesActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Toolbar toolbar;
-    private int messageType;
+    //  private int messageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class NotesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int messageType = intent.getIntExtra(MESSAGE_TYPE, 1);
+
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
         if (ab != null) {

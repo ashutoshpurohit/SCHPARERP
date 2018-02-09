@@ -7,11 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.myapp.handbook.HttpConnectionUtil;
 import com.myapp.handbook.NotesActivity;
+import com.myapp.handbook.NotesDetailActivity;
 import com.myapp.handbook.R;
 import com.myapp.handbook.domain.DiaryNote;
 
@@ -27,6 +27,7 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
    // private final Context context;
     private final Activity parentActivity;
     private final int messageType;
+    long msgId;
 
     public DiaryNoteSummaryAdapter(Activity activity, List<DiaryNote> notes, int messageType)
     {
@@ -36,26 +37,6 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
     }
 
 
-    /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
-     * an item.
-     * <p>
-     * This new ViewHolder should be constructed with a new View that can represent the items
-     * of the given type. You can either create a new View manually or inflate it from an XML
-     * layout file.
-     * <p>
-     * The new ViewHolder will be used to display items of the adapter using
-     * {@link #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
-     * different items in the data set, it is a good idea to cache references to sub views of
-     * the View to avoid unnecessary {@link View#findViewById(int)} calls.
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to
-     *                 an adapter position.
-     * @param viewType The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
-     * @see #getItemViewType(int)
-     * @see #onBindViewHolder(ViewHolder, int)
-     */
     @Override
     public DiaryNoteSummaryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_diarynotesummary_item,parent,false);
@@ -63,32 +44,18 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
         return new DiaryNoteSummaryViewHolder(itemView);
     }
 
-    /**
-     * Called by RecyclerView to display the data at the specified position. This method should
-     * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
-     * position.
-     * <p>
-     * Note that unlike {@link ListView}, RecyclerView will not call this method
-     * again if the position of the item changes in the data set unless the item itself is
-     * invalidated or the new position cannot be determined. For this reason, you should only
-     * use the <code>position</code> parameter while acquiring the related data item inside
-     * this method and should not keep a copy of it. If you need the position of an item later
-     * on (e.g. in a click listener), use {@link ViewHolder#getAdapterPosition()} which will
-     * have the updated adapter position.
-     * <p>
-     * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can
-     * handle effcient partial bind.
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     */
     @Override
     public void onBindViewHolder(DiaryNoteSummaryViewHolder holder, int position) {
         DiaryNote currentNote = diaryNotes.get(position);
         holder.title.setText(currentNote.getTitle());
         holder.msg_detail.setText(getSummaryNote(currentNote.getDetail()));
         holder.date.setText(currentNote.getDate());
+        // holder.msg_id.setText( String.valueOf(currentNote.getDbRowId()));
+        holder.Id = currentNote.getDbRowId();
+
+
+        //msgId = currentNote.getDbRowId();
+
         String chkImage = currentNote.getImage_url();
         if( chkImage == null || chkImage.isEmpty()){
             holder.msg_img.setVisibility(View.GONE);
@@ -131,35 +98,17 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
     @Override
     public void onClick(View v) {
 
-        /*Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("position", 1);
-        context.startActivity(intent);*/
-
         Intent intent = new Intent(parentActivity.getApplicationContext(), NotesActivity.class);
-      /* if(this.messageType==HttpConnectionUtil.DIARY_NOTE_TYPE) {*/
         intent.putExtra(NotesActivity.MESSAGE_TYPE, this.messageType);
-        // }
-
         parentActivity.startActivity(intent);
-
-       /* Fragment fragment = new DiaryNotesFragment();
-
-        MainActivity mainActivity = (MainActivity)parentActivity;
-        android.support.v4.app.FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
-        //ft.replace(R.id.content_frame, fragment, "visible_fragment");
-        ft.replace(R.id.frame, fragment, "visible_fragment");
-        ft.addToBackStack(null);
-        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commitAllowingStateLoss();*/
-        //Set the action bar title
-
     }
 
     public class DiaryNoteSummaryViewHolder extends RecyclerView.ViewHolder{
         TextView title, date, msg_detail;
         ImageView msg_img;
         ImageView msg_attchment;
-
+        TextView msg_id;
+        long Id;
 
         public DiaryNoteSummaryViewHolder(View itemView) {
             super(itemView);
@@ -168,6 +117,26 @@ public class DiaryNoteSummaryAdapter extends RecyclerView.Adapter<DiaryNoteSumma
             msg_detail=(TextView)itemView.findViewById(R.id.diaryNote_summary_msg);
             msg_img = (ImageView)itemView.findViewById(R.id.diaryNote_msg_image);
             msg_attchment=(ImageView) itemView.findViewById(R.id.diaryNote_msg_attachment);
+            // msg_id = (TextView)itemView.findViewById(R.id.dbRowId);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // get position
+                    int pos = getAdapterPosition();
+
+                    // check if item still exists
+                    if (pos != RecyclerView.NO_POSITION) {
+                        DiaryNote clickedDataItem = diaryNotes.get(pos);
+                        Id = clickedDataItem.getDbRowId();
+                        Intent intent = new Intent(parentActivity.getApplicationContext(), NotesDetailActivity.class);
+                        intent.putExtra("ID", Id);
+
+                        parentActivity.startActivity(intent);
+                        //Toast.makeText(v.getContext(), "You clicked " + clickedDataItem.getDbRowId(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
         }
     }
 }
