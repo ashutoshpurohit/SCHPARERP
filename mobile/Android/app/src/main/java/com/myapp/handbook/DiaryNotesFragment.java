@@ -41,6 +41,7 @@ import com.myapp.handbook.Listeners.RecycleViewClickListener;
 import com.myapp.handbook.adapter.MyRecyclerAdapter;
 import com.myapp.handbook.data.HandBookDbHelper;
 import com.myapp.handbook.data.HandbookContract;
+import com.myapp.handbook.domain.RoleProfile;
 import com.myapp.handbook.util.AndroidPermissions;
 
 import java.io.File;
@@ -60,7 +61,8 @@ public class DiaryNotesFragment extends Fragment implements RecycleViewClickList
     ShareActionProvider shareActionProvider;
     Toolbar toolbar;
     String selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
-
+    RoleProfile selectedProfile;
+    RoleProfile.ProfileRole role;
 
     boolean receiversRegistered = false;
     BroadcastReceiver onComplete = new BroadcastReceiver() {
@@ -205,6 +207,12 @@ public class DiaryNotesFragment extends Fragment implements RecycleViewClickList
             registerDownloadManagerIntentReceivers();
         }
 
+
+        selectedProfile = RoleProfile.getProfile(HttpConnectionUtil.getProfiles(),selectedProfileId);
+        if(selectedProfile!=null ) {
+            role = selectedProfile.getProfileRole();
+        }
+
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
 
         db = handbookDbHelper.getReadableDatabase();
@@ -297,14 +305,15 @@ public class DiaryNotesFragment extends Fragment implements RecycleViewClickList
     private Cursor loadNotesFromDB(String selectedDate, SQLiteDatabase currentDB) {
         Cursor notesCursor = null;
 
+        int msgType = HttpConnectionUtil.DIARY_NOTE_TYPE;
+        if(role.equals(RoleProfile.ProfileRole.TEACHER))
+        {
+            msgType = HttpConnectionUtil.PARENT_NOTE_TYPE;
+        }
 
-        /*String query_to_fetch_earliest = "select *  from " + HandbookContract.NotificationEntry.TABLE_NAME + " where " +
-                HandbookContract.NotificationEntry.COLUMN_MSG_TYPE + " = '" + HttpConnectionUtil.DIARY_NOTE_TYPE +
-                "' and " +HandbookContract.NotificationEntry.COLUMN_TO_IDS + " LIKE " +"'%" + selectedProfileId + "%'" +
-                " order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP + ") DESC ";*/
 
         String query_to_fetch_earliest = "select *  from " + HandbookContract.NotificationEntry.TABLE_NAME + " where " +
-                HandbookContract.NotificationEntry.COLUMN_MSG_TYPE + " = '" + HttpConnectionUtil.DIARY_NOTE_TYPE +
+                HandbookContract.NotificationEntry.COLUMN_MSG_TYPE + " = '" + msgType +
                 "' and " + HandbookContract.NotificationEntry.COLUMN_TO_IDS + " LIKE " + "'%" + selectedProfileId +
                 "%'" + " and " + HandbookContract.NotificationEntry.COLUMN_DATE + " = '" +
                 selectedDate + "'";

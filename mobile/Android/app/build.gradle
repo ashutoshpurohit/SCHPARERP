@@ -23,10 +23,10 @@ android {
         applicationId "com.myapp.handbook"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 28
+        versionCode 33
         versionName "0.6"
         multiDexEnabled true
-        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -48,7 +48,9 @@ android {
         aaptOptions {
             cruncherEnabled = false
         }
+
     }
+
 }
 
 dependencies {
@@ -73,6 +75,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
+
 }
 
 apply plugin: 'com.google.gms.google-services'
