@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -32,6 +33,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapp.handbook.Listeners.RecycleViewClickListener;
@@ -41,6 +44,8 @@ import com.myapp.handbook.data.HandbookContract;
 import com.myapp.handbook.util.AndroidPermissions;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.myapp.handbook.TeacherNoteFragment.TAG;
@@ -57,13 +62,6 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
     Toolbar toolbar;
     String selectedProfileId = HttpConnectionUtil.getSelectedProfileId();
 
-    /*String query_to_fetch_earliest = "select *  from " + HandbookContract.NotificationEntry.TABLE_NAME + " where " +
-            HandbookContract.NotificationEntry.COLUMN_TO_IDS + " LIKE " + "'%" + selectedProfileId + "%'"
-            + " order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP + ") DESC ";*/
-    String query_to_fetch_earliest = "select *  from " + HandbookContract.NotificationEntry.TABLE_NAME + " where " +
-            HandbookContract.NotificationEntry.COLUMN_MSG_TYPE + " = '" + HttpConnectionUtil.HOMEWORK_TYPE + "' and " +
-            HandbookContract.NotificationEntry.COLUMN_TO_IDS + " LIKE " +
-            "'%" + selectedProfileId + "%'" + " order  by datetime(" + HandbookContract.NotificationEntry.COLUMN_TIMESTAMP + ") DESC ";
     boolean receiversRegistered = false;
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
@@ -81,6 +79,11 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
             Toast.makeText(ctxt, "Downloading message", Toast.LENGTH_LONG).show();
         }
     };
+    String formattedDate;
+    Calendar c;
+    SimpleDateFormat df;
+    TextView current_date;
+    TextView emptyRecyclerView;
     private SQLiteDatabase db;
     private Cursor cursor;
     private DownloadManager downloadManager = null;
@@ -206,14 +209,9 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
         }
 
         SQLiteOpenHelper handbookDbHelper = new HandBookDbHelper(inflater.getContext());
-
         db = handbookDbHelper.getReadableDatabase();
-
-
-        cursor = db.rawQuery(query_to_fetch_earliest, null);
-
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        view = inflater.inflate(R.layout.fragment_homework, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         toolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
 
         // use this setting to improve performance if you know that changes
@@ -224,13 +222,91 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an timetableAdapter (see also next example)
-        mAdapter = new MyRecyclerAdapter(this.getContext(), cursor, this);
-        mRecyclerView.setAdapter(mAdapter);
-        ((MyRecyclerAdapter) mAdapter).setActivity((AppCompatActivity) getActivity());
-        ((MyRecyclerAdapter) mAdapter).setNotesContext(notesContext);
-        return rootView;
+        /**
+         * Code for next
+         * and previous button
+         *
+         * Note that the month numbers are 0-based, so at the time of this writing (in April) the month number will be 3.
+         * */
+
+        // First of all to set current date to textview.
+        //current_date = (TextView) view.findViewById(R.id.curDate);
+        c = Calendar.getInstance();
+        df = new SimpleDateFormat("dd/MM/yyyy");
+        formattedDate = df.format(c.getTime());
+        //current_date.setText(formattedDate);
+        cursor = loadNotesFromDB(formattedDate, db);
+
+        emptyRecyclerView = (TextView) view.findViewById(R.id.empty_view);
+        ImageView img_prev_month = (ImageView) view.findViewById(R.id.img_month_previous);
+        ImageView img_nxt_month = (ImageView) view.findViewById(R.id.img_month_next);
+
+        img_nxt_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar tempDate = Calendar.getInstance();
+                String tempFormattedDate = df.format(tempDate.getTime());
+                if (formattedDate.equals(tempFormattedDate)) {
+                    Toast.makeText(getContext(), "Homework not available for future dates", Toast.LENGTH_SHORT).show();
+                } else {
+                    c.add(Calendar.DATE, 1);
+                    formattedDate = df.format(c.getTime());
+                    //      current_date.setText(formattedDate);
+                    cursor = loadNotesFromDB(formattedDate, db);
+
+                }
+                setupNotesAdapter();
+            }
+        });
+        img_prev_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.add(Calendar.DATE, -1);
+                formattedDate = df.format(c.getTime());
+                //current_date.setText(formattedDate);
+                cursor = loadNotesFromDB(formattedDate, db);
+                setupNotesAdapter();
+            }
+        });
+
+        setupNotesAdapter();
+
+
+        return view;
     }
+
+    private void setupNotesAdapter() {
+        String testCursorData = DatabaseUtils.dumpCursorToString(cursor);
+        Log.i("CursorDate", testCursorData);
+        if (cursor != null && (cursor.getCount() > 0)) {
+            if (View.VISIBLE == 0) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+            }
+            mAdapter = new MyRecyclerAdapter(this.getContext(), cursor, this);
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+            ((MyRecyclerAdapter) mAdapter).setActivity((AppCompatActivity) getActivity());
+            ((MyRecyclerAdapter) mAdapter).setNotesContext(notesContext);
+        } else {
+            mRecyclerView.setVisibility(View.GONE);
+            if (emptyRecyclerView != null)
+                emptyRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private Cursor loadNotesFromDB(String selectedDate, SQLiteDatabase currentDB) {
+        Cursor notesCursor = null;
+        String query_to_fetch_earliest = "select *  from " + HandbookContract.NotificationEntry.TABLE_NAME + " where " +
+                HandbookContract.NotificationEntry.COLUMN_MSG_TYPE + " = '" + HttpConnectionUtil.HOMEWORK_TYPE +
+                "' and " + HandbookContract.NotificationEntry.COLUMN_TO_IDS + " LIKE " + "'%" + selectedProfileId +
+                "%'" + " and " + HandbookContract.NotificationEntry.COLUMN_DATE + " = '" +
+                selectedDate + "'";
+
+        Log.i("query for notes", query_to_fetch_earliest);
+        notesCursor = currentDB.rawQuery(query_to_fetch_earliest, null);
+        return notesCursor;
+    }
+
 
     private void registerDownloadManagerIntentReceivers() {
         getContext().registerReceiver(onComplete,
@@ -308,7 +384,10 @@ public class HomeWorkNotesFragment extends Fragment implements RecycleViewClickL
                 break;
             default:
                 Intent intent = new Intent(getContext(), NotesDetailActivity.class);
-                intent.putExtra("ID", position);
+                intent.putExtra(NotesActivity.MESSAGE_TYPE, HttpConnectionUtil.HOMEWORK_TYPE);
+                Long temp_pos = Long.valueOf(position);
+                intent.putExtra("ID", temp_pos);
+//                intent.putExtra("ID", position);
                 getContext().startActivity(intent);
 
                 break;

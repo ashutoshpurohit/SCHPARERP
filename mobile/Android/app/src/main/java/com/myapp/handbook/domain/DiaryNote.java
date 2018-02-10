@@ -8,6 +8,9 @@ public class DiaryNote {
     String detail;
     String date;
     String from;
+    String msg_id;
+    String image_url;
+    long dbRowId;
 
     public String getTitle() {
         return title;
@@ -57,9 +60,13 @@ public class DiaryNote {
         this.image_url = image_url;
     }
 
-    String msg_id;
-    String image_url;
+    public long getDbRowId() {
+        return dbRowId;
+    }
 
+    public void setDbRowId(long dbRowId) {
+        this.dbRowId = dbRowId;
+    }
 
 
 

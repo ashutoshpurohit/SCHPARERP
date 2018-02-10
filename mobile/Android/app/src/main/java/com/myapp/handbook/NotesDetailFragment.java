@@ -52,17 +52,31 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private  long message_id;
-    private SQLiteDatabase db;
-    private Cursor cursor;
     DownloadManager downloadManager;
     boolean receiversRegistered=false;
     String imageUrl;
-
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            //findViewById(R.id.start).setEnabled(true);
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                long downloadId = intent.getLongExtra(
+                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+                openDownloadedAttachment(getContext(), downloadId);
+            }
+        }
+    };
+    BroadcastReceiver onNotificationClick = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Downloading message", Toast.LENGTH_LONG).show();
+        }
+    };
+    private long message_id;
+    private SQLiteDatabase db;
+    private Cursor cursor;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public NotesDetailFragment() {
@@ -91,7 +105,8 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getActivity().getIntent();
-        message_id = intent.getIntExtra("ID", 0);
+        message_id = intent.getLongExtra("ID", 0);
+        //message_id = intent.getIntExtra("ID", 0);
 
     }
 
@@ -126,7 +141,7 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
             TextView fromTextView = (TextView)view.findViewById(R.id.detail_from);
             ImageView imageDetailView = (ImageView) view.findViewById(R.id.detail_image);
             ImageView attachmentIcon = (ImageView)view.findViewById(R.id.item_msg_type_icon);
-            View attachmentView = (View)view.findViewById(R.id.detail_section_file_download);
+            View attachmentView = view.findViewById(R.id.detail_section_file_download);
             TextView downloadFileNameView = (TextView)view.findViewById(R.id.item_file_name);
             attachmentIcon.setOnClickListener(this);
             downloadFileNameView.setOnClickListener(this);
@@ -183,18 +198,6 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
         receiversRegistered=false;
     }
 
-    BroadcastReceiver onComplete=new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            //findViewById(R.id.start).setEnabled(true);
-            String action = intent.getAction();
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                long downloadId = intent.getLongExtra(
-                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-                openDownloadedAttachment(getContext(), downloadId);
-            }
-        }
-    };
-
     private void openDownloadedAttachment(final Context context, final long downloadId) {
         DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query();
@@ -217,7 +220,7 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
             if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme())) {
                 // FileUri - Convert it to contentUri.
                 File file = new File(attachmentUri.getPath());
-                attachmentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+".com.myapp.handbook.provider", file);;
+                attachmentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".com.myapp.handbook.provider", file);
             }
 
             Intent openAttachmentIntent = new Intent(Intent.ACTION_VIEW);
@@ -230,12 +233,6 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
             }
         }
     }
-
-    BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "Downloading message", Toast.LENGTH_LONG).show();
-        }
-    };
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -321,7 +318,7 @@ public class NotesDetailFragment extends Fragment implements View.OnClickListene
                         .setAction("OK", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String [] permissions= {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};;
+                                String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
                                 ActivityCompat.requestPermissions(getActivity(), permissions, AndroidPermissions.REQUEST_STORAGE);
                             }
                         })
